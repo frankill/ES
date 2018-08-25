@@ -12,9 +12,12 @@ body1 = Dict( "id" => "es_log_filter" ,
 						"fieldvalue" =>  ["onload"] , 
 						"msize" =>  10 ))
 
-res1  = esearch(info, "test" , body1, "_search/template", scroll="20s" ) 
+res1  = esearch(info, "test" , body1, "_search/template", scroll="20s" )
+
 id    = @esexp res1 "_scroll_id" 
+
 num   = ceil( (@esexp @esexp( res1, "hits") "total" ) / 10000)  -1 
+
 res1  = @esexp @esexp(res1, "hits") "hits"
 
 for i = collect(1:num)
