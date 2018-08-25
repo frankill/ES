@@ -5,7 +5,7 @@
 
 	using HTTP
 	using JSON
-	export Esinfo, escount, esearch ,escroll, @esexp ,@esexport ,escrollclear,esupdate,escript
+	export Esinfo, escount, esearch ,escroll, @esexp ,@esexport ,esbulkupdate,esbulkcript
 
 	struct Esinfo
 		host::AbstractString
@@ -13,6 +13,7 @@
 	end
 
 	struct ActionType{T} end
+	struct BulkType{T} end
 
 	function makeurl(::Type{ActionType{:_count}}, info::Esinfo, index::AbstractString)
 		"http://$(info.host):$(info.port)/$index/_count"
@@ -26,7 +27,7 @@
 		"http://$(info.host):$(info.port)/_search/scroll"
 	end
 
-	function makeurl(::Type{ActionType{:_update}}, info::Esinfo )
+	function makeurl(::Type{ActionType{:_bulk}}, info::Esinfo )
 		"http://$(info.host):$(info.port)/_bulk"
 	end
 
@@ -89,7 +90,7 @@
 
 	end
 
-	function esupdate(info::Esinfo, index::AbstractString, doctype::AbstractString, 
+	function esbulkupdate(info::Esinfo, index::AbstractString, doctype::AbstractString, 
 						data::Vector{<:Dict{<:AbstractString}}, 
 						id::Vector{<:Union{Number,AbstractString}},
 						asupsert::Bool)
@@ -98,12 +99,12 @@
 			throw("id size != data size")
 		end 
 		
-		chunk = (makebulk(ActionType{:_update}, index, doctype, x, y , asupsert) for (x ,y) in zip(data, id) )
-		esupdate(info, chunk)
+		chunk = (makebulk(BulkType{:_update}, index, doctype, x, y , asupsert) for (x ,y) in zip(data, id) )
+		esbulk(info, chunk)
 
 	end 
 
-	function escript(info::Esinfo, index::AbstractString, doctype::AbstractString, 
+	function esbulkcript(info::Esinfo, index::AbstractString, doctype::AbstractString, 
 						data::Vector{<:Dict{<:AbstractString}}, 
 						id::Vector{<:Union{Number,AbstractString}},
 						 sid::AbstractString,asupsert::Bool)
@@ -112,35 +113,102 @@
 			throw("id size != data size")
 		end
 		
-		chunk = (makebulk(ActionType{:script}, index, doctype, x, y , sid, asupsert) for (x ,y) in zip(data, id) )
-		esupdate(info, chunk)
+		chunk = (makebulk(BulkType{:_script}, index, doctype, x, y , sid, asupsert) for (x ,y) in zip(data, id) )
+		esbulk(info, chunk)
 	 
 
 	end 
 	
- 	function makebulk(::Type{ActionType{:_update}}, index::AbstractString, doctype::AbstractString, 
+	function esbulkindex(info::Esinfo, index::AbstractString, doctype::AbstractString, 
+						data::Vector{<:Dict{<:AbstractString}}, 
+						id::Vector{<:Union{Number,AbstractString}} )
+
+		if length(data) != length(id)
+			throw("id size != data size")
+		end
+		
+		chunk = (makebulk(BulkType{:_index}, index, doctype, x, y  ) for (x ,y) in zip(data, id) )
+		esbulk(info, chunk)
+	 
+
+	end 
+	
+	function esbulkcreate(info::Esinfo, index::AbstractString, doctype::AbstractString, 
+						data::Vector{<:Dict{<:AbstractString}}, 
+						id::Vector{<:Union{Number,AbstractString}} )
+
+		if length(data) != length(id)
+			throw("id size != data size")
+		end
+		
+		chunk = (makebulk(BulkType{:_create}, index, doctype, x, y ) for (x ,y) in zip(data, id) )
+		esbulk(info, chunk)
+	 
+
+	end 
+	
+	function esbulkdel(info::Esinfo, index::AbstractString, doctype::AbstractString, 
+						id::Vector{<:Union{Number,AbstractString}} )
+		
+		chunk = (makebulk(BulkType{:_del}, index, doctype, x ) for x in id )
+		esbulk(info, chunk)
+	 
+
+	end
+	
+	macro esmeta(method, index, doc, id)
+		esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $doc , "_id" => $id )) )))
+	end 
+	
+	function makebulk(::Type{BulkType{:_del}}, index::AbstractString, doctype::AbstractString, 
+						  id::Union{AbstractString, Number} )
+
+			title =  @esmeta "delete" index doctype id 
+			return( "$(title)\n")
+	 
+	end 
+	
+ 	function makebulk(::Type{BulkType{:_index}}, index::AbstractString, doctype::AbstractString, 
+						data::Dict{<:AbstractString}, id::Union{AbstractString, Number} )
+
+			title =  @esmeta "index" index doctype id 
+			content = data |> json
+			return( "$(title)\n$(content)\n")
+	 
+	end 
+	
+	 function makebulk(::Type{BulkType{:_create}}, index::AbstractString, doctype::AbstractString, 
+						data::Dict{<:AbstractString}, id::Union{AbstractString, Number})
+
+			title =  @esmeta "create" index doctype id 
+			content = data |> json
+			return( "$(title)\n$(content)\n")
+	 
+	end 
+	
+ 	function makebulk(::Type{BulkType{:_update}}, index::AbstractString, doctype::AbstractString, 
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number}, asupsert::Bool)
 
-			title = Dict("update" => Dict("_index" => index, "_type" => doctype, "_id" =>id ) ) |> json
+			title =  @esmeta "update" index doctype id 
 			content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
 			return( "$(title)\n$(content)\n")
 	 
 	end 
 	
-	function makebulk(::Type{ActionType{:script}}, index::AbstractString, doctype::AbstractString, 
+	function makebulk(::Type{BulkType{:_script}}, index::AbstractString, doctype::AbstractString, 
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number},
 						sid::AbstractString,asupsert::Bool)
 		
-			title = Dict("update" => Dict("_index" => index, "_type" => doctype, "_id" =>id ) ) |> json
+			title =  @esmeta "update" index doctype id 
 			content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
 											"doc_as_upsert" => asupsert, "lang" => "") |> json
 			return("$(title)\n$(content)\n")
 		
 	end 
 
-	function esupdate(info::Esinfo, data)
-		url   = makeurl(ActionType{:_update}, info )
-		query = Dict( )
+	function esbulk(info::Esinfo, data)
+		url   = makeurl(ActionType{:_bulk}, info )
+		query = Dict()
 		@esexport "POST" url data query "x-ndjson"
 	end 
 
