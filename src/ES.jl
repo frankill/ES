@@ -89,16 +89,21 @@
 		@esexport "DELETE" (url * "/_all") json(body) Dict() "json"
 
 	end
-
+	
+	macro esdatawarn(x, y)
+		esc(quote 
+				if length($x) != length($y)
+					throw("id size != data size")
+				end 
+			end )
+	end 
+	
 	function esbulkupdate(info::Esinfo, index::AbstractString, doctype::AbstractString, 
 						data::Vector{<:Dict{<:AbstractString}}, 
 						id::Vector{<:Union{Number,AbstractString}},
 						asupsert::Bool)
 
-		if length(data) != length(id)
-			throw("id size != data size")
-		end 
-		
+		@esdatawarn data id 
 		chunk = (makebulk(BulkType{:_update}, index, doctype, x, y , asupsert) for (x ,y) in zip(data, id) )
 		esbulk(info, chunk)
 
@@ -109,10 +114,7 @@
 						id::Vector{<:Union{Number,AbstractString}},
 						 sid::AbstractString,asupsert::Bool)
 
-		if length(data) != length(id)
-			throw("id size != data size")
-		end
-		
+		@esdatawarn data id 
 		chunk = (makebulk(BulkType{:_script}, index, doctype, x, y , sid, asupsert) for (x ,y) in zip(data, id) )
 		esbulk(info, chunk)
 	 
@@ -123,28 +125,20 @@
 						data::Vector{<:Dict{<:AbstractString}}, 
 						id::Vector{<:Union{Number,AbstractString}} )
 
-		if length(data) != length(id)
-			throw("id size != data size")
-		end
-		
+		@esdatawarn data id 
 		chunk = (makebulk(BulkType{:_index}, index, doctype, x, y  ) for (x ,y) in zip(data, id) )
 		esbulk(info, chunk)
 	 
-
 	end 
 	
 	function esbulkcreate(info::Esinfo, index::AbstractString, doctype::AbstractString, 
 						data::Vector{<:Dict{<:AbstractString}}, 
 						id::Vector{<:Union{Number,AbstractString}} )
 
-		if length(data) != length(id)
-			throw("id size != data size")
-		end
-		
+		@esdatawarn data id 
 		chunk = (makebulk(BulkType{:_create}, index, doctype, x, y ) for (x ,y) in zip(data, id) )
 		esbulk(info, chunk)
 	 
-
 	end 
 	
 	function esbulkdel(info::Esinfo, index::AbstractString, doctype::AbstractString, 
@@ -153,7 +147,6 @@
 		chunk = (makebulk(BulkType{:_del}, index, doctype, x ) for x in id )
 		esbulk(info, chunk)
 	 
-
 	end
 	
 	macro esmeta(method, index, doc, id)
