@@ -52,18 +52,26 @@
 
 	function escount(info::Esinfo, index::AbstractString)
 
-		url = makeurl(ActionType{:_count}, info, index )
-		res = @esexport "GET" url Dict() Dict() "json"
+		url   = makeurl(ActionType{:_count}, info, index )
+		res   = @esexport "GET" url Dict() Dict() "json"
 		@esexp res "count"
 
 	end
+	
+	function esearch(info::Esinfo, index::AbstractString, body::AbstractString , path::AbstractString="_search" ; kw...)
 
+		query = Dict(kw...)
+		url   = makeurl(ActionType{:_search}, info, index , path )
+		@esexport "POST" url body query "json"
+
+	end
+	
 	function esearch(info::Esinfo, index::AbstractString, body::Dict , path::AbstractString="_search" ; kw...)
 
 		query = Dict(kw...)
 		url   = makeurl(ActionType{:_search}, info, index , path )
 		@esexport "POST" url json(body) query "json"
-
+		
 	end
 
 	function escroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
@@ -156,35 +164,35 @@
 	function makebulk(::Type{BulkType{:_del}}, index::AbstractString, doctype::AbstractString, 
 						  id::Union{AbstractString, Number} )
 
-			title =  @esmeta "delete" index doctype id 
-			return( "$(title)\n")
+		title =  @esmeta "delete" index doctype id 
+		return( "$(title)\n")
 	 
 	end 
 	
  	function makebulk(::Type{BulkType{:_index}}, index::AbstractString, doctype::AbstractString, 
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number} )
 
-			title =  @esmeta "index" index doctype id 
-			content = data |> json
-			return( "$(title)\n$(content)\n")
+		title =  @esmeta "index" index doctype id 
+		content = data |> json
+		return( "$(title)\n$(content)\n")
 	 
 	end 
 	
 	 function makebulk(::Type{BulkType{:_create}}, index::AbstractString, doctype::AbstractString, 
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number})
 
-			title =  @esmeta "create" index doctype id 
-			content = data |> json
-			return( "$(title)\n$(content)\n")
+		title =  @esmeta "create" index doctype id 
+		content = data |> json
+		return( "$(title)\n$(content)\n")
 	 
 	end 
 	
  	function makebulk(::Type{BulkType{:_update}}, index::AbstractString, doctype::AbstractString, 
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number}, asupsert::Bool)
 
-			title =  @esmeta "update" index doctype id 
-			content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
-			return( "$(title)\n$(content)\n")
+		title =  @esmeta "update" index doctype id 
+		content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
+		return( "$(title)\n$(content)\n")
 	 
 	end 
 	
@@ -192,10 +200,10 @@
 						data::Dict{<:AbstractString}, id::Union{AbstractString, Number},
 						sid::AbstractString,asupsert::Bool)
 		
-			title =  @esmeta "update" index doctype id 
-			content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
-											"doc_as_upsert" => asupsert, "lang" => "") |> json
-			return("$(title)\n$(content)\n")
+		title =  @esmeta "update" index doctype id 
+		content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
+										"doc_as_upsert" => asupsert, "lang" => "") |> json
+		return("$(title)\n$(content)\n")
 		
 	end 
 
