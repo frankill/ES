@@ -1,6 +1,5 @@
 # ES
 
-
 using DataFrames
 using JSON
 
@@ -28,5 +27,3 @@ result = [ @esexp(x ,"_source" )  for x in res1 ]
 open("foo.json","w") do f  write(f, json(result ))  end
 
 esupdate(info, "test123", "doc", result, collect(1:length(result)), true)
- 
- 
