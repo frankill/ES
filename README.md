@@ -32,4 +32,5 @@ a =ES.esbulkindex(info, "test123", "doc", result, collect(1:length(result))  )
  
  #test 
 a= @filter(a=1, b in [1,2,3] , has("test"))
+
 @query(filter=a, size=10000) |> json
