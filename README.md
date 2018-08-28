@@ -1,9 +1,9 @@
 
 # For personal testing only.
 
-using DataFrames
+#using DataFrames
 using JSON
-using  ES
+using ES
 
 info  = Esinfo("host", "9200")  
 body1 = Dict( "id" => "es_log_filter" , 
@@ -30,3 +30,6 @@ open("foo.json","w") do f  write(f, json(result ))  end
 a =ES.esbulkindex(info, "test123", "doc", result, collect(1:length(result))  )
  
  
+ #test 
+a= @filter(a=1, b in [1,2,3] , has("test"))
+@query(filter=a, size=10000) |> json
