@@ -18,18 +18,7 @@ function make_json(method::AbstractString, exprs::Vector )
 end
 
 function make_json( exprs::Vector )
-	quote
-		len = length($exprs)
-		val = Array{Dict}(undef, length($exprs))
-		
-		for i in 1:len
-			(methods, name, content)  = trans($exprs[i])
-			val[i] = Dict(methods => Dict(name => eval(content ))) 
-		end 
-		
-		Dict("query" => Dict("bool" => val))
-	 
-	end 	
+ 
 end
  
 macro filter( expr... )
