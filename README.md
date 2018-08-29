@@ -24,13 +24,17 @@ for i = collect(1:num)
 end 
 
 result = [ @esexp(x ,"_source" )  for x in res1 ]
- 
-open("foo.json","w") do f  write(f, json(result ))  end
 
 a =ES.esbulkindex(info, "test123", "doc", result, collect(1:length(result))  )
  
  
  #test 
-a= @filter(a=1, b in [1,2,3] , has("test"))
+const inname = ["openid","data.longitude", "data.latitude"]
 
-@query(filter=a, size=10000) |> json
+const etime  = datetime2unix(now(UTC)) |> df -> round(Int,df)*1000
+
+const stime  = datetime2unix(now(UTC) - Second(300)) |> df -> round(Int,df)*1000
+
+esfilter = @filter(has("data.latitude") , local_time > stime , local_time < etime  )  
+
+querys   = @query(size=10000, _source in inname,  filter = esfilter)  |>  json 
