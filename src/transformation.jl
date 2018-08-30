@@ -1,6 +1,6 @@
 struct SearchNode{T} end
 
-const  sname = ["filter", "must", "must_not", "query" , "nested"]
+const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent"]
 
 function Base.push!(t::AbstractDict, b::AbstractDict)
 	for (x,y) in b 
@@ -68,6 +68,10 @@ function make_json( exprs::Vector )
 	end)
 end
  
+macro fulltext( expr... )
+    return  make_json(collect( expr ) ,"query") 
+end
+
 macro filter( expr... )
     return  make_json( "filter", collect( expr ))
 end
@@ -88,6 +92,13 @@ macro nested( expr... )
     return  make_json(collect( expr ) ,"nested") 
 end
 
+macro has_child( expr... )
+    return  make_json(collect( expr ) ,"has_child") 
+end
+
+macro has_parent( expr... )
+    return  make_json(collect( expr ) ,"has_parent") 
+end
 
 function trans( expr::Expr )
     trans( SearchNode{expr.head}, expr)
@@ -137,10 +148,10 @@ syms(::Type{esyms{:<=}})   = "gte"
 syms(::Type{esyms{:>}})    = "lt"
 syms(::Type{esyms{:>=}})   = "lte"
 
-not(::Type{esyms{:<}})     = esyms{:>}
-not(::Type{esyms{:<=}})    = esyms{:>=}
-not(::Type{esyms{:>}})     = esyms{:<}
-not(::Type{esyms{:<=}})    = esyms{:>=}
+not(::Type{esyms{:<}})  = esyms{:>}
+not(::Type{esyms{:<=}}) = esyms{:>=}
+not(::Type{esyms{:>}})  = esyms{:<}
+not(::Type{esyms{:<=}})  = esyms{:>=}
 
 function trans(::Type{SearchNode{:macrocall}}, expr::Expr)
 	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
