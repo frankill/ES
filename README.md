@@ -6,6 +6,7 @@
 # ><  == gt lt 
 
 julia > @fulltext(match = @query(type = "test")) | > json | > println 
+
 {
 	"query": {
 		"match": {
@@ -16,6 +17,7 @@ julia > @fulltext(match = @query(type = "test")) | > json | > println
 
 
 julia > @fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) | > json | > println
+
 {
 	"query": {
 		"bool": {
@@ -33,6 +35,7 @@ julia > @fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) 
 
 
 julia > @query(size = 1000, @filter(has("openid"))) | > json | > println
+
 {
 	"size": 1000,
 	"query": {
@@ -47,6 +50,7 @@ julia > @query(size = 1000, @filter(has("openid"))) | > json | > println
 }
 
 julia > @query(size = 1000, query = @filter(has("openid"))) | > json | > println
+
 {
 	"size": 1000,
 	"query": {
