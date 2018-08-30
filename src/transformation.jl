@@ -109,10 +109,40 @@ function trans(::Type{SearchNode{:(has)}}, expr::Expr)
 	("exists" , "field" , expr.args[2] )
 end 
 
-function trans(::Type{SearchNode{:(>)}}, expr::Expr)
+function trans(::Type{SearchNode{:(>=)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "gte" => $(expr.args[3])) ))
 end 
 
-function trans(::Type{SearchNode{:(<)}}, expr::Expr)
+function trans(::Type{SearchNode{:(<=)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "lte" => $(expr.args[3])) ))
 end 
+
+function trans(::Type{SearchNode{:(>)}}, expr::Expr)
+	("range" , expr.args[2] , :(Dict( "gt" => $(expr.args[3])) ))
+end 
+
+function trans(::Type{SearchNode{:(<)}}, expr::Expr)
+	("range" , expr.args[2] , :(Dict( "lt" => $(expr.args[3])) ))
+end 
+
+function trans(::Type{SearchNode{:comparison}}, expr::Expr)
+	sym = ( syms(esyms{expr.args[2]}) ,syms( not(esyms{expr.args[4]}) ) )
+	("range" , expr.args[3] , :(Dict( $(sym[1]) => $(expr.args[1]) ,$(sym[2]) => $(expr.args[5]) )))
+end 
+
+abstract type esyms{T} end 
+
+syms(::Type{esyms{:<}})    = "gt"
+syms(::Type{esyms{:<=}})   = "gte"
+syms(::Type{esyms{:>}})    = "lt"
+syms(::Type{esyms{:>=}})   = "lte"
+
+not(::Type{esyms{:<}})  = esyms{:>}
+not(::Type{esyms{:<=}}) = esyms{:>=}
+not(::Type{esyms{:>}})  = esyms{:<}
+not(::Type{esyms{:<=}})  = esyms{:>=}
+
+function trans(::Type{SearchNode{:macrocall}}, expr::Expr)
+	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
+end 
+
