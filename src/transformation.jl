@@ -137,10 +137,10 @@ syms(::Type{esyms{:<=}})   = "gte"
 syms(::Type{esyms{:>}})    = "lt"
 syms(::Type{esyms{:>=}})   = "lte"
 
-not(::Type{esyms{:<}})  = esyms{:>}
-not(::Type{esyms{:<=}}) = esyms{:>=}
-not(::Type{esyms{:>}})  = esyms{:<}
-not(::Type{esyms{:<=}})  = esyms{:>=}
+not(::Type{esyms{:<}})     = esyms{:>}
+not(::Type{esyms{:<=}})    = esyms{:>=}
+not(::Type{esyms{:>}})     = esyms{:<}
+not(::Type{esyms{:<=}})    = esyms{:>=}
 
 function trans(::Type{SearchNode{:macrocall}}, expr::Expr)
 	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
