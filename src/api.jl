@@ -57,7 +57,7 @@
 			end )
 	end
 
-	function esputsnapshot(info::Esinfo, backup_path::AbstractString, index::AbstractString, body::Dict{};kw...)
+	function esputsnapshot(info::Esinfo, backup_path::AbstractString, index::AbstractString, body::Dict;kw...)
 
 		query = Dict(kw...)
 		url   = makeurl(ActionType{:_snapshot}, info, backup_path ,index )
