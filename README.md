@@ -1,5 +1,3 @@
-
-# For personal testing only.
 # in == terms
 # =  == term
 # has == exists
