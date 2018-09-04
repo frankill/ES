@@ -137,7 +137,7 @@ function trans(::Type{SearchNode{:(<)}}, expr::Expr)
 end 
 
 function trans(::Type{SearchNode{:comparison}}, expr::Expr)
-	sym = ( syms(esyms{expr.args[2]}) ,syms( not(esyms{expr.args[4]}) ) )
+	sym = ( syms(esyms{expr.args[2]}) ,syms( ! esyms{expr.args[4]}) )
 	("range" , expr.args[3] , :(Dict( $(sym[1]) => $(expr.args[1]) ,$(sym[2]) => $(expr.args[5]) )))
 end 
 
@@ -146,12 +146,12 @@ abstract type esyms{T} end
 syms(::Type{esyms{:<}})    = "gt"
 syms(::Type{esyms{:<=}})   = "gte"
 syms(::Type{esyms{:>}})    = "lt"
-syms(::Type{esyms{:>=}})   = "lte"
+syms(::Type{esyms{:>=}})   = "lte" 
 
-not(::Type{esyms{:<}})  = esyms{:>}
-not(::Type{esyms{:<=}}) = esyms{:>=}
-not(::Type{esyms{:>}})  = esyms{:<}
-not(::Type{esyms{:<=}})  = esyms{:>=}
+Base.:!(::Type{esyms{:<}})  = esyms{:>}
+Base.:!(::Type{esyms{:<=}}) = esyms{:>=}
+Base.:!(::Type{esyms{:>}})  = esyms{:<}
+Base.:!(::Type{esyms{:<=}})  = esyms{:>=}
 
 function trans(::Type{SearchNode{:macrocall}}, expr::Expr)
 	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
