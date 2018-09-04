@@ -8,6 +8,5 @@
 
 	include("api.jl")
 	include("Transformation.jl")
-	include("baidumap.jl")
 
 end 
