@@ -1,3 +1,4 @@
+# 对es中常用的操作做了一些转换，支持must must_not filter nested 等过滤和查询
 # in == terms
 # =  == term
 # has == exists
