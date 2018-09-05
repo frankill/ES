@@ -3,14 +3,14 @@
 # =  == term
 # has == exists
 # ><  == gt lt 
-
+# julia对应到es中的json
 ```
 using ES
 using JSON
 ```
 
 ```julia
-@fulltext(match = @query(type = "test")) |> json |> println 
+@fulltext(match = @query(type = "test")) 
 ```
 ```json
 {
@@ -22,7 +22,7 @@ using JSON
 }
 ```
 ```julia
-@fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) |> json |> println
+@fulltext(match = @query(type = "test"), bool = @filter(has("openid")))
 ```
 ```json
 {
@@ -41,7 +41,7 @@ using JSON
 }
 ```
 ```julia
-@query(size = 1000, @filter(has("openid"))) |> json |> println
+@query(size = 1000, @filter(has("openid"))) 
 ```
 ```json
 {
@@ -58,7 +58,7 @@ using JSON
 }
 ```
 ```julia
-@query(size = 1000, query = @filter(has("openid"))) |> json |> println
+@query(size = 1000, query = @filter(has("openid"))) 
 ```
 ```json
 {
