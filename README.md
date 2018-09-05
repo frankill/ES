@@ -15,9 +15,10 @@ julia > @fulltext(match = @query(type = "test")) | > json | > println
 	}
 }
 ```
-
+```julia
 julia > @fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) | > json | > println
-
+```
+```json
 {
 	"query": {
 		"bool": {
@@ -32,10 +33,11 @@ julia > @fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) 
 		}
 	}
 }
-
-
+```
+```julia
 julia > @query(size = 1000, @filter(has("openid"))) | > json | > println
-
+```
+```json
 {
 	"size": 1000,
 	"query": {
@@ -48,9 +50,11 @@ julia > @query(size = 1000, @filter(has("openid"))) | > json | > println
 		}
 	}
 }
-
+```
+```julia
 julia > @query(size = 1000, query = @filter(has("openid"))) | > json | > println
-
+```
+```json
 {
 	"size": 1000,
 	"query": {
@@ -63,5 +67,5 @@ julia > @query(size = 1000, query = @filter(has("openid"))) | > json | > println
 		}
 	}
 }
-
+```
 
