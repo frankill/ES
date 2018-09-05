@@ -1,4 +1,6 @@
- module ES
+__precompile__()
+
+module ES
 
 	using HTTP
 	using JSON
