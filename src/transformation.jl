@@ -104,6 +104,10 @@ function estrans( expr::Expr )
     estrans( SearchNode{expr.head}, expr)
 end
 
+function trans(expr::Symbol)
+     trans(eval(expr))
+end
+
 function estrans( ::Type{SearchNode{:call}}, expr::Expr)
      estrans(SearchNode{expr.args[1]}, expr)
 end
