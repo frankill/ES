@@ -5,3 +5,7 @@
 
 a = :( 1< a <=4)
 @query(a)
+
+t = :(size=d)
+d = 1000
+@query(t,@filter(b=1))
