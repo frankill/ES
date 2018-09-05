@@ -104,7 +104,7 @@ function estrans( expr::Expr )
     estrans( SearchNode{expr.head}, expr)
 end
 
-function trans(expr::Symbol)
+function estrans(expr::Symbol)
      estrans(eval(expr))
 end
 
