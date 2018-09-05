@@ -144,9 +144,9 @@ end
 abstract type esyms{T} end 
 
 syms(::Type{esyms{:<}})    = "gt"
-syms(::Type{esyms{:<=}})   = "gte"
+syms(::Type{esyms{:(<=)}})   = "gte"
 syms(::Type{esyms{:>}})    = "lt"
-syms(::Type{esyms{:>=}})   = "lte" 
+syms(::Type{esyms{:(>=)}})   = "lte" 
 
 Base.:!(::Type{esyms{:<}})  = esyms{:>}
 Base.:!(::Type{esyms{:(<=)}}) = esyms{:(>=)}
