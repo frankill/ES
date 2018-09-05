@@ -76,8 +76,8 @@ using JSON
 ```
 
 ```julia
-path = :(path="/home")
-@query(size=100, @must_not(id >100) , @nested( path,@filter(1< rownum <=100) ))
+path = :(path="home")
+@query(size=100, @must_not(id >100) , @nested( path, @query(@filter(1< home.rownum <=100) )))
 ```
 ```json
 {
@@ -92,15 +92,19 @@ path = :(path="/home")
 				}
 			}],
 			"nested": {
-				"path": "/home",
-				"filter": [{
-					"range": {
-						"rownum": {
-							"lte": 100,
-							"gt": 1
-						}
+				"path": "home",
+				"query": {
+					"bool": {
+						"filter": [{
+							"range": {
+								"home.rownum": {
+									"lte": 100,
+									"gt": 1
+								}
+							}
+						}]
 					}
-				}]
+				}
 			}
 		}
 	}
