@@ -75,3 +75,32 @@ using JSON
 }
 ```
 
+```julia
+path = :(path="/home")
+@query( @nested(size=1000, path, @must( has("id")) , @filter(1< rownum <=100) ))
+```
+```json
+{
+	"query": {
+		"bool": {
+			"nested": {
+				"path": "/home",
+				"filter": [{
+					"range": {
+						"rownum": {
+							"lte": 100,
+							"gt": 1
+						}
+					}
+				}],
+				"size": 1000,
+				"must": [{
+					"exists": {
+						"field": "id"
+					}
+				}]
+			}
+		}
+	}
+}
+```
