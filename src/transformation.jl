@@ -14,7 +14,7 @@ function make_json(method::AbstractString, exprs::Vector )
 			local val = Array{Dict}(undef, length($exprs))
 			
 			for i in 1:len
-				(methods, name, content)  = trans($exprs[i])
+				(methods, name, content)  = estrans($exprs[i])
 				if string(name) in sname  
 					val[i] =  eval(content) 
 				else 
@@ -32,7 +32,7 @@ function make_json(  exprs::Vector, type::AbstractString )
 			local val = Dict()
 			
 			for i in 1:len
-				(methods, name, content)  = trans($exprs[i])
+				(methods, name, content)  = estrans($exprs[i])
 				if string(name) in sname  
 					push!(val, eval(content ))
 				else 
@@ -51,7 +51,7 @@ function make_json( exprs::Vector )
 			local query = Dict()
 			
 			for i in 1:len
-				(methods, name, content)  = trans($exprs[i])
+				(methods, name, content)  = estrans($exprs[i])
 				
 				if string(name) in sname  
 					push!(query, eval(content ))
@@ -100,43 +100,43 @@ macro has_parent( expr... )
     return  make_json(collect( expr ) ,"has_parent") 
 end
 
-function trans( expr::Expr )
-    trans( SearchNode{expr.head}, expr)
+function estrans( expr::Expr )
+    estrans( SearchNode{expr.head}, expr)
 end
 
-function trans( ::Type{SearchNode{:call}}, expr::Expr)
-     trans(SearchNode{expr.args[1]}, expr)
+function estrans( ::Type{SearchNode{:call}}, expr::Expr)
+     estrans(SearchNode{expr.args[1]}, expr)
 end
 
-function trans(::Type{SearchNode{:(=)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(=)}}, expr::Expr)
 	("term" , expr.args[1] ,  expr.args[2] )
 end 
 
-function trans(::Type{SearchNode{:(in)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(in)}}, expr::Expr)
 	("terms" , expr.args[2] , expr.args[3] )
 end 
 
-function trans(::Type{SearchNode{:(has)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(has)}}, expr::Expr)
 	("exists" , "field" , expr.args[2] )
 end 
 
-function trans(::Type{SearchNode{:(>=)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(>=)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "gte" => $(expr.args[3])) ))
 end 
 
-function trans(::Type{SearchNode{:(<=)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(<=)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "lte" => $(expr.args[3])) ))
 end 
 
-function trans(::Type{SearchNode{:(>)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(>)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "gt" => $(expr.args[3])) ))
 end 
 
-function trans(::Type{SearchNode{:(<)}}, expr::Expr)
+function estrans(::Type{SearchNode{:(<)}}, expr::Expr)
 	("range" , expr.args[2] , :(Dict( "lt" => $(expr.args[3])) ))
 end 
 
-function trans(::Type{SearchNode{:comparison}}, expr::Expr)
+function estrans(::Type{SearchNode{:comparison}}, expr::Expr)
 	sym = ( syms(esyms{expr.args[2]}) ,syms( ! esyms{expr.args[4]}) )
 	("range" , expr.args[3] , :(Dict( $(sym[1]) => $(expr.args[1]) ,$(sym[2]) => $(expr.args[5]) )))
 end 
@@ -153,7 +153,7 @@ Base.:!(::Type{esyms{:<=}}) = esyms{:>=}
 Base.:!(::Type{esyms{:>}})  = esyms{:<}
 Base.:!(::Type{esyms{:<=}})  = esyms{:>=}
 
-function trans(::Type{SearchNode{:macrocall}}, expr::Expr)
+function estrans(::Type{SearchNode{:macrocall}}, expr::Expr)
 	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
 end 
 
