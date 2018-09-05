@@ -3,8 +3,10 @@
 # has == exists
 # ><  == gt lt 
 
+```julia
 julia > @fulltext(match = @query(type = "test")) | > json | > println 
-
+```
+```json
 {
 	"query": {
 		"match": {
@@ -12,7 +14,7 @@ julia > @fulltext(match = @query(type = "test")) | > json | > println
 		}
 	}
 }
-
+```
 
 julia > @fulltext(match = @query(type = "test"), bool = @filter(has("openid"))) | > json | > println
 
