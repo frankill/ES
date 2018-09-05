@@ -15,6 +15,7 @@ function make_json(method::AbstractString, exprs::Vector )
 			
 			for i in 1:len
 				(methods, name, content)  = estrans($exprs[i])
+				name == nothing && ((methods, name, content) = eval(content))
 				if string(name) in sname  
 					val[i] =  eval(content) 
 				else 
@@ -33,6 +34,7 @@ function make_json(  exprs::Vector, type::AbstractString )
 			
 			for i in 1:len
 				(methods, name, content)  = estrans($exprs[i])
+				name == nothing && ((methods, name, content) = eval(content))
 				if string(name) in sname  
 					push!(val, eval(content ))
 				else 
@@ -52,7 +54,7 @@ function make_json( exprs::Vector )
 			
 			for i in 1:len
 				(methods, name, content)  = estrans($exprs[i])
-				
+				name == nothing && ((methods, name, content) = eval(content))
 				if string(name) in sname  
 					push!(query, eval(content ))
 				else 
@@ -105,7 +107,7 @@ function estrans( expr::Expr )
 end
 
 function estrans(expr::Symbol)
-    (nothing  , expr ,  Expr(:call, :estrans, expr) )
+    (nothing  , nothing ,  Expr(:call, :estrans, expr) )
 end
 
 function estrans( ::Type{SearchNode{:call}}, expr::Expr)
