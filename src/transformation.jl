@@ -149,9 +149,9 @@ syms(::Type{esyms{:>}})    = "lt"
 syms(::Type{esyms{:>=}})   = "lte" 
 
 Base.:!(::Type{esyms{:<}})  = esyms{:>}
-Base.:!(::Type{esyms{:<=}}) = esyms{:>=}
+Base.:!(::Type{esyms{:(<=)}}) = esyms{:(>=)}
 Base.:!(::Type{esyms{:>}})  = esyms{:<}
-Base.:!(::Type{esyms{:<=}})  = esyms{:>=}
+Base.:!(::Type{esyms{:(<=)}})  = esyms{:(>=)}
 
 function estrans(::Type{SearchNode{:macrocall}}, expr::Expr)
 	(nothing  , replace(string(expr.args[1]), "@" => "")  , expr)
