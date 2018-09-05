@@ -77,12 +77,20 @@ using JSON
 
 ```julia
 path = :(path="/home")
-@query( @nested(size=1000, path, @must( has("id")) , @filter(1< rownum <=100) ))
+@query(size=100, @must_not(id >100) , @nested( path,@filter(1< rownum <=100) ))
 ```
 ```json
 {
+	"size": 100,
 	"query": {
 		"bool": {
+			"must_not": [{
+				"range": {
+					"id": {
+						"gt": 100
+					}
+				}
+			}],
 			"nested": {
 				"path": "/home",
 				"filter": [{
@@ -91,12 +99,6 @@ path = :(path="/home")
 							"lte": 100,
 							"gt": 1
 						}
-					}
-				}],
-				"size": 1000,
-				"must": [{
-					"exists": {
-						"field": "id"
 					}
 				}]
 			}
