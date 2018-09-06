@@ -3,9 +3,3 @@
 @query(size = 1000, @filter(has("openid")))
 @query(size = 1000, query = @filter(has("openid")))
 
-a = :( 1< a <=4)
-@query(a)
-
-t = :(size=d)
-d = 1000
-@query(t,@filter(b=1))
