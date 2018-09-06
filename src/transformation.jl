@@ -8,68 +8,132 @@ function Base.push!(t::AbstractDict, b::AbstractDict)
 	end 
 end  
 
+# function make_json(method::AbstractString, exprs::Vector )
+# 	esc(quote
+# 			local len = length($exprs)
+# 			local val = Array{Dict}(undef, length($exprs))
+			
+# 			for i in 1:len
+# 				(methods, name, content)  = estrans($exprs[i])
+# 				name == nothing && ((methods, name, content) = eval(content))
+# 				if string(name) in sname  
+# 					val[i] =  eval(content) 
+# 				else 
+# 					val[i] = Dict(methods => Dict(name =>  eval(content)   )) 
+# 				end 
+# 			end 
+			
+# 			Dict($method => val)
+# 	end)
+# end
+
+# function make_json(  exprs::Vector, type::AbstractString )
+# 	esc(quote
+# 			local len = length($exprs)
+# 			local val = Dict()
+			
+# 			for i in 1:len
+# 				(methods, name, content)  = estrans($exprs[i])
+# 				name == nothing && ((methods, name, content) = eval(content))
+# 				if string(name) in sname  
+# 					push!(val, eval(content ))
+# 				else 
+# 					push!(val, name => eval(content )) 
+# 				end 
+# 			end 
+			
+# 			Dict($type => val)
+# 	end)	
+# end
+
+# function make_json( exprs::Vector )
+# 	esc(quote
+# 			local len = length($exprs)
+# 			local val = Dict()
+# 			local query = Dict()
+			
+# 			for i in 1:len
+# 				(methods, name, content)  = estrans($exprs[i])
+# 				name == nothing && ((methods, name, content) = eval(content))
+# 				if string(name) in sname  
+# 					push!(query, eval(content ))
+# 				else 
+# 					push!(val, name => eval(content )) 
+# 				end 
+# 			end 
+			
+# 			if ! isempty(query)
+# 				merge(val,  Dict("query" => Dict( "bool" => query)))
+# 			else 
+# 				val
+# 			end 
+# 	end)
+# end
+ 
 function make_json(method::AbstractString, exprs::Vector )
-	esc(quote
-			local len = length($exprs)
-			local val = Array{Dict}(undef, length($exprs))
-			
-			for i in 1:len
-				(methods, name, content)  = estrans($exprs[i])
-				name == nothing && ((methods, name, content) = eval(content))
-				if string(name) in sname  
-					val[i] =  eval(content) 
-				else 
-					val[i] = Dict(methods => Dict(name =>  eval(content)   )) 
-				end 
-			end 
-			
-			Dict($method => val)
-	end)
+
+	len = length(exprs)
+	val = Array{Expr}(undef, length(exprs))
+	
+	for i in 1:len
+		(methods, name, content)  = estrans(exprs[i])
+		typeof(name) != String && (name = string(name))
+
+		if name in sname  
+			val[i] =  :( eval($content) )
+		else 
+			val[i] = :( Dict($methods => Dict( $name  => eval($content))   )) 
+		end 
+	end 
+
+	esc(:(Dict($method => map(eval, $val))))
 end
 
 function make_json(  exprs::Vector, type::AbstractString )
-	esc(quote
-			local len = length($exprs)
-			local val = Dict()
-			
-			for i in 1:len
-				(methods, name, content)  = estrans($exprs[i])
-				name == nothing && ((methods, name, content) = eval(content))
-				if string(name) in sname  
-					push!(val, eval(content ))
-				else 
-					push!(val, name => eval(content )) 
-				end 
-			end 
-			
-			Dict($type => val)
-	end)	
+
+	len = length(exprs)
+	val = Array{Expr}(undef, length(exprs))
+	
+	for i in 1:len
+		(methods, name, content)  = estrans(exprs[i])
+		typeof(name) != String && (name = string(name))
+
+		if name in sname  
+			val[i] =  :( $name => eval($content)[$name] )
+		else 
+			val[i] = :( $name  => eval($content))  
+		end 
+	end 
+	
+	esc(:(Dict($type => Dict(map(eval, $val)))))
+
 end
 
 function make_json( exprs::Vector )
-	esc(quote
-			local len = length($exprs)
-			local val = Dict()
-			local query = Dict()
-			
-			for i in 1:len
-				(methods, name, content)  = estrans($exprs[i])
-				name == nothing && ((methods, name, content) = eval(content))
-				if string(name) in sname  
-					push!(query, eval(content ))
-				else 
-					push!(val, name => eval(content )) 
-				end 
-			end 
-			
-			if ! isempty(query)
-				merge(val,  Dict("query" => Dict( "bool" => query)))
-			else 
-				val
-			end 
-	end)
+
+	len = length(exprs)
+	val = Expr[]
+	query = Expr[]
+	
+	for i in exprs
+		(methods, name, content)  = estrans(i)
+		typeof(name) != String && (name = string(name))
+
+		if name in sname  
+			push!(query, :($name => eval($content)[$name]  ))
+		else 
+			push!(val, :($name => eval($content )))
+		end 
+	end 
+	
+	if ! isempty(query)
+		esc(:( merge(Dict(map(eval, $val)),  Dict("query" => Dict( "bool" => Dict(map(eval, $query)))))))
+	else 
+		esc(:( Dict(map(eval, $val))) )
+	end 
+
 end
- 
+						
 macro fulltext( expr... )
     return  make_json(collect( expr ) ,"query") 
 end
@@ -106,9 +170,9 @@ function estrans( expr::Expr )
     estrans( SearchNode{expr.head}, expr)
 end
 
-function estrans(expr::Symbol)
-    (nothing  , nothing ,  Expr(:call, :estrans, expr) )
-end
+# function estrans(expr::Symbol)
+#     (nothing  , nothing ,  Expr(:call, :estrans, expr) )
+# end
 
 function estrans( ::Type{SearchNode{:call}}, expr::Expr)
      estrans(SearchNode{expr.args[1]}, expr)
