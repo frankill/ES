@@ -69,6 +69,19 @@ end
 # 			end 
 # 	end)
 # end
+
+function make_loop(exprs::Vector )
+
+	len = length(exprs)
+	val = Array{Expr}(undef, length(exprs))
+	
+	for i in 1:len
+		(methods, name, content)  = estrans(exprs[i])
+		val[i] = :( $(string(name))  => eval($content)  )
+	end 
+
+	esc(:(Dict(map(eval, $val))))
+end
  
 function make_json(method::AbstractString, exprs::Vector )
 
@@ -133,6 +146,10 @@ function make_json( exprs::Vector )
 	end 
 
 end
+
+macro common( expr...)
+	return  make_loop(collect( expr )) 
+end 
 						
 macro fulltext( expr... )
     return  make_json(collect( expr ) ,"query") 
