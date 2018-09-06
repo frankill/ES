@@ -57,23 +57,6 @@ using JSON
 	}
 }
 ```
-```julia
-@query(size = 1000, query = @filter(has("openid"))) 
-```
-```json
-{
-	"size": 1000,
-	"query": {
-		"bool": {
-			"filter": [{
-				"exists": {
-					"field": "openid"
-				}
-			}]
-		}
-	}
-}
-```
 
 ```julia
 size , rownum = 1000, 100
