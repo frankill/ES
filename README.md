@@ -59,11 +59,11 @@ using ES
 
 ```julia
 size , rownum = 1000, 100
-@query(size=size, @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=rownum) )))
+@query(size=size,_source in ["a","b"], @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=rownum) )))
 ```
 ```json
 {
-	"size": 100,
+	"size": 1000,
 	"query": {
 		"bool": {
 			"must_not": [{
@@ -79,7 +79,7 @@ size , rownum = 1000, 100
 						"filter": [{
 							"range": {
 								"home.rownum": {
-									"lte": 100,
+									"lte": 100000,
 									"gt": 1
 								}
 							}
@@ -89,6 +89,7 @@ size , rownum = 1000, 100
 				"path": "home"
 			}
 		}
-	}
+	},
+	"_source": ["a", "b"]
 }
 ```
