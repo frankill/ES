@@ -76,7 +76,8 @@ using JSON
 ```
 
 ```julia
-@query(size=100, @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=100) )))
+size , rownum = 1000, 100
+@query(size=size, @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=rownum) )))
 ```
 ```json
 {
