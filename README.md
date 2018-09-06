@@ -91,7 +91,6 @@ using JSON
 				}
 			}],
 			"nested": {
-				"path": "home",
 				"query": {
 					"bool": {
 						"filter": [{
@@ -103,7 +102,8 @@ using JSON
 							}
 						}]
 					}
-				}
+				},
+				"path": "home"
 			}
 		}
 	}
