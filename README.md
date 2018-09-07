@@ -65,8 +65,8 @@ has == exists
 ```
 
 ```julia
-size , rownum = 1000, 100
-@query(size=size,_source in ["a","b"], @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=rownum) )))
+sizes , rownum = 1000, 100
+@query(size=sizes,_source in ["a","b"], @must_not(id >100) , @nested( path="home", @query(@filter(1< home.rownum <=rownum) )))
 ```
 ```json
 {
