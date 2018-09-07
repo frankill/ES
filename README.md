@@ -1,17 +1,18 @@
-```
+# Elasticsearch
  
 es Client implemented in Julia.
 I wanted something with which to learn a little Julia
 So really this is just a pet project. I'm not sure how far it will get.
+ 
+``` julia
+using ES
 
+"""
 in == terms
 =  == term
 has == exists
 ><  == gt lt 
-```
- 
-```
-using ES
+"""
 ```
 
 ```julia
