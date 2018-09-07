@@ -1,12 +1,13 @@
-```julia
+```
  
 es Client implemented in Julia.
 I wanted something with which to learn a little Julia
 So really this is just a pet project. I'm not sure how far it will get.
-# in == terms
-# =  == term
-# has == exists
-# ><  == gt lt 
+
+in == terms
+=  == term
+has == exists
+><  == gt lt 
 ```
  
 ```
