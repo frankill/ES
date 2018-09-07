@@ -70,6 +70,83 @@ end
 # 	end)
 # end
 
+# function make_loop(exprs::Vector )
+
+# 	len = length(exprs)
+# 	val = Array{Expr}(undef, length(exprs))
+	
+# 	for i in 1:len
+# 		(methods, name, content)  = estrans(exprs[i])
+# 		val[i] = :( $(string(name))  => eval($content)  )
+# 	end 
+
+# 	esc(:(Dict(map(eval, $val))))
+# end
+ 
+# function make_json(method::AbstractString, exprs::Vector )
+
+# 	len = length(exprs)
+# 	val = Array{Expr}(undef, length(exprs))
+	
+# 	for i in 1:len
+# 		(methods, name, content)  = estrans(exprs[i])
+# 		typeof(name) != String && (name = string(name))
+
+# 		if name in sname  
+# 			val[i] =  :( eval($content) )
+# 		else 
+# 			val[i] = :( Dict($methods => Dict( $name  => eval($content))   )) 
+# 		end 
+# 	end 
+
+# 	esc(:(Dict($method => map(eval, $val))))
+# end
+
+# function make_json(  exprs::Vector, type::AbstractString )
+
+# 	len = length(exprs)
+# 	val = Array{Expr}(undef, length(exprs))
+	
+# 	for i in 1:len
+# 		(methods, name, content)  = estrans(exprs[i])
+# 		typeof(name) != String && (name = string(name))
+
+# 		if name in sname  
+# 			val[i] =  :( $name => eval($content)[$name] )
+# 		else 
+# 			val[i] = :( $name  => eval($content))  
+# 		end 
+# 	end 
+	
+# 	esc(:(Dict($type => Dict(map(eval, $val)))))
+
+# end
+
+# function make_json( exprs::Vector )
+
+# 	len = length(exprs)
+# 	val = Expr[]
+# 	query = Expr[]
+	
+# 	for i in exprs
+# 		(methods, name, content)  = estrans(i)
+# 		typeof(name) != String && (name = string(name))
+
+# 		if name in sname  
+# 			push!(query, :($name => eval($content)[$name]  ))
+# 		else 
+# 			push!(val, :($name => eval($content )))
+# 		end 
+# 	end 
+	
+# 	if ! isempty(query)
+# 		esc(:( merge(Dict(map(eval, $val)),  Dict("query" => Dict( "bool" => Dict(map(eval, $query)))))))
+# 	else 
+# 		esc(:( Dict(map(eval, $val))) )
+# 	end 
+
+# end
+
 function make_loop(exprs::Vector )
 
 	len = length(exprs)
@@ -80,9 +157,9 @@ function make_loop(exprs::Vector )
 		val[i] = :( $(string(name))  => eval($content)  )
 	end 
 
-	esc(:(Dict(map(eval, $val))))
+	esc(Expr( :call, :Dict, val... ))
 end
- 
+
 function make_json(method::AbstractString, exprs::Vector )
 
 	len = length(exprs)
@@ -93,13 +170,12 @@ function make_json(method::AbstractString, exprs::Vector )
 		typeof(name) != String && (name = string(name))
 
 		if name in sname  
-			val[i] =  :( eval($content) )
+			val[i] =  :( $name => eval($content)[$name] )
 		else 
-			val[i] = :( Dict($methods => Dict( $name  => eval($content))   )) 
+			val[i] =  :( $methods => Dict( $name  => eval($content)) ) 
 		end 
 	end 
-
-	esc(:(Dict($method => map(eval, $val))))
+	Expr( :call, :Dict, val... ) |> df -> esc(:(Dict($method => $df )))
 end
 
 function make_json(  exprs::Vector, type::AbstractString )
@@ -114,12 +190,10 @@ function make_json(  exprs::Vector, type::AbstractString )
 		if name in sname  
 			val[i] =  :( $name => eval($content)[$name] )
 		else 
-			val[i] = :( $name  => eval($content))  
+			val[i] =  :( $name  => eval($content))  
 		end 
 	end 
-	
-	esc(:(Dict($type => Dict(map(eval, $val)))))
-
+	Expr( :call, :Dict, val... ) |> df -> esc(:(Dict($type => $df)))
 end
 
 function make_json( exprs::Vector )
@@ -139,10 +213,13 @@ function make_json( exprs::Vector )
 		end 
 	end 
 	
+	vexp = Expr( :call, :Dict, val... )
+
 	if ! isempty(query)
-		esc(:( merge(Dict(map(eval, $val)),  Dict("query" => Dict( "bool" => Dict(map(eval, $query)))))))
+		qexp = Expr( :call, :Dict, query... ) |> df -> :(Dict("query" => Dict("bool" => $df)))
+		esc(Expr( :call, :merge, vexp , qexp ))
 	else 
-		esc(:( Dict(map(eval, $val))) )
+		esc(vexp)
 	end 
 
 end
