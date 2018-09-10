@@ -175,7 +175,7 @@ function make_json(method::AbstractString, exprs::Vector )
 			val[i] =  :( $methods => Dict( $name  => eval($content)) ) 
 		end 
 	end 
-        esc(:(Dict($method => map(eval, $val) )))
+ 	Expr( :call, :vcat, val... ) |> df -> esc(:(Dict($method => $df )))
 end
 
 function make_json(  exprs::Vector, type::AbstractString )
