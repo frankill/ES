@@ -135,6 +135,20 @@
 		@esexport "POST" url json(body) query "application/json"
 		
 	end
+		
+	function esfsearch(info::Esinfo, index::AbstractString, query::T ; time::AbstractString="20s" ) where T <: Union{AbstractString, Dict}
+		res  = esearch(info, index, query, "_search", scroll="20s" ) 
+		snum = res["hits"]["total"]
+		typeof(query) <: AbstractString && (query = JSON.Parser.parse(query)) 
+		num  = get(query , "size", 10000)
+		snum <= num && return res["hits"]["hits"]
+
+		for i in 1:(Int(floor(snum/num)))
+			escroll(info , res["_scroll_id"] , time) |> 
+				df -> append!(res["hits"]["hits"], df["hits"]["hits"] )
+		end 
+		res["hits"]["hits"]
+	end 
 
 	function escroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
 
