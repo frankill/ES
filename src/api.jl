@@ -86,7 +86,14 @@
 		@esexport "DELETE" url Dict() Dict() "application/json"
 
 	end
+		
+	function esindexsetting(info::Esinfo, index::AbstractString)
 
+		url   = makeurl(ActionType{:_setting}, info, index )
+		@esexport "GET" url Dict() Dict() "application/json"
+
+	end
+		
 	function filtercombin(; filters...)
 		esfilter = Dict(filters...)
 		Dict("bool" => Dict("filter" => esfilter ))
