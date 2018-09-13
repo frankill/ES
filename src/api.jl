@@ -183,7 +183,7 @@ end
 
 function escrollclear(info::Esinfo, id::Union{Vector{AbstractString},AbstractString} )
 
-	url   = makeurl(ActionType{:scroll}, info )
+	url   = makeurl(ActionType{:_scroll}, info )
 	body = Dict("scroll_id" => id)
 	@esexport "DELETE" url json(body) Dict() "application/json"
 
@@ -191,7 +191,7 @@ end
 
 function escrollclear(info::Esinfo)
 
-	url   = makeurl(ActionType{:scroll}, info )
+	url   = makeurl(ActionType{:_scroll}, info )
 	body  = Dict()
 	@esexport "DELETE" (url * "/_all") json(body) Dict() "application/json"
 
