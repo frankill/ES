@@ -161,7 +161,7 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	num   = pop!(body, "size", 10000)
 	snum  = escount(info, index, body )
 	query = Dict(kw..., :size => num)
-
+			
 	res   = esearch(info, index, body, query)  
 	snum  <= num && return res
 
@@ -169,7 +169,8 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
 			df -> append!(res["hits"]["hits"], df["hits"]["hits"] )
 	end 
-
+	escrollclear(info, res["_scroll_id"])
+	pop!(res, "_scroll_id")
 	res
 end
 
