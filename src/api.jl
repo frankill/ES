@@ -147,19 +147,31 @@ function esearch(info::Esinfo, index::AbstractString, body::Dict , path::Abstrac
 
 end
 
-function esfsearch(info::Esinfo, index::AbstractString, query::T ; time::AbstractString="20s" ) where T <: Union{AbstractString, Dict}
-	res  = esearch(info, index, query, "_search", scroll="20s" ) 
-	snum = res["hits"]["total"]
-	typeof(query) <: AbstractString && (query = JSON.Parser.parse(query)) 
-	num  = get(query , "size", 10000)
-	snum <= num && return res["hits"]["hits"]
+function esearch(info::Esinfo, index::AbstractString, body::Dict ,query::Dict, path::AbstractString="_search" )
+
+	url   = makeurl(ActionType{:_search}, info, index , path )
+	@esexport "POST" url json(body) query "application/json"
+
+end
+
+function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where T <: Union{AbstractString, Dict}
+
+	typeof(body) <: AbstractString && (body= JSON.Parser.parse(body))
+
+	num   = pop!(body, "size", 10000)
+	snum  = escount(info, index, body )
+	query = Dict(kw..., :size => num)
+
+	res   = esearch(info, index, body, query)  
+	snum  <= num && return res
 
 	for i in 1:(Int(floor(snum/num)))
-		escroll(info , res["_scroll_id"] , time) |> 
+		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
 			df -> append!(res["hits"]["hits"], df["hits"]["hits"] )
 	end 
-	res["hits"]["hits"]
-end 
+
+	res
+end
 
 function escroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
 
