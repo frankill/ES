@@ -163,7 +163,7 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	query = Dict(kw..., :size => num)
 			
 	res   = esearch(info, index, body, query)  
-	snum  <= num && return res
+	snum  <= num && return (escrollclear(info, res["_scroll_id"]) ; pop!(res, "_scroll_id") ;res)
 
 	for i in 1:(Int(floor(snum/num)))
 		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
