@@ -115,7 +115,7 @@ function escount(info::Esinfo, index::AbstractString)
 
 end
 
-function escount(info::Esinfo, index::AbstractString, body::Dict{<:AbstractString})
+function escount(info::Esinfo, index::AbstractString, body::Dict)
 
 	url   = makeurl(ActionType{:_count}, info, index )
 	res   = @esexport "POST" url json(body) Dict() "application/json"
