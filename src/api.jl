@@ -98,15 +98,6 @@ function esindexsetting(info::Esinfo, index::AbstractString)
 
 end
 
-function filtercombin(; filters...)
-	esfilter = Dict(filters...)
-	Dict("bool" => Dict("filter" => esfilter ))
-end 
-
-function aggscombin(aggs::Vector{<:Dict})
-	map(reduce, aggs)
-end 
-
 function escount(info::Esinfo, index::AbstractString)
 
 	url   = makeurl(ActionType{:_count}, info, index )
