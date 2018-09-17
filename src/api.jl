@@ -151,7 +151,7 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 
 	num   = pop!(body, "size", 10000)
 	snum  = if haskey(body, "query") 
-			escount(info, index, body["query"])
+			escount(info, index, Dict("query" => body["query"]))
 		else
 			escount(info, index, Dict() )
 		end 
