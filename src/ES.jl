@@ -8,7 +8,8 @@ module ES
 	export @esexp ,@esexport ,@query, @filter, @must, @must_not  ,@nested ,@has_child, @has_parent ,@fulltext,@common
 
 
-	include("api.jl")
+	
 	include("transformation.jl")
+	include("api.jl")
 
 end 
