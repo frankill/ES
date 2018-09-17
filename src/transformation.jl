@@ -15,7 +15,7 @@ function make_loop(exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		val[i] = :( $(string(name))  => eval($content)  )
+		val[i] = :( $(string(name))  => $content  )
 	end 
 
 	esc(Expr( :call, :Dict, val... ))
@@ -31,9 +31,9 @@ function make_json(method::AbstractString, exprs::Vector )
 		typeof(name) != String && (name = string(name))
 
 		if name in sname  
-			val[i] =  :( $name => eval($content)[$name] )
+			val[i] =  :( $name => $(content)[$name] )
 		else 
-			val[i] =  :( $methods => Dict( $name  => eval($content)) ) 
+			val[i] =  :( $methods => Dict( $name  => $content) ) 
 		end 
 	end 
  	Expr( :call, :vcat, val... ) |> df -> esc(:(Dict($method => $df )))
@@ -49,9 +49,9 @@ function make_json(  exprs::Vector, type::AbstractString )
 		typeof(name) != String && (name = string(name))
 
 		if name in sname  
-			val[i] =  :( $name => eval($content)[$name] )
+			val[i] =  :( $name => $(content)[$name] )
 		else 
-			val[i] =  :( $name  => eval($content))  
+			val[i] =  :( $name  => $content)  
 		end 
 	end 
 	Expr( :call, :Dict, val... ) |> df -> esc(:(Dict($type => $df)))
@@ -68,9 +68,9 @@ function make_json( exprs::Vector )
 		typeof(name) != String && (name = string(name))
 
 		if name in sname  
-			push!(query, :($name => eval($content)[$name]  ))
+			push!(query, :($name => $(content)[$name]  ))
 		else 
-			push!(val, :($name => eval($content )))
+			push!(val, :($name => $content ))
 		end 
 	end 
 	
