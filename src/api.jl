@@ -150,11 +150,15 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	typeof(body) <: AbstractString && (body= JSON.Parser.parse(body))
 
 	num   = pop!(body, "size", 10000)
-	snum  = escount(info, index, body )
+	snum  = escount(info, index, body["query"] )
 	query = Dict(kw..., :size => num)
 			
 	res   = esearch(info, index, body, query)  
-	snum  <= num && return res
+	snum  <= num && return begin
+					escrollclear(info, res["_scroll_id"])
+					pop!(res, "_scroll_id")
+					res
+				end 
 
 	for i in 1:(Int(floor(snum/num)))
 		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
