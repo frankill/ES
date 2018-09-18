@@ -147,7 +147,7 @@ end
 
 function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where T <: Union{AbstractString, Dict}
 
-	typeof(body) <: AbstractString && (body= JSON.Parser.parse(body))
+	isa(body , AbstractString) && (body= JSON.Parser.parse(body))
 
 	num   = pop!(body, "size", 10000)
 	snum  = (haskey(body, "query") ? Dict("query" => body["query"]) : Dict()) |> 
