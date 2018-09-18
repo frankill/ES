@@ -15,7 +15,7 @@ function make_loop(exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		typeof(name) != String && (name = string(name))
+		isa(name, AbstractString) || (name = string(name))
 		
 		val[i] = :( $name  => $content  )
 		
@@ -31,7 +31,7 @@ function make_json(method::AbstractString, exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		typeof(name) != String && (name = string(name))
+		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
 			val[i] =  :( $name => $(content)[$name] )
@@ -49,7 +49,7 @@ function make_json(  exprs::Vector, type::AbstractString )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		typeof(name) != String && (name = string(name))
+		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
 			val[i] =  :( $name => $(content)[$name] )
@@ -68,7 +68,7 @@ function make_json( exprs::Vector )
 	
 	for i in exprs
 		(methods, name, content)  = estrans(i)
-		typeof(name) != String && (name = string(name))
+		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
 			push!(query, :($name => $(content)[$name]  ))
