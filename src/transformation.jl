@@ -15,7 +15,10 @@ function make_loop(exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		val[i] = :( $(string(name))  => $content  )
+		typeof(name) != String && (name = string(name))
+		
+		val[i] = :( $name  => $content  )
+		
 	end 
 
 	esc(Expr( :call, :Dict, val... ))
