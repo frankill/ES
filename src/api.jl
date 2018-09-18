@@ -153,10 +153,11 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	snum  = haskey(body, "query") ? Dict("query" => body["query"]) : Dict() |> 
 			df -> escount(info, index, df)
 	query = Dict(kw..., :size => num)
-			
+				
 	res   = esearch(info, index, body, query)  
 	snum  <= num && return res
-
+	
+	sizehint!(res, snum)
 	for i in 1:(Int(floor(snum/num)))
 		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
 			df -> append!(res["hits"]["hits"], df["hits"]["hits"] )
