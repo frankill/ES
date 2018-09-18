@@ -157,7 +157,7 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	res   = esearch(info, index, body, query)  
 	snum  <= num && return res
 	
-	sizehint!(res, snum)
+	sizehint!(res["hits"]["hits"], snum)
 	for i in 1:(Int(floor(snum/num)))
 		escroll(info , res["_scroll_id"] , query[:scroll]) |> 
 			df -> append!(res["hits"]["hits"], df["hits"]["hits"] )
