@@ -150,11 +150,7 @@ function esfsearch(info::Esinfo, index::AbstractString, body::T ; kw... ) where 
 	typeof(body) <: AbstractString && (body= JSON.Parser.parse(body))
 
 	num   = pop!(body, "size", 10000)
-	snum  = if haskey(body, "query") 
-			escount(info, index, Dict("query" => body["query"]))
-		else
-			escount(info, index, Dict() )
-		end 
+	snum  = haskey(body, "query") ? escount(info, index, Dict("query" => body["query"])) : escount(info, index, Dict() )
 	query = Dict(kw..., :size => num)
 			
 	res   = esearch(info, index, body, query)  
