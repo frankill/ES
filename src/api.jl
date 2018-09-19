@@ -245,7 +245,7 @@ function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkdel(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{Any}, 
+# 					data::Vector{Any}, 
 					id::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
