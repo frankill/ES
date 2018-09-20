@@ -16,7 +16,7 @@ function make_loop(exprs::Vector )
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
-		val[i] = :( $name  => $content  )
+		val[i] =  :( $methods => Dict( $name  => $content) ) 
 	end 
 
 	esc(Expr( :call, :Dict, val... ))
@@ -46,7 +46,7 @@ function make_json(  exprs::Vector, type::AbstractString )
 	val = Array{Expr}(undef, length(exprs))
 	
 	for i in 1:len
-		(methods, name, content)  = estrans(exprs[i])
+		( _ , name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
@@ -65,7 +65,7 @@ function make_json( exprs::Vector )
 	query = Expr[]
 	
 	for i in exprs
-		(methods, name, content)  = estrans(i)
+		( _ , name, content)  = estrans(i)
 		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
@@ -129,7 +129,18 @@ end
 # function estrans(expr::Symbol)
 #     (nothing  , nothing ,  Expr(:call, :estrans, expr) )
 # end
+function estrans(::Type{SearchNode{:(*)}}, expr::Expr)
+	("regexp" , expr.args[2] , expr.args[3] )
+end 
 
+function estrans(::Type{SearchNode{:(%)}}, expr::Expr)
+	("wildcard" , expr.args[2] , expr.args[3] )
+end 
+
+function estrans(::Type{SearchNode{:(|)}}, expr::Expr)
+	("prefix" , expr.args[2] , expr.args[3] )
+end 
+						
 function estrans( ::Type{SearchNode{:call}}, expr::Expr)
      estrans(SearchNode{expr.args[1]}, expr)
 end
