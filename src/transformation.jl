@@ -1,6 +1,6 @@
 struct SearchNode{T} end
 
-const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent"]
+const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent", "should"]
 
 function Base.push!(t::AbstractDict, b::AbstractDict)
 	for (x,y) in b 
@@ -114,6 +114,10 @@ end
 
 macro filter( expr... )
     return  make_json( "filter", collect( expr ))
+end
+						
+macro should( expr... )
+    return  make_json( "should", collect( expr ))
 end
 
 macro must( expr... )
