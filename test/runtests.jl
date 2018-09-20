@@ -10,7 +10,7 @@
 
 # # 1
 # @distributed (vcat) for i in 0:shards-1  
-# 	query= @common(slice= @query(id=i, max= shards) ) |>  df ->  merge(df , @query(size = 100) )  
+# 	query= @smi(slice= @query(id=i, max= shards) ) |>  df ->  merge(df , @query(size = 100) )  
 # 	ES.esfsearch(info, index, query)  
 # end 
 
