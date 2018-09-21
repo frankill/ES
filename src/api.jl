@@ -12,6 +12,10 @@ struct BulkLength{T<:Number}
    count::T
 end 
 
+function extra(data, kw...)
+	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
+end
+
 Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
 
 function makeurl(::Type{ActionType{:_setting}}, info::Esinfo, index::AbstractString)
