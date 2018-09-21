@@ -32,6 +32,7 @@ macro extra(data, kw...)
 end
 
 Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
+Base.length(B::BulkLength)           = Int(ceil(B.count/B.seq))
 
 function makeurl(::Type{ActionType{:_setting}}, info::Esinfo, index::AbstractString)
 	"http://$(info.host):$(info.port)/$index/_settings"
