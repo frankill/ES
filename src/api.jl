@@ -12,8 +12,23 @@ struct BulkLength{T<:Number}
    count::T
 end 
 
-function extra(data, kw...)
-	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
+# function extra(data, kw...)
+# 	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
+# end
+
+
+macro extra(data, kw...)
+
+	q , len = quote end , length(kw)
+	q = Expr(:ref, data , kw[1])
+	len == 1 && return q 
+
+	for i in 2:len 
+		q = Expr(:ref , q , kw[i])
+	end 
+
+	return q 
+
 end
 
 Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
