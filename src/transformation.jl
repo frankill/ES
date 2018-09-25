@@ -149,8 +149,8 @@ function estrans( expr::Expr )
 end
 
 function estrans(expr::Symbol)
-    q = Expr(:ref, Expr(:., expr, :(:keys) ), 12)
-    (nothing  , q  , Expr(:ref, expr, q ))
+    q = Expr(:ref, Expr(:., esc(expr), :(:keys) ), 12)
+    (nothing  , q  , Expr(:ref, esc(expr), q ))
 end
 						
 function estrans(::Type{SearchNode{:(*)}}, expr::Expr)
