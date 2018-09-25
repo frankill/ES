@@ -20,14 +20,14 @@ end
 macro extra(data, kw...)
 
 	q , len = quote end , length(kw)
-	q = Expr(:ref, data , kw[1])
+	q = Expr(:ref, esc(data) , kw[1])
 	len == 1 && return q 
 
 	for i in 2:len 
 		q = Expr(:ref , q , kw[i])
 	end 
 
-	return esc(q) 
+	return q 
 
 end
 
