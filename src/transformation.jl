@@ -30,7 +30,7 @@ function make_loop2(exprs::Vector )
 	for i in 1:len
 		( _ , name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
-		val[i] =  :( $name  => $content)  
+		val[i] =   name in sname ? :($name => $(content)[$name]) : :($name  => $content)
 	end 
 
 	esc(Expr( :call, :Dict, val... ))
