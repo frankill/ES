@@ -16,15 +16,18 @@ end
 # 	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
 # end
 
+function escape(x<:Union{Symbol,String})
+	return isa(x, Symbol) ? esc(x) : x
+end 
 
 macro extra(data, kw...)
 
 	q , len = quote end , length(kw)
-	q = Expr(:ref, esc(data) , kw[1])
+	q = Expr(:ref, esc(data) , escape(kw[1]))
 	len == 1 && return q 
 
 	for i in 2:len 
-		q = Expr(:ref , q , kw[i])
+		q = Expr(:ref , q , escape(kw[i]))
 	end 
 
 	return q 
