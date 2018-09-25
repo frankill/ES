@@ -30,7 +30,7 @@ function make_loop2(exprs::Vector )
 	for i in 1:len
 		( methods , name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
-		val[i] =   methods == nothing  ? :($name => $(content)[$name]) : :($name  => $content)
+		val[i] = methods == nothing  ? :($name => $(content)[$name]) : :($name  => $content)
 	end 
 
 	esc(Expr( :call, :Dict, val... ))
