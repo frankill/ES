@@ -101,3 +101,40 @@ sizes , rownum = 1000, 100
 	"_source": ["a", "b"]
 }
 ```
+```julia
+@fulltext(size=1 , bool= @smi(minimum_should_match=1,  @should(@must_not(a=1), @must(b=2)) ) )
+```
+```json
+{
+    "query": {
+        "size": 1,
+        "bool": {
+            "minimum_should_match": 1,
+            "should": [
+                {
+                    "bool": {
+                        "must_not": [
+                            {
+                                "term": {
+                                    "a": 1
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "b": 2
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
+```
