@@ -102,7 +102,9 @@ sizes , rownum = 1000, 100
 }
 ```
 ```julia
-@fulltext(size=1 , bool= @smi(minimum_should_match=1, @filter(1<c <=3 , has("Ta")),  @should(@must_not(a=1), @must(b=2)) ) )
+@fulltext(size=1 , bool= @smi(minimum_should_match=1, 
+							@filter(1<c <=3 , has("Ta"), h % "ks", ff * "s.*?y"),  
+							@should(@must_not(a=1), @must(b=2)) ) )
 ```
 ```json
 {
@@ -122,6 +124,16 @@ sizes , rownum = 1000, 100
                 {
                     "exists": {
                         "field": "Ta"
+                    }
+                },
+                {
+                    "wildcard": {
+                        "h": "ks"
+                    }
+                },
+                {
+                    "regexp": {
+                        "ff": "s.*?y"
                     }
                 }
             ],
