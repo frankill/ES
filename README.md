@@ -102,7 +102,7 @@ sizes , rownum = 1000, 100
 }
 ```
 ```julia
-@fulltext(size=1 , bool= @smi(minimum_should_match=1,  @should(@must_not(a=1), @must(b=2)) ) )
+@fulltext(size=1 , bool= @smi(minimum_should_match=1, @filter(1<c <=3 , has("Ta")),  @should(@must_not(a=1), @must(b=2)) ) )
 ```
 ```json
 {
@@ -110,6 +110,21 @@ sizes , rownum = 1000, 100
         "size": 1,
         "bool": {
             "minimum_should_match": 1,
+            "filter": [
+                {
+                    "range": {
+                        "c": {
+                            "lte": 3,
+                            "gt": 1
+                        }
+                    }
+                },
+                {
+                    "exists": {
+                        "field": "Ta"
+                    }
+                }
+            ],
             "should": [
                 {
                     "bool": {
