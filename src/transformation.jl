@@ -45,7 +45,7 @@ function make_json(method::AbstractString, exprs::Vector )
 		(methods, name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
 
-		if name in sname  
+		if methods == nothing 
 			val[i] =  :( "bool" => Dict( $name => $(content)[$name]) )
 		else 
 			val[i] =  :( $methods => Dict( $name  => $content) ) 
@@ -60,10 +60,10 @@ function make_json(  exprs::Vector, type::AbstractString )
 	val = Array{Expr}(undef, length(exprs))
 	
 	for i in 1:len
-		( _ , name, content)  = estrans(exprs[i])
+		( methods , name, content)  = estrans(exprs[i])
 		isa(name, AbstractString) || (name = string(name))
 
-		if name in sname  
+		if methods == nothing
 			val[i] =  :( $name => $(content)[$name] )
 		else 
 			val[i] =  :( $name  => $content)  
@@ -79,10 +79,10 @@ function make_json( exprs::Vector )
 	query = Expr[]
 	
 	for i in exprs
-		( _ , name, content)  = estrans(i)
+		( methods , name, content)  = estrans(i)
 		isa(name, AbstractString) || (name = string(name))
 
-		if name in sname  
+		if methods == nothing 
 			push!(query, :($name => $(content)[$name]  ))
 		else 
 			push!(val, :($name => $content ))
