@@ -152,7 +152,7 @@ end
 
 function estrans(expr::Symbol)
     exp =  :($expr.keys[$expr.slots .!= 0][1])
-    (nothing  , exp , :($expr[$exp]))
+    (nothing  , exp , expr )
 end
 						
 function estrans(::Type{SearchNode{:(*)}}, expr::Expr)
