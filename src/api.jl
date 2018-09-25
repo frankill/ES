@@ -16,9 +16,8 @@ end
 # 	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
 # end
 
-function escape(x::T) where T <:Union{Symbol,String}
-	return isa(x, Symbol) ? esc(x) : x
-end 
+escape(x::Symbol) = esc(x) 
+escape(x::String) = x
 
 macro extra(data, kw...)
 
