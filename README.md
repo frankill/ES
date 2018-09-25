@@ -165,3 +165,13 @@ sizes , rownum = 1000, 100
     }
 }
 ```
+
+```julia
+@btime @fulltext(size=1 , bool= @smi(minimum_should_match=1,  @filter(1<c <=3 , has("Ta"), h % "ks", ff * "s.*?y") 
+,@should(@must_not(a=1), @must(b=2)) ) )
+```
+```text
+  38.100 μs (186 allocations: 15.97 KiB)
+Dict{String,Dict{String,Any}} with 1 entry:
+  "query" => Dict{String,Any}("size"=>1,"bool"=>Dict{String,Any}("minimum_should_match"=>1,"filter"=>Pair{String,Dict{String,V} where V}["…
+```
