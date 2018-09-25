@@ -46,7 +46,7 @@ function make_json(method::AbstractString, exprs::Vector )
 		isa(name, AbstractString) || (name = string(name))
 
 		if name in sname  
-			val[i] =  :( $name => $(content)[$name] )
+			val[i] =  :( "bool" => Dict( $name => $(content)[$name]) )
 		else 
 			val[i] =  :( $methods => Dict( $name  => $content) ) 
 		end 
