@@ -148,9 +148,11 @@ function estrans( expr::Expr )
     estrans( SearchNode{expr.head}, expr)
 end
 
-# function estrans(expr::Symbol)
-#     (nothing  , nothing ,  Expr(:call, :estrans, expr) )
-# end
+function estrans(expr::Symbol)
+    q = Expr(:ref, Expr(:., expr, :(:keys) ), 12)
+    (nothing  , q  , Expr(:ref, expr, q ))
+end
+						
 function estrans(::Type{SearchNode{:(*)}}, expr::Expr)
 	("regexp" , expr.args[2] , expr.args[3] )
 end 
