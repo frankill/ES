@@ -149,12 +149,12 @@ function estrans( expr::Expr )
     estrans( SearchNode{expr.head}, expr)
 end
 
-function estrans(expr::Symbol)
+function estrans(expr::Symbol)					
     exp =  quote 
 		try 
 			$expr.keys[$expr.slots .!= 0][1]
 		catch 
-			string($expr) 
+			string(:($expr)) 
 		end 
 	   end 
     (nothing  , exp , expr )
