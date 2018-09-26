@@ -150,12 +150,11 @@ function estrans( expr::Expr )
 end
 
 function estrans(expr::Symbol)
-    title = :($expr)
     exp =  quote 
 		try 
 			$expr.keys[$expr.slots .!= 0][1]
 		catch 
-			string($title) 
+			string($(:($expr))) 
 		end 
 	   end 
     (nothing  , exp , expr )
