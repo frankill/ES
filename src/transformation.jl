@@ -150,7 +150,13 @@ function estrans( expr::Expr )
 end
 
 function estrans(expr::Symbol)
-    exp =  :($expr.keys[$expr.slots .!= 0][1])
+    exp =  quote 
+		try 
+			$expr.keys[$expr.slots .!= 0][1]
+		catch 
+			$expr 
+		end 
+	   end 
     (nothing  , exp , expr )
 end
 						
