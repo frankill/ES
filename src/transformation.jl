@@ -154,7 +154,7 @@ function estrans(expr::Symbol)
 		try 
 			$expr.keys[$expr.slots .!= 0][1]
 		catch 
-			$expr 
+			string(:($expr)) 
 		end 
 	   end 
     (nothing  , exp , expr )
