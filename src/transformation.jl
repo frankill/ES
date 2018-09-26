@@ -157,7 +157,7 @@ function estrans(expr::Symbol)
 			string($(Expr(:quote, expr)))
 		end 
 	   end 
-    (nothing  , exp , expr )
+    ("Symbol"  , exp , expr )
 end
 						
 function estrans(::Type{SearchNode{:(*)}}, expr::Expr)
