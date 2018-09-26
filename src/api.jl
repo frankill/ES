@@ -17,7 +17,7 @@ end
 # end
 
 escape(x::Symbol) = esc(x) 
-escape(x::AbstractString) = x
+escape(x) = x
 
 macro extra(data, kw...)
 
