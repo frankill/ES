@@ -1,8 +1,7 @@
 struct SearchNode{T} end
 
-#const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent", "should"]
-
-const ontype = Union{AbstractString, Expr}
+# const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent", "should"]
+# const ontype = Union{AbstractString, Expr}
 
 function Base.push!(t::AbstractDict, b::AbstractDict)
 	for (x,y) in b 
@@ -17,7 +16,7 @@ function make_loop(exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		isa(name, ontype) || (name = string(name))
+		isa(name, Symbol) && (name = string(name))
 		val[i] =  :( $methods => Dict( $name  => $content) ) 
 	end 
 
@@ -31,7 +30,7 @@ function make_loop2(exprs::Vector )
 	
 	for i in 1:len
 		( methods , name, content)  = estrans(exprs[i])
-		isa(name, ontype) || (name = string(name))
+		isa(name, Symbol) && (name = string(name))
 		val[i] = methods == nothing  ? :($name => $(content)[$name]) : :($name  => $content)
 	end 
 
@@ -45,7 +44,7 @@ function make_json(method::AbstractString, exprs::Vector )
 	
 	for i in 1:len
 		(methods, name, content)  = estrans(exprs[i])
-		isa(name, ontype) || (name = string(name))
+		isa(name, Symbol) && (name = string(name))
 
 		if methods == nothing 
 			val[i] =  :( "bool" => Dict( $name => $(content)[$name]) )
@@ -63,7 +62,7 @@ function make_json(  exprs::Vector, type::AbstractString )
 	
 	for i in 1:len
 		( methods , name, content)  = estrans(exprs[i])
-		isa(name, ontype) || (name = string(name))
+		isa(name, Symbol) && (name = string(name))
 
 		if methods == nothing
 			val[i] =  :( $name => $(content)[$name] )
@@ -82,7 +81,7 @@ function make_json( exprs::Vector )
 	
 	for i in exprs
 		( methods , name, content)  = estrans(i)
-		isa(name, ontype) || (name = string(name))
+		isa(name, Symbol) && (name = string(name))
 
 		if methods == nothing 
 			push!(query, :($name => $(content)[$name]  ))
