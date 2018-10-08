@@ -16,8 +16,8 @@ end
 # 	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
 # end
 
-escape(x::Symbol) = esc(x) 
-escape(x) = x
+escape(x) = esc(x) 
+escape(x::AbstractString) = x
 
 macro extra(data, kw...)
 
