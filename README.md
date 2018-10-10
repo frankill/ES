@@ -177,19 +177,4 @@ using BenchmarkTools
 Dict{String,Dict{String,Any}} with 1 entry:
   "query" => Dict{String,Any}("size"=>1,"bool"=>Dict{String,Any}("minimum_should_match"=>1,"filter"=>Pair{String,Dict{String,V} where V}["…
 ```
-```julia
-using Distributed 
-addprocs(5)
-
-@everywhere using ES 
-
-info     = Esinfo("localhost", "9200") 
-index    = "201807"
-setting  = ES.esindexsetting(info, index)[index]["settings"]["index"]
-shards   = parse(Int, setting["number_of_shards"]) 
-
-@distributed (vcat) for i in 0:shards-1  
-	query= @smi(slice= @query(id=i, max= shards) ) |>  df ->  merge(df , @query(size = 100) )  
-	ES.esfsearch(info, index, query)  
-end 
-```
+ 
