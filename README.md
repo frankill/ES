@@ -188,13 +188,15 @@ Dict{String,Dict{String,Any}} with 1 entry:
 				@should(
 					@must_not(a=1), 
 					@must(b=2)) )) ,
-	aggs= @smi(t= @smi(a=123)))
+	aggs= @smi(genres= @comm(field in "genre") ))
 ```
 ```json 
 {
     "aggs": {
-        "t": {
-            "a": 123
+        "genres": {
+            "terms": {
+                "field": "genre"
+            }
         }
     },
     "size": 1,
