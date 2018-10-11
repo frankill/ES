@@ -177,4 +177,80 @@ using BenchmarkTools
 Dict{String,Dict{String,Any}} with 1 entry:
   "query" => Dict{String,Any}("size"=>1,"bool"=>Dict{String,Any}("minimum_should_match"=>1,"filter"=>Pair{String,Dict{String,V} where V}["…
 ```
- 
+
+```julia
+@query(  size=1 , 
+	 query= @smi(bool= @smi(minimum_should_match=1, 
+				@filter(1<c <=3 , 
+					has("Ta"), 
+					h % "ks", 
+					ff * "s.*?y"),  
+				@should(
+					@must_not(a=1), 
+					@must(b=2)) )) ,
+	aggs= @smi(t= @smi(a=123)))
+```
+```json 
+{
+    "aggs": {
+        "t": {
+            "a": 123
+        }
+    },
+    "size": 1,
+    "query": {
+        "bool": {
+            "minimum_should_match": 1,
+            "filter": [
+                {
+                    "range": {
+                        "c": {
+                            "lte": 3,
+                            "gt": 1
+                        }
+                    }
+                },
+                {
+                    "exists": {
+                        "field": "Ta"
+                    }
+                },
+                {
+                    "wildcard": {
+                        "h": "ks"
+                    }
+                },
+                {
+                    "regexp": {
+                        "ff": "s.*?y"
+                    }
+                }
+            ],
+            "should": [
+                {
+                    "bool": {
+                        "must_not": [
+                            {
+                                "term": {
+                                    "a": 1
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "b": 2
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
+```
