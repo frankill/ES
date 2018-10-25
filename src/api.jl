@@ -310,7 +310,7 @@ end
 function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::AbstractString ,
 					data::Union{NamedTuple,Dict} )
 
-	title =  @smi(index = @smi(_index = index , _type = type))
+	title =  @smi(index = @smi(_index = index , _type = type)) |> json 
 	content = data |> json
 	return( "$(title)\n$(content)\n")
 
