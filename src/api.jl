@@ -258,18 +258,8 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 					data::Vector{<:Union{NamedTuple,Dict}} ,chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = (makebulk(BulkType{:_index}, x  ) for x in  data[m:n] ) 
-		esbulk(info, index, doc, chunk, kw...)
-	end 
-
-end 
-
-function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}} ,chunk_num::Number=1000 ; kw...)
-
-	for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = (makebulk(BulkType{:_create},  x ) for x in  data[m:n] ) 
-		esbulk(info, index, doc, chunk, kw...)
+		chunk = (makebulk(BulkType{:_index}, index, doc ,x ) for x in  data[m:n] ) 
+		esbulk(info, chunk, kw...)
 	end 
 
 end 
@@ -317,9 +307,10 @@ function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict},
 
 end 
 
-function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict} )
+function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::AbstractString ,
+					data::Union{NamedTuple,Dict} )
 
-	title =  @esmeta "index" Dict() 
+	title =  @smi(index = @smi(_index = index , _type = type))
 	content = data |> json
 	return( "$(title)\n$(content)\n")
 
@@ -329,14 +320,6 @@ end
 					id::Union{AbstractString, Number})
 
 	title =  @esmeta "create" id 
-	content = data |> json
-	return( "$(title)\n$(content)\n")
-
-end 
-
- function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict} )
-
-	title =  @esmeta "create" Dict()
 	content = data |> json
 	return( "$(title)\n$(content)\n")
 
