@@ -254,6 +254,26 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 
 end 
 
+function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
+					data::Vector{<:Union{NamedTuple,Dict}} ,chunk_num::Number=1000 ; kw... )
+
+	for (m, n) in BulkLength( chunk_num, length(data) )
+		chunk = (makebulk(BulkType{:_index}, x  ) for x in  data[m:n] ) )
+		esbulk(info, index, doc, chunk, kw...)
+	end 
+
+end 
+
+function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
+					data::Vector{<:Union{NamedTuple,Dict}} ,chunk_num::Number=1000 ; kw...)
+
+	for (m, n) in BulkLength( chunk_num, length(data) )
+		chunk = (makebulk(BulkType{:_create},  x ) for x in  data[m:n] ) )
+		esbulk(info, index, doc, chunk, kw...)
+	end 
+
+end 
+
 function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
 					data::Vector{<:Union{NamedTuple,Dict}}, 
 					id::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw...)
