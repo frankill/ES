@@ -12,10 +12,6 @@ struct BulkLength{T<:Number}
    count::T
 end 
 
-# function extra(data, kw...)
-# 	isa(kw, Tuple{}) ? data : extra(data[kw[1]], kw[2:end]...)
-# end
-
 escape(x) = esc(x) 
 escape(x::AbstractString) = x
 
