@@ -216,7 +216,7 @@ macro esdatawarn(x, y)
 end 
 
 function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Dict{<:AbstractString}}, 
+					data::Vector{<:Union{NamedTuple,Dict}}, 
 					id::Vector{<:Union{Number,AbstractString}}, 
 					asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
 
@@ -230,7 +230,7 @@ function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 	
 
 function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Dict{<:AbstractString}}, 
+					data::Vector{<:Union{NamedTuple,Dict}}, 
 					id::Vector{<:Union{Number,AbstractString}},
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
 
@@ -243,7 +243,7 @@ function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Dict{<:AbstractString}}, 
+					data::Vector{<:Union{NamedTuple,Dict}}, 
 					id::Vector{<:Union{Number,AbstractString}} ,chunk_num::Number=1000 ; kw... )
 
 	@esdatawarn data id 
@@ -255,7 +255,7 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Dict{<:AbstractString}}, 
+					data::Vector{<:Union{NamedTuple,Dict}}, 
 					id::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw...)
 
 	@esdatawarn data id 
@@ -288,7 +288,7 @@ function makebulk(::Type{BulkType{:_del}}, id::Union{AbstractString, Number} )
 
 end 
 
-function makebulk(::Type{BulkType{:_index}},  data::Dict{<:AbstractString}, 
+function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number} )
 
 	title =  @esmeta "index" id 
@@ -297,7 +297,15 @@ function makebulk(::Type{BulkType{:_index}},  data::Dict{<:AbstractString},
 
 end 
 
- function makebulk(::Type{BulkType{:_create}},  data::Dict{<:AbstractString}, 
+function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict} )
+
+	title =  @esmeta "index" Dict() 
+	content = data |> json
+	return( "$(title)\n$(content)\n")
+
+end 
+
+ function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number})
 
 	title =  @esmeta "create" id 
@@ -306,7 +314,15 @@ end
 
 end 
 
-function makebulk(::Type{BulkType{:_update}},  data::Dict{<:AbstractString}, 
+ function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict} )
+
+	title =  @esmeta "create" Dict()
+	content = data |> json
+	return( "$(title)\n$(content)\n")
+
+end 
+
+function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number} ,asupsert::Bool)
 
 	title =  @esmeta "update"  id 
@@ -315,7 +331,7 @@ function makebulk(::Type{BulkType{:_update}},  data::Dict{<:AbstractString},
 
 end 
 
-function makebulk(::Type{BulkType{:_script}},  data::Dict{<:AbstractString}, id::Union{AbstractString, Number} ,
+function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id::Union{AbstractString, Number} ,
 					sid::AbstractString,asupsert::Bool)
 
 	title =  @esmeta "update" id 
@@ -336,5 +352,3 @@ function esbulk(info::Esinfo , data  ; kw...)
 	query = Dict(kw...)
 	@esexport "POST" url data query "application/x-ndjson"
 end 
-
-
