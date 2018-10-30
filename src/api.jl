@@ -375,7 +375,7 @@ end
 function makebulk(::Type{BulkType{:_del}}, id::Union{AbstractString, Number},
 					routing::Union{AbstractString, Number} )
 
-	title =  @smi( delete = @smi(_id = id , _routing = routing )) |> json
+	title =  @smi( delete = @smi(_id = id , routing = routing )) |> json
 	return( "$(title)\n")
 
 end 
@@ -392,7 +392,7 @@ end
 function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number} ,routing::Union{AbstractString, Number})
 
-	title =  @smi( index = @smi(_id = id , _routing = routing )) |> json
+	title =  @smi( index = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
 	return( "$(title)\n$(content)\n")
 
@@ -428,7 +428,7 @@ end
  function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number},routing::Union{AbstractString, Number})
 
-	title =  @smi( create = @smi(_id = id , _routing = routing )) |> json
+	title =  @smi( create = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
 	return( "$(title)\n$(content)\n")
 
@@ -446,7 +446,7 @@ end
 function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict}, 
 					id::Union{AbstractString, Number} ,routing::Union{AbstractString, Number},asupsert::Bool)
 
-	title =  @smi( update = @smi(_id = id , _routing = routing )) |> json
+	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
 	return( "$(title)\n$(content)\n")
 
@@ -465,7 +465,7 @@ end
 function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id::Union{AbstractString, Number} ,
 					routing::Union{AbstractString, Number} ,sid::AbstractString,asupsert::Bool)
 
-	title =  @smi( update = @smi(_id = id , _routing = routing )) |> json
+	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
 									"doc_as_upsert" => asupsert, "lang" => "") |> json
 	return("$(title)\n$(content)\n")
