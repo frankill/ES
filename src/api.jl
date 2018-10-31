@@ -71,8 +71,10 @@ macro esexport(method, url, body , query , type )
 		quote
 
 			respos = HTTP.request($method, $url , $header , $body, query= $query)
-
-			if respos.status == 200
+			
+			$method != "POST" && return JSON.parse(String(respos.body))
+					
+			if respos.status == 200 
 				"COMMIT OK"
 			else
 				JSON.parse(String(respos.body))
