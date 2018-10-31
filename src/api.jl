@@ -457,7 +457,7 @@ function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id:
 
 	title =  @esmeta "update" id 
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
-			"scripted_upsert" => asupsert, "lang" => "") |> json
+			"scripted_upsert" => asupsert, upsert=> Dict()) |> json
 	return("$(title)\n$(content)\n")
 
 end 
@@ -467,7 +467,7 @@ function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id:
 
 	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
-			"scripted_upsert" => asupsert, "lang" => "") |> json
+			"scripted_upsert" => asupsert, upsert => Dict()") |> json
 	return("$(title)\n$(content)\n")
 
 end 
