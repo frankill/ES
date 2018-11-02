@@ -1,5 +1,7 @@
 struct SearchNode{T} end
 
+const fname = ["has_child", "has_parent" , "nested"]
+
 function Base.push!(t::AbstractDict, b::AbstractDict)
 	for (x,y) in b 
 		push!(t, x => y)
@@ -44,9 +46,9 @@ function make_json(method::AbstractString, exprs::Vector )
 		isa(name, Symbol) && (name = string(name))
 
 		if methods == nothing 
-			val[i] =  :( $name => $(content)[$name]  ) 
+			val[i] = name in fname ? :($name => $(content)[$name]) : :( "bool" => Dict( $name => $(content)[$name])) 
 		else 
-			val[i] =  :( $methods => Dict( $name  => $content) ) 
+			val[i] =  :( $methods => Dict( $name  => $content)) 
 		end 
 	end 
  	Expr( :call, :vcat, val... ) |> df -> esc(:(Dict($method => $df )))
