@@ -1,8 +1,5 @@
 struct SearchNode{T} end
 
-# const  sname = ["filter", "must", "must_not", "query" , "nested", "has_child" ,"has_parent", "should"]
-# const ontype = Union{AbstractString, Expr}
-
 function Base.push!(t::AbstractDict, b::AbstractDict)
 	for (x,y) in b 
 		push!(t, x => y)
@@ -47,7 +44,7 @@ function make_json(method::AbstractString, exprs::Vector )
 		isa(name, Symbol) && (name = string(name))
 
 		if methods == nothing 
-			val[i] =  :( "bool" => Dict( $name => $(content)[$name]) )
+			val[i] =  :( $name => $(content)[$name]  ) 
 		else 
 			val[i] =  :( $methods => Dict( $name  => $content) ) 
 		end 
