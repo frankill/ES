@@ -309,7 +309,7 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 					routing::Vector{<:Union{Number,AbstractString}},::Val{true}, chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = (makebulk(BulkType{:_index}, index, doc ,x ,y) for (x,y) in  zip(data[m:n], routing[m:n]) ) 
+		chunk = (makebulk(BulkType{:_index}, index, doc ,x ,y,Val(true)) for (x,y) in  zip(data[m:n], routing[m:n]) ) 
 		esbulk(info, chunk, kw...)
 	end 
 
@@ -408,7 +408,7 @@ function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::Abstr
 end 
 
 function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::AbstractString ,
-					data::Union{NamedTuple,Dict} ,routing::Union{AbstractString, Number})
+					data::Union{NamedTuple,Dict} ,routing::Union{AbstractString, Number}, ::Val{true})
 
 	title =  @smi(index = @smi(_index = index , _type = type,_routing = routing )) |> json 
 	content = data |> json
