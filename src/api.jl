@@ -558,9 +558,9 @@ Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
 macro cheak(method , data) 
 	esc(quote
 		if haskey($data, :routing)
-			title = @esmetaallronting $method ref($data, :_index)  ref($data, :_type)  ref($data, :_id) ref($data, :routing)
+			title = @esmetaallronting($method,ref($data, :_index),ref($data, :_type),ref($data, :_id),ref($data, :routing)) |> json
 		else 
-			title = @esmetaall $method ref($data, :_index)  ref($data, :_type)  ref($data, :_id)
+			title = @esmetaall($method ref($data, :_index),ref($data, :_type),ref($data, :_id)) |> json
 		end 
 	end)
 end 
