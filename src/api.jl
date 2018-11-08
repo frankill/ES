@@ -485,4 +485,120 @@ function esbulk(info::Esinfo , data  ; kw...)
 end 
 
 # add meta all function 
-												
+function esbulkupdate(info::Esinfo,  data::Vector{<:Union{NamedTuple,Dict}},  
+						asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
+
+	for (m, n) in BulkLength( chunk_num, length(id) )
+		chunk = (makebulk(BulkType{:_update}, i , asupsert) for i in data[m:n] )
+		esbulk(info, chunk, kw...)
+	end 
+
+end 	
+
+function esbulkcript(info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, 
+					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
+
+	for (m, n) in BulkLength( chunk_num, length(id) )
+		chunk = (makebulk(BulkType{:_script}, i , sid, asupsert) for i in data[m:n] )
+		esbulk(info, chunk, kw...)
+	end  
+
+end 
+
+function esbulkindex( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw... )
+
+	for (m, n) in BulkLength( chunk_num, length(id) )
+		chunk = (makebulk(BulkType{:_index}, i ) for i in data[m:n] )
+		esbulk(info, chunk, kw...)
+	end 
+
+end 
+
+function esbulkcreate( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw...)
+
+	for (m, n) in BulkLength( chunk_num, length(id) )
+		chunk = (makebulk(BulkType{:_create}, i ) for i in data[m:n] )
+		esbulk(info, chunk, kw...)
+	end 
+
+end 
+
+function esbulkdel( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}},chunk_num::Number=1000 ; kw... )
+
+	for (m, n) in BulkLength( chunk_num, length(id) )
+		chunk = (makebulk(BulkType{:_del}, i) for i in data[m:n] )
+		esbulk(info, chunk, kw...)
+	end 
+
+end
+
+
+macro esmetaall(method, index, type, id )
+	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id )) )))
+end 
+
+macro esmetaallronting(method, index, type, id, routing )
+	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id ,"routing" => routing)) )))
+end 
+
+macro flown(x, y ) 
+	esc(Expr(:., x, :($(:($y)))))
+end 
+
+macro flowd(x, y ) 
+	esc(Expr(:ref, x, y ))
+end 
+
+ref(x::Dict, y::AbstractString)	=  	@flowd(x,y)
+ref(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
+ref(x::Dict, y::Symbol) 		= 	ref(x, String(y))
+
+Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
+
+macro cheak(method , data) 
+	esc(quote
+		if haskey($data, :routing)
+			title = @esmetaallronting $method ref($data, :_index)  ref($data, :_type)  ref($data, :_id) ref($data, :routing)
+		else 
+			title = @esmetaall $method ref($data, :_index)  ref($data, :_type)  ref($data, :_id)
+		end 
+	end)
+end 
+
+function makebulk(::Type{BulkType{:_del}},  data::Union{NamedTuple,Dict} )
+
+	@cheak "delete" data 
+	return( "$(title)\n")
+
+end
+
+function makebulk(::Type{BulkType{:_index}}, data::Union{NamedTuple,Dict})
+
+	@cheak "index" data 
+	content = data |> json
+	return( "$(title)\n$(content)\n")
+
+end 
+
+ function makebulk(::Type{BulkType{:_create}}, data::Union{NamedTuple,Dict})
+ 	@cheak "create" data 
+	content = data |> json
+	return( "$(title)\n$(content)\n")
+
+end 
+
+function makebulk(::Type{BulkType{:_update}}, data::Union{NamedTuple,Dict} ,asupsert::Bool)
+	@cheak "update" data 
+	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
+	return( "$(title)\n$(content)\n")
+
+end 
+
+function makebulk(::Type{BulkType{:_script}}, data::Union{NamedTuple,Dict} ,sid::AbstractString,asupsert::Bool)
+	@cheak "update" data 
+	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
+			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
+	return("$(title)\n$(content)\n")
+
+end 
+										
