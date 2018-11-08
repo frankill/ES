@@ -551,7 +551,7 @@ end
 
 ref(x::Dict, y::AbstractString)	=  	@flowd(x,y)
 ref(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
-ref(x::Dict, y::Symbol) 		= 	ref(x, String(y))
+ref(x::Dict, y::Symbol) 	= 	ref(x, String(y))
 
 Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
 
