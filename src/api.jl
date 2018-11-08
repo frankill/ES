@@ -488,7 +488,7 @@ end
 function esbulkupdate(info::Esinfo,  data::Vector{<:Union{NamedTuple,Dict}},  
 						asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_update}, i , asupsert) for i in data[m:n] )
 		esbulk(info, chunk, kw...)
 	end 
@@ -498,7 +498,7 @@ end
 function esbulkcript(info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, 
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_script}, i , sid, asupsert) for i in data[m:n] )
 		esbulk(info, chunk, kw...)
 	end  
@@ -507,7 +507,7 @@ end
 
 function esbulkindex( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_index}, i ) for i in data[m:n] )
 		esbulk(info, chunk, kw...)
 	end 
@@ -516,7 +516,7 @@ end
 
 function esbulkcreate( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw...)
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_create}, i ) for i in data[m:n] )
 		esbulk(info, chunk, kw...)
 	end 
@@ -525,7 +525,7 @@ end
 
 function esbulkdel( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}},chunk_num::Number=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_del}, i) for i in data[m:n] )
 		esbulk(info, chunk, kw...)
 	end 
