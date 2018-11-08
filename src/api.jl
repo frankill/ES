@@ -560,7 +560,7 @@ macro cheak(method , data)
 		if haskey($data, :routing)
 			title = @esmetaallronting($method,ref($data, :_index),ref($data, :_type),ref($data, :_id),ref($data, :routing)) |> json
 		else 
-			title = @esmetaall($method ref($data, :_index),ref($data, :_type),ref($data, :_id)) |> json
+			title = @esmetaall($method,ref($data, :_index),ref($data, :_type),ref($data, :_id)) |> json
 		end 
 	end)
 end 
