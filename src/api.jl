@@ -575,28 +575,28 @@ end
 function makebulk(::Type{BulkType{:_index}}, data::Union{NamedTuple,Dict})
 
 	@cheak "index" data 
-	content = ref($data, :_source) |> json
+	content = ref(data, :_source) |> json
 	return( "$(title)\n$(content)\n")
 
 end 
 
  function makebulk(::Type{BulkType{:_create}}, data::Union{NamedTuple,Dict})
  	@cheak "create" data 
-	content = ref($data, :_source) |> json
+	content = ref(data, :_source) |> json
 	return( "$(title)\n$(content)\n")
 
 end 
 
 function makebulk(::Type{BulkType{:_update}}, data::Union{NamedTuple,Dict} ,asupsert::Bool)
 	@cheak "update" data 
-	content = Dict("doc" => ref($data, :_source), "doc_as_upsert" => asupsert) |> json
+	content = Dict("doc" => ref(data, :_source), "doc_as_upsert" => asupsert) |> json
 	return( "$(title)\n$(content)\n")
 
 end 
 
 function makebulk(::Type{BulkType{:_script}}, data::Union{NamedTuple,Dict} ,sid::AbstractString,asupsert::Bool)
 	@cheak "update" data 
-	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref($data, :_source))), 
+	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref(data, :_source))), 
 			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
 	return("$(title)\n$(content)\n")
 
