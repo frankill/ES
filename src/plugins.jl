@@ -14,25 +14,18 @@ function Base.merge(a::AbstractString, b::AbstractString)
 	join([a,b])
 end  
 
-macro xpackfun(interface, d) 
+macro xpackfun(interface) 
 	iname = esc(Symbol(interface)) 
-	funname = merge("xpacksql", interface ) 
+	funname = merge("xpack", interface ) 
 	return quote 
-		if isa($d, Dict)  
-			function $(funname)(info::Esinfo, sql::Dict; kw...)  
-				query = Dict(kw...) 
-				@esexport "POST" makeurl(Xpack{$(iname)}, info) json(sql) query "application/json"
-			end 
-		else 
-			function $(funname)(info::Esinfo, sql::AbstractString ; kw...)  
-				query = Dict(kw...) 
-				@esexport "POST" makeurl(Xpack{$(iname)}, info) sql query "application/json"
-			end 
+		function $(funname)(info::Esinfo, sql::T; kw...) where T <: Union{AbstractString,Dict}
+			query = Dict(kw...) 
+			isa(sql, Dict) && sql = json(sql) 
+			@esexport "POST" makeurl(Xpack{$(iname)}, info) sql query "application/json"
 		end 
 	end 
 end 
 
-@xpackfun "translate" Dict
-@xpackfun "translate" AbstractString
-@xpackfun "sql" Dict
-@xpackfun "sql" AbstractString
+@xpackfun "translate" 
+@xpackfun "sql" 
+
