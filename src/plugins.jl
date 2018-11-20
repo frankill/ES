@@ -1,5 +1,6 @@
 
 struct Xpack{T} end
+Xpack(T) = Xpack{T}
 
 function makeurl(::Type{Xpack{:sql}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_xpack/sql/"
@@ -21,7 +22,7 @@ macro xpackfun(interface)
 		function $(funname)(info::Esinfo, sql::T; kw...) where T <: Union{AbstractString,Dict}
 			query = Dict(kw...) 
 			isa(sql, Dict) && (sql = json(sql)) 
-			@esexport "POST" makeurl(Xpack{:$(iname)}, info) sql query "application/json"
+			@esexport "POST" makeurl(Xpack($iname), info) sql query "application/json"
 		end 
 	end 
 end 
