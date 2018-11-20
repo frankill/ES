@@ -24,7 +24,6 @@ macro xpackfun(interface)
 			isa(essql, Dict) && (essql = json(essql)) 
 			url   = makeurl(Xpack(iname), info) 
 			@esexport "POST" url essql querys "application/json"
-			url
 		end 
 	end
 end 
