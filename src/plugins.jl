@@ -20,7 +20,7 @@ macro xpackfun(interface)
 	return quote 
 		function ($funname)(info::Esinfo, sql::T; kw...) where T <: Union{AbstractString,Dict}
 			query = Dict(kw...) 
-			isa(sql, Dict) && sql = json(sql) 
+			isa(sql, Dict) && (sql = json(sql)) 
 			@esexport "POST" makeurl(Xpack{$(iname)}, info) sql query "application/json"
 		end 
 	end 
