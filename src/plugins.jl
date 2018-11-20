@@ -11,16 +11,23 @@ end
 
 function Base.merge(a::AbstractString, b::AbstractString)
 	endswith(a, b) && return a 
-	join(a,b)
+	join([a,b])
 end  
 
 macro xpackfun(interface, d) 
 	iname = esc(Symbol(interface)) 
-	funname = merge("essql", interface ) 
+	funname = merge("xpacksql", interface ) 
 	return quote 
-		function $(funname)(info::Esinfo, sql::$d ; kw...)  
-			query = Dict(kw...) 
-			@esexport "POST" makeurl(Xpack{$(iname)}, info) json(sql) query "application/json"
+		if isa($d, Dict)  
+			function $(funname)(info::Esinfo, sql::Dict; kw...)  
+				query = Dict(kw...) 
+				@esexport "POST" makeurl(Xpack{$(iname)}, info) json(sql) query "application/json"
+			end 
+		else 
+			function $(funname)(info::Esinfo, sql::AbstractString ; kw...)  
+				query = Dict(kw...) 
+				@esexport "POST" makeurl(Xpack{$(iname)}, info) sql query "application/json"
+			end 
 		end 
 	end 
 end 
