@@ -9,12 +9,18 @@ function makeurl(::Type{Xpack{:translate}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_xpack/sql/translate"
 end
 
+function Base.merge(a::AbstractString, b::AbstractString)
+	endswith(a, b) && return a 
+	join(a,b)
+end  
+
 macro xpackfun(interface, d) 
-	funcname = esc(Symbol(interface)) 
+	iname = esc(Symbol(interface)) 
+	funname = merge("essql", interface ) 
 	return quote 
-		function $(funcname)(info::Esinfo, sql::$d ; kw...)  
+		function $(funname)(info::Esinfo, sql::$d ; kw...)  
 			query = Dict(kw...) 
-			@esexport "POST" makeurl(Xpack{:translate}, info) json(sql) query "application/json"
+			@esexport "POST" makeurl(Xpack{$(iname)}, info) json(sql) query "application/json"
 		end 
 	end 
 end 
