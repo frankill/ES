@@ -7,7 +7,7 @@ module ES
 	export Esinfo, escount, esearch ,esfsearch, escroll ,esbulkupdate,esbulkcript,esbulkindex,esbulkcreate
 	export @esexport ,@query, @filter, @must, @must_not ,@should  ,@nested ,@has_child, @has_parent ,@fulltext,@smi,@comm,@extra
 
-	export xpacksql , xpacksqltranslate
+	export xpacksql , xpacktranslate
 	
 	include("transformation.jl")
 	include("api.jl")
