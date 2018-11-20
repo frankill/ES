@@ -19,11 +19,10 @@ macro xpackfun(interface)
 	iname = esc(Symbol(interface))
 	funname = esc(Symbol(merge("xpack", interface )) )
 	return quote 
-		function $(funname)(info::Esinfo, sql::T; kw...) where T <: Union{AbstractString,Dict}
+		function $(funname)(info::Esinfo, sql; kw...) 
 			query = Dict(kw...) 
 			isa(sql, Dict) && (sql = json(sql)) 
 			url   = makeurl(Xpack($iname), info) 
-			print(url)
 			@esexport "POST" url sql query "application/json"
 		end 
 	end 
