@@ -18,7 +18,7 @@ end
 macro xpackfun(interface) 
 	funname = esc(Symbol(merge("xpack", interface )) )
 	return quote 
-		iname = Symbol(interface)
+		iname = Symbol($interface)
 		function $(funname)(info::Esinfo, essql::T ; kw...) where T <: Union{Dict, AbstractString}
 			querys = Dict(kw...) 
 			isa(essql, Dict) && (essql = json(essql)) 
