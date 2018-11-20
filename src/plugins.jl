@@ -16,7 +16,7 @@ function Base.merge(a::AbstractString, b::AbstractString)
 end  
 
 macro xpackfun(interface) 
-	iname = esc(Symbol(interface))
+	iname = Symbol(interface)
 	funname = esc(Symbol(merge("xpack", interface )) )
 	return quote 
 		function $(funname)(info::Esinfo, essql::T ; kw...) where T <: Union{Dict, AbstractString}
