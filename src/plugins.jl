@@ -25,7 +25,7 @@ macro xpackfun(interface, d)
 	end 
 end 
 
-@xpackfun "essqltrans" Dict
-@xpackfun "essqltrans" AbstractString
-@xpackfun "essql" Dict
-@xpackfun "essql" AbstractString
+@xpackfun "translate" Dict
+@xpackfun "translate" AbstractString
+@xpackfun "sql" Dict
+@xpackfun "sql" AbstractString
