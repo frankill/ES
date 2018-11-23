@@ -12,6 +12,9 @@ struct BulkLength{T<:Number}
    count::T
 end 
 
+const EsData = Union{NamedTuple,Dict}
+const EsId   = Union{Number,AbstractString}
+
 escape(x) = esc(x) 
 escape(x::AbstractString) = x
 
@@ -214,8 +217,8 @@ macro esdatawarn(x, y)
 end 
 
 function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}}, 
+					data::Vector{<:EsData}, 
+					id::Vector{<:EsId}, 
 					asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
 
 	@esdatawarn data id 
@@ -228,9 +231,9 @@ function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 	
 
 function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}}, 
-					routing::Vector{<:Union{Number,AbstractString}},
+					data::Vector{<:EsData}, 
+					id::Vector{<:EsId}, 
+					routing::Vector{<:EsId},
 					asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
 
 	@esdatawarn data id 
@@ -243,8 +246,7 @@ function esbulkupdate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 	
 
 function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}},
+					data::Vector{<:EsData}, id::Vector{<:EsId},
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
 
 	@esdatawarn data id 
@@ -256,9 +258,7 @@ function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}},
-					routing::Vector{<:Union{Number,AbstractString}},
+					data::Vector{<:EsData}, id::Vector{<:EsId},routing::Vector{<:EsId},
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
 
 	@esdatawarn data id 
@@ -270,8 +270,7 @@ function esbulkcript(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}} ,chunk_num::Number=1000 ; kw... )
+					data::Vector{<:EsData}, id::Vector{<:EsId} ,chunk_num::Number=1000 ; kw... )
 
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
@@ -282,9 +281,8 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}} ,
-					routing::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw... )
+					data::Vector{<:EsData}, id::Vector{<:EsId} ,
+					routing::Vector{<:EsId},chunk_num::Number=1000 ; kw... )
 
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
@@ -295,7 +293,7 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}} ,::Val{true}, chunk_num::Number=1000 ; kw... )
+					data::Vector{<:EsData} ,::Val{true}, chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_index}, index, doc ,x ) for x in  data[m:n] ) 
@@ -305,8 +303,8 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}} ,
-					routing::Vector{<:Union{Number,AbstractString}},::Val{true}, chunk_num::Number=1000 ; kw... )
+					data::Vector{<:EsData} ,routing::Vector{<:EsId},::Val{true}, 
+					chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_index}, index, doc ,x ,y,Val(true)) for (x,y) in  zip(data[m:n], routing[m:n]) ) 
@@ -316,8 +314,7 @@ function esbulkindex(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw...)
+					data::Vector{<:EsData}, id::Vector{<:EsId},chunk_num::Number=1000 ; kw...)
 
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
@@ -328,9 +325,8 @@ function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					data::Vector{<:Union{NamedTuple,Dict}}, 
-					id::Vector{<:Union{Number,AbstractString}},
-					routing::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw...)
+					data::Vector{<:EsData}, id::Vector{<:EsId},
+					routing::Vector{<:EsId},chunk_num::Number=1000 ; kw...)
 
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
@@ -341,7 +337,7 @@ function esbulkcreate(info::Esinfo, index::AbstractString, doc::AbstractString,
 end 
 
 function esbulkdel(info::Esinfo, index::AbstractString, doc::AbstractString,  
-					id::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw... )
+					id::Vector{<:EsId},chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (makebulk(BulkType{:_del}, x ) for x in id[m:n] )
@@ -351,8 +347,7 @@ function esbulkdel(info::Esinfo, index::AbstractString, doc::AbstractString,
 end
 
 function esbulkdel(info::Esinfo, index::AbstractString, doc::AbstractString, 
-					id::Vector{<:Union{Number,AbstractString}},
-					routing::Vector{<:Union{Number,AbstractString}},chunk_num::Number=1000 ; kw... )
+					id::Vector{<:EsId},routing::Vector{<:EsId},chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (makebulk(BulkType{:_del}, x ,y) for (x ,y) in zip(data[m:n], id[m:n]) )
@@ -365,23 +360,21 @@ macro esmeta(method, id)
 	esc(:(json(Dict($method => Dict( "_id" => $id )) )))
 end 
 
-function makebulk(::Type{BulkType{:_del}}, id::Union{AbstractString, Number} )
+function makebulk(::Type{BulkType{:_del}}, id::EsId )
 
 	title =  @esmeta "delete" id 
 	return( "$(title)\n")
 
 end 
 
-function makebulk(::Type{BulkType{:_del}}, id::Union{AbstractString, Number},
-					routing::Union{AbstractString, Number} )
+function makebulk(::Type{BulkType{:_del}}, id::EsId,routing::EsId )
 
 	title =  @smi( delete = @smi(_id = id , routing = routing )) |> json
 	return( "$(title)\n")
 
 end 
 
-function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number} )
+function makebulk(::Type{BulkType{:_index}},  data::EsData, id::EsId )
 
 	title =  @esmeta "index" id 
 	content = data |> json
@@ -389,8 +382,7 @@ function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict},
 
 end 
 
-function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number} ,routing::Union{AbstractString, Number})
+function makebulk(::Type{BulkType{:_index}},  data::EsData, id::EsId ,routing::EsId)
 
 	title =  @smi( index = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
@@ -399,7 +391,7 @@ function makebulk(::Type{BulkType{:_index}},  data::Union{NamedTuple,Dict},
 end 
 
 function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::AbstractString ,
-					data::Union{NamedTuple,Dict} )
+					data::EsData )
 
 	title =  @smi(index = @smi(_index = index , _type = type)) |> json 
 	content = data |> json
@@ -408,7 +400,7 @@ function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::Abstr
 end 
 
 function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::AbstractString ,
-					data::Union{NamedTuple,Dict} ,routing::Union{AbstractString, Number}, ::Val{true})
+					data::EsData ,routing::EsId, ::Val{true})
 
 	title =  @smi(index = @smi(_index = index , _type = type,_routing = routing )) |> json 
 	content = data |> json
@@ -416,8 +408,7 @@ function makebulk(::Type{BulkType{:_index}}, index::AbstractString , type::Abstr
 
 end 
 
- function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number})
+ function makebulk(::Type{BulkType{:_create}},  data::EsData, id::EsId)
 
 	title =  @esmeta "create" id 
 	content = data |> json
@@ -425,8 +416,7 @@ end
 
 end 
 
- function makebulk(::Type{BulkType{:_create}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number},routing::Union{AbstractString, Number})
+ function makebulk(::Type{BulkType{:_create}},  data::EsData, id::EsId,routing::EsId)
 
 	title =  @smi( create = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
@@ -434,8 +424,7 @@ end
 
 end 
 
-function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number} ,asupsert::Bool)
+function makebulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,asupsert::Bool)
 
 	title =  @esmeta "update"  id 
 	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
@@ -443,8 +432,7 @@ function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict},
 
 end 
 
-function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict}, 
-					id::Union{AbstractString, Number} ,routing::Union{AbstractString, Number},asupsert::Bool)
+function makebulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,routing::EsId,asupsert::Bool)
 
 	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
@@ -452,8 +440,7 @@ function makebulk(::Type{BulkType{:_update}},  data::Union{NamedTuple,Dict},
 
 end 
 
-function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id::Union{AbstractString, Number} ,
-					sid::AbstractString,asupsert::Bool)
+function makebulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,sid::AbstractString,asupsert::Bool)
 
 	title =  @esmeta "update" id 
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
@@ -462,8 +449,8 @@ function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id:
 
 end 
 
-function makebulk(::Type{BulkType{:_script}},  data::Union{NamedTuple,Dict}, id::Union{AbstractString, Number} ,
-					routing::Union{AbstractString, Number} ,sid::AbstractString,asupsert::Bool)
+function makebulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,routing::EsId ,sid::AbstractString,
+														asupsert::Bool)
 
 	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
@@ -485,8 +472,7 @@ function esbulk(info::Esinfo , data  ; kw...)
 end 
 
 # add meta all function 
-function esbulkupdate(info::Esinfo,  data::Vector{<:Union{NamedTuple,Dict}},  
-						asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
+function esbulkupdate(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=true  ,chunk_num::Number=1000 ; kw...)
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_update}, i , asupsert) for i in data[m:n] )
@@ -495,8 +481,8 @@ function esbulkupdate(info::Esinfo,  data::Vector{<:Union{NamedTuple,Dict}},
 
 end 	
 
-function esbulkcript(info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, 
-					  sid::AbstractString,asupsert::Bool=true,chunk_num::Number=1000 ; kw... )
+function esbulkcript(info::Esinfo, data::Vector{<:EsData}, sid::AbstractString,asupsert::Bool=true,
+								chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_script}, i , sid, asupsert) for i in data[m:n] )
@@ -505,7 +491,7 @@ function esbulkcript(info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}},
 
 end 
 
-function esbulkindex( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw... )
+function esbulkindex( info::Esinfo, data::Vector{<:EsData}, chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_index}, i ) for i in data[m:n] )
@@ -514,7 +500,7 @@ function esbulkindex( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chun
 
 end 
 
-function esbulkcreate( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chunk_num::Number=1000 ; kw...)
+function esbulkcreate( info::Esinfo, data::Vector{<:EsData}, chunk_num::Number=1000 ; kw...)
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_create}, i ) for i in data[m:n] )
@@ -523,7 +509,7 @@ function esbulkcreate( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}}, chu
 
 end 
 
-function esbulkdel( info::Esinfo, data::Vector{<:Union{NamedTuple,Dict}},chunk_num::Number=1000 ; kw... )
+function esbulkdel( info::Esinfo, data::Vector{<:EsData},chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (makebulk(BulkType{:_del}, i) for i in data[m:n] )
@@ -565,14 +551,14 @@ macro cheak(method , data)
 	end)
 end 
 
-function makebulk(::Type{BulkType{:_del}},  data::Union{NamedTuple,Dict} )
+function makebulk(::Type{BulkType{:_del}},  data::EsData )
 
 	@cheak "delete" data 
 	return( "$(title)\n")
 
 end
 
-function makebulk(::Type{BulkType{:_index}}, data::Union{NamedTuple,Dict})
+function makebulk(::Type{BulkType{:_index}}, data::EsData)
 
 	@cheak "index" data 
 	content = ref(data, :_source) |> json
@@ -580,21 +566,21 @@ function makebulk(::Type{BulkType{:_index}}, data::Union{NamedTuple,Dict})
 
 end 
 
- function makebulk(::Type{BulkType{:_create}}, data::Union{NamedTuple,Dict})
+ function makebulk(::Type{BulkType{:_create}}, data::EsData)
  	@cheak "create" data 
 	content = ref(data, :_source) |> json
 	return( "$(title)\n$(content)\n")
 
 end 
 
-function makebulk(::Type{BulkType{:_update}}, data::Union{NamedTuple,Dict} ,asupsert::Bool)
+function makebulk(::Type{BulkType{:_update}}, data::EsData ,asupsert::Bool)
 	@cheak "update" data 
 	content = Dict("doc" => ref(data, :_source), "doc_as_upsert" => asupsert) |> json
 	return( "$(title)\n$(content)\n")
 
 end 
 
-function makebulk(::Type{BulkType{:_script}}, data::Union{NamedTuple,Dict} ,sid::AbstractString,asupsert::Bool)
+function makebulk(::Type{BulkType{:_script}}, data::EsData ,sid::AbstractString,asupsert::Bool)
 	@cheak "update" data 
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref(data, :_source))), 
 			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
