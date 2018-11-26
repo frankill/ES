@@ -20,7 +20,7 @@ macro catexport(method, url , query  )
 		end )
 end
 
-macro genfun(methods, paths, names )
+macro catgenfun(methods, paths, names )
 	funname = esc(Symbol(string("cat", paths )) )
 
 	return quote 
@@ -44,20 +44,20 @@ macro genfun(methods, paths, names )
 end 
 
 
-@genfun "GET" "aliases"  "name"
-@genfun "GET" "fielddata" "fields"
-@genfun "GET" "allocation"  "node_id"
-@genfun "GET" "count"  "index"
-@genfun "GET" "health"  nothing
-@genfun "GET" "master"  nothing 
-@genfun "GET" "nodeattrs"  nothing
-@genfun "GET" "pending_tasks"  nothing 
-@genfun "GET" "plugins"  nothing 
-@genfun "GET" "recovery"  "index" 
-@genfun "GET" "repositories"  nothing 
-@genfun "GET" "segments"  "index" 
-@genfun "GET" "shards"  "index" 
-@genfun "GET" "snapshots"  "repository" 
-@genfun "GET" "tasks"  nothing 
-@genfun "GET" "templates"  "name" 
-@genfun "GET" "thread_pool"  "thread_pool_patterns" 
+@catgenfun "GET" "aliases"  "name"
+@catgenfun "GET" "fielddata" "fields"
+@catgenfun "GET" "allocation"  "node_id"
+@catgenfun "GET" "count"  "index"
+@catgenfun "GET" "health"  nothing
+@catgenfun "GET" "master"  nothing 
+@catgenfun "GET" "nodeattrs"  nothing
+@catgenfun "GET" "pending_tasks"  nothing 
+@catgenfun "GET" "plugins"  nothing 
+@catgenfun "GET" "recovery"  "index" 
+@catgenfun "GET" "repositories"  nothing 
+@catgenfun "GET" "segments"  "index" 
+@catgenfun "GET" "shards"  "index" 
+@catgenfun "GET" "snapshots"  "repository" 
+@catgenfun "GET" "tasks"  nothing 
+@catgenfun "GET" "templates"  "name" 
+@catgenfun "GET" "thread_pool"  "thread_pool_patterns" 
