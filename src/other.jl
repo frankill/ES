@@ -1,8 +1,7 @@
 struct DmlType{T} end
 struct DdlType{T} end
 
-function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
 
@@ -10,33 +9,27 @@ function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, 
 	"http://$(info.host):$(info.port)/$index/$type"
 end
 
-function makeurl(::Type{DmlType{:_create}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_create}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id/_create"
 end
 
-function makeurl(::Type{DmlType{:_delete}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_delete}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
 
-function makeurl(::Type{DmlType{:_head}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_head}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
 
-function makeurl(::Type{DmlType{:_get}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_get}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
 
-function makeurl(::Type{DmlType{:_get_source}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DmlType{:_get_source}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id/_source"
 end
 
-function makeurl(::Type{DdlType{:_explain}}, info::Esinfo, index::AbstractString, type::AbstractString,
-													id::AbstractString)
+function makeurl(::Type{DdlType{:_explain}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id/_explain"
 end
 
