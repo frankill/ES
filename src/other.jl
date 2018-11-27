@@ -134,11 +134,11 @@ function makeurl(::Type{DdlType{:_scripts_painless_execute}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_scripts/painless/_execute"
 end
 
-function makeurl(::Type{DdlType{:search_shards}}, info::Esinfo)
+function makeurl(::Type{DdlType{:_search_shards}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_search_shards"
 end
 
-function makeurl(::Type{DdlType{:search_shards}}, info::Esinfo, index::AbstractString)
+function makeurl(::Type{DdlType{:_search_shards}}, info::Esinfo, index::AbstractString)
 	"http://$(info.host):$(info.port)/$index/_search_shards"
 end
 
