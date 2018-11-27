@@ -5,16 +5,15 @@ macro eshead( url , query  )
 
 	esc(
 		quote
-# 			try 
-# 				respos = HTTP.request("HEAD", $url , query= $query)
+			try 
+				respos = HTTP.request("HEAD", $url , query= $query)
 
-# 				if respos.status == 200 
-# 					JSON.parse(String(respos.body))
-# 				end
-# 			catch 
-# 				"no data"
-# 			end 
-			HTTP.request("HEAD", $url , query= $query)
+				if respos.status == 200 
+					"OK"
+				end
+			catch 
+				"404 - Not Found"
+			end 
 
 		end )
 end
