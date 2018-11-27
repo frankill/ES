@@ -357,7 +357,7 @@ function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body:
 
 end
 
-function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body::AbstractString; kw...)
+function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body::Dict; kw...)
 
 	esmget(info, index, type, json(body), kw...)
 
