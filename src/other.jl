@@ -307,16 +307,30 @@ function esgetsource(info::Esinfo, index::AbstractString, type::AbstractString, 
 
 end
 
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
+function esindex(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
 
-	escreate(info, index, type, id, json(doc), kw...)
+	esindex(info, index, type, id, json(doc), kw...)
 
 end
 
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::AbstractString; kw...)
+function esindex(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::AbstractString; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(DmlType{:_index}, info, index ,type, id )
+	@esexport "POST" url doc query "application/json"
+
+end
+
+function esindex(info::Esinfo, index::AbstractString, type::AbstractString, doc::Dict; kw...)
+
+	esindex(info, index, type, json(doc), kw...)
+
+end
+
+function esindex(info::Esinfo, index::AbstractString, type::AbstractString, doc::AbstractString; kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(DmlType{:_index}, info, index ,type )
 	@esexport "POST" url doc query "application/json"
 
 end
@@ -331,20 +345,6 @@ function esupdate(info::Esinfo, index::AbstractString, type::AbstractString,id::
 
 	query = Dict(kw...)
 	url   = makeurl(DmlType{:_update}, info, index ,type, id )
-	@esexport "POST" url doc query "application/json"
-
-end
-
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString, doc::Dict; kw...)
-
-	escreate(info, index, type, json(doc), kw...)
-
-end
-
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString, doc::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DmlType{:_index}, info, index ,type )
 	@esexport "POST" url doc query "application/json"
 
 end
