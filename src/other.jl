@@ -1,6 +1,21 @@
 struct DmlType{T} end
 struct DdlType{T} end
 
+macro eshead( url , query  )
+
+	esc(
+		quote
+
+			respos = HTTP.request("HEAD", $url , query= $query)
+			
+			if respos.status == 200 
+				JSON.parse(String(respos.body))
+			end
+
+		end )
+end
+
+
 function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
@@ -242,7 +257,7 @@ end
 function esexists(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
 
 	url   = makeurl(DmlType{:_head}, info, index ,type, id )
-	@esexport "HEAD" url Dict() Dict(kw...) "application/json"
+	@eshead  url   Dict(kw...)  
 
 end
 
@@ -436,7 +451,7 @@ end
 function esping(info::Esinfo )
 
 	url   = makeurl(DdlType{:_ping}, info )
-	@esexport "HEAD" url Dict() Dict() "application/json"
+	@eshead  url  Dict()  
 
 end
 
@@ -522,7 +537,7 @@ end
 
 function esrender_search_template(info::Esinfo , id::AbstractString , body::AbstractString )
 
-	url   = makeurl(DdlType{:_reindex_rethrottle}, info , id )
+	url   = makeurl(DdlType{:_render_search_template}, info , id )
 	@esexport "POST" url body Dict() "application/json"
 
 end
@@ -541,14 +556,14 @@ end
 
 function esrender_search_template(info::Esinfo ,body::AbstractString )
 
-	url   = makeurl(DdlType{:_reindex_rethrottle}, info )
+	url   = makeurl(DdlType{:_render_search_template}, info )
 	@esexport "POST" url body Dict() "application/json"
 
 end
 
 function esscripts_painless_execute(info::Esinfo ,body::AbstractString )
 
-	url   = makeurl(DdlType{:_reindex_rethrottle}, info )
+	url   = makeurl(DdlType{:_scripts_painless_execute}, info )
 	@esexport "POST" url body Dict() "application/json"
 
 end
