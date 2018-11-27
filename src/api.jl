@@ -59,10 +59,6 @@ function makeurl(::Type{ActionType{:_bulk}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_bulk"
 end
 
-function makeurl(::Type{ActionType{:_snapshot}}, info::Esinfo, backup_name::AbstractString,index::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$backup_name/$index"
-end
-
 macro esexp(x,y)
 	esc(:(get($x, $y, missing)))  
 end
@@ -80,36 +76,6 @@ macro esexport(method, url, body , query , type )
 			end
 
 		end )
-end
-
-function esputsnapshot(info::Esinfo, backup_path::AbstractString, index::AbstractString, body::Dict;kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(ActionType{:_snapshot}, info, backup_path ,index )
-	@esexport "PUT" url json(body) query "application/json"
-
-end
-
-function esputsnapshot(info::Esinfo, backup_path::AbstractString, index::AbstractString, body::AbstractString;kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(ActionType{:_snapshot}, info, backup_path ,index )
-	@esexport "PUT" url body query "application/json"
-
-end
-
-function esgetsnapshot(info::Esinfo, backup_path::AbstractString ,index::AbstractString)
-
-	url   = makeurl(ActionType{:_snapshot}, info, backup_path ,index )
-	@esexport "GET" url Dict() Dict() "application/json"
-
-end
-
-function esdelsnapshot(info::Esinfo, backup_path::AbstractString ,index::AbstractString)
-
-	url   = makeurl(ActionType{:_snapshot}, info, backup_path ,index )
-	@esexport "DELETE" url Dict() Dict() "application/json"
-
 end
 
 function esindexsetting(info::Esinfo, index::AbstractString)
