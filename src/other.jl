@@ -280,7 +280,7 @@ end
 function esexplain(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString, dsl::AbstractString ; kw...)
 
 	query = Dict(kw...)
-	url   = makeurl(DdlType{:_explain}, info, index  )
+	url   = makeurl(DdlType{:_explain}, info, index , type, id  )
 	@esexport "POST" url dsl query "application/json"
 
 end
