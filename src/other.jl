@@ -242,7 +242,7 @@ end
 function esexists(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
 
 	url   = makeurl(DmlType{:_head}, info, index ,type, id )
-	HTTP.head(url , query= Dict(kw...) )
+	@esexport "HEAD" url Dict() Dict(kw...) "application/json"
 
 end
 
@@ -436,7 +436,7 @@ end
 function esping(info::Esinfo )
 
 	url   = makeurl(DdlType{:_ping}, info )
-	HTTP.head(url , query= Dict(kw...) )
+	@esexport "HEAD" url Dict() Dict() "application/json"
 
 end
 
