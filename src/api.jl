@@ -119,26 +119,26 @@ function esindexsetting(info::Esinfo, index::AbstractString)
 
 end
 
-function escount(info::Esinfo, index::AbstractString)
+function escount(info::Esinfo, index::AbstractString ; kw...)
 
 	url   = makeurl(ActionType{:_count}, info, index )
-	res   = @esexport "GET" url Dict() Dict() "application/json"
+	res   = @esexport "GET" url Dict() Dict(kw...) "application/json"
 	@esexp res "count"
 
 end
 
-function escount(info::Esinfo, index::AbstractString, body::Dict)
+function escount(info::Esinfo, index::AbstractString, body::Dict ; kw...)
 
 	url   = makeurl(ActionType{:_count}, info, index )
-	res   = @esexport "POST" url json(body) Dict() "application/json"
+	res   = @esexport "POST" url json(body) Dict(kw...) "application/json"
 	@esexp res "count"
 
 end
 
-function escount(info::Esinfo, index::AbstractString, body::AbstractString)
+function escount(info::Esinfo, index::AbstractString, body::AbstractString ; kw...)
 
 	url   = makeurl(ActionType{:_count}, info, index )
-	res   = @esexport "POST" url body Dict() "application/json"
+	res   = @esexport "POST" url body Dict(kw...) "application/json"
 	@esexp res "count"
 
 end
