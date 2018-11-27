@@ -11,5 +11,7 @@ module ES
 	include("transformation.jl")
 	include("api.jl")
 	include("plugins.jl")
+	include("cat.jl")
+	include("other.jl")
 
 end 
