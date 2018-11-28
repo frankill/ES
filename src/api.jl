@@ -492,7 +492,7 @@ macro esmetaall(method, index, type, id )
 end 
 
 macro esmetaallronting(method, index, type, id, routing )
-	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id ,"routing" => routing)) )))
+	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id ,"routing" => $routing)) )))
 end 
 
 macro flown(x, y ) 
