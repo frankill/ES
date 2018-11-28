@@ -12,7 +12,7 @@ module ES
 		esexists,esexists_source,esexplain,esfield_caps,esget,esgetscript,esgetsource,esindexsetting,
 		esmget,esmtermvectors,esping,esputscript,esrankeval,esreindex,esreindex_rethrottle,
 		esrender_search_template,esscripts_painless_execute,essearch_shards,esupdate,
-		esupdate_by_query,esupdate_by_query_rethrottle,cataliases,catfielddata,
+		esupdate_by_query,esupdate_by_query_rethrottle,cataliases,catfielddata,esindex,
 		catnodeattrs,catrecovery,catshards,cattemplates,catallocation,cathealth,catpending_tasks,
 		catrepositories,catsnapshots,catthread_pool,catcount,catmaster,catplugins,catsegments,cattasks
 	
