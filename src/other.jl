@@ -233,19 +233,19 @@ end
 
 function esupdate_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::Dict ; kw...)
 
- 	esupdate_by_query(info, "$index/$type", json(dsl), kw...)
+ 	esupdate_by_query(info, "$index/$type", json(dsl) ; kw...)
 
 end
 
 function esupdate_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::AbstractString ; kw...)
 
- 	esupdate_by_query(info, "$index/$type", dsl, kw...)
+ 	esupdate_by_query(info, "$index/$type", dsl ; kw...)
 
 end
 
 function esupdate_by_query(info::Esinfo, index::AbstractString, dsl::Dict ; kw...)
 
- 	esupdate_by_query(info, index, json(dsl), kw...)
+ 	esupdate_by_query(info, index, json(dsl) ; kw...)
 
 end
 
