@@ -37,7 +37,7 @@ macro catgenfun(methods, paths, names )
 			quote
 				querys = Dict(kw...) 
 				url    = makeurl(CatType{:_cat}, info, $paths, name)
-				@catexport "GET"  url  querys 
+				@catexport $methods  url  querys 
 			end )
 	) 
 end 
@@ -56,7 +56,7 @@ macro catgenfun(methods, paths )
 			quote
 				querys = Dict(kw...) 
 				url    = makeurl(CatType{:_cat}, info, $paths)
-				@catexport "GET"  url  querys 
+				@catexport $methods  url  querys 
 			end )
 	) 
 end 
