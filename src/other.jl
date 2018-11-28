@@ -18,6 +18,19 @@ macro eshead( url , query  )
 		end )
 end
 
+macro esdelete( url,   query   )
+
+	esc(
+		quote
+
+			respos = HTTP.request("DELETE", $url ,  query= $query)
+			
+			if respos.status == 200 
+				JSON.parse(String(respos.body))
+			end
+
+		end )
+end
 
 function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
@@ -177,7 +190,7 @@ end
 function esdelete(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString ; kw...)
 
 	url   = makeurl(DmlType{:_delete}, info, index ,type, id )
-	HTTP.delete(url , query= Dict(kw...) )
+	@esdelete(url ,  Dict(kw...) )
 
 end
 
@@ -201,7 +214,7 @@ function esdelete_by_query(info::Esinfo, scripts_id::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(DdlType{:_delete_script}, info, scripts_id  )
-	HTTP.delete(url , query= Dict(kw...) )
+	@esdelete(url ,  Dict(kw...) )
 
 end
 
