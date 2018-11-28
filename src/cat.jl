@@ -20,44 +20,63 @@ macro catexport(method, url , query  )
 		end )
 end
 
+
 macro catgenfun(methods, paths, names )
 	funname = esc(Symbol(string("cat", paths )) )
+	name    = esc(Symbol(names) )
 
-	return quote 
-		( if $names != nothing 
-			
-			function $(funname)(info::Esinfo, name::AbstractString ; kw...)  
+	Expr(:function , 
+		Expr(:call , 
+			funname ,
+			Expr(:parameters, 
+				Expr(:(...), :kw)),
+			Expr(:(::) , :info , :Esinfo),
+			Expr(:(::) , name , :AbstractString)
+			) , 
+		Expr(:block ,  
+			quote
 				querys = Dict(kw...) 
 				url    = makeurl(CatType{:_cat}, info, $paths, name)
 				@catexport "GET"  url  querys 
-			end 
-		else 
-			nothing 
-		end  ,
-		function $(funname)(info::Esinfo ;kw...)  
-			querys = Dict(kw...) 
-			url    = makeurl(CatType{:_cat}, info, $paths)
-			@catexport "GET"  url  querys 
-		end 
-		)
-	end
+			end )
+	) 
 end 
+
+macro catgenfun(methods, paths )
+	funname = esc(Symbol(string("cat", paths )) )
+
+	Expr(:function , 
+		Expr(:call , 
+			funname ,
+			Expr(:parameters, 
+				Expr(:(...), :kw)),
+			Expr(:(::) , :info , :Esinfo)
+			) , 
+		Expr(:block ,  
+			quote
+				querys = Dict(kw...) 
+				url    = makeurl(CatType{:_cat}, info, $paths)
+				@catexport "GET"  url  querys 
+			end )
+	) 
+end 
+
 
 
 @catgenfun "GET" "aliases"  "name"
 @catgenfun "GET" "fielddata" "fields"
 @catgenfun "GET" "allocation"  "node_id"
 @catgenfun "GET" "count"  "index"
-@catgenfun "GET" "health"  nothing
-@catgenfun "GET" "master"  nothing 
-@catgenfun "GET" "nodeattrs"  nothing
-@catgenfun "GET" "pending_tasks"  nothing 
-@catgenfun "GET" "plugins"  nothing 
+@catgenfun "GET" "health"
+@catgenfun "GET" "master" 
+@catgenfun "GET" "nodeattrs"
+@catgenfun "GET" "pending_tasks" 
+@catgenfun "GET" "plugins" 
 @catgenfun "GET" "recovery"  "index" 
-@catgenfun "GET" "repositories"  nothing 
+@catgenfun "GET" "repositories" 
 @catgenfun "GET" "segments"  "index" 
 @catgenfun "GET" "shards"  "index" 
 @catgenfun "GET" "snapshots"  "repository" 
-@catgenfun "GET" "tasks"  nothing 
+@catgenfun "GET" "tasks" 
 @catgenfun "GET" "templates"  "name" 
 @catgenfun "GET" "thread_pool"  "thread_pool_patterns" 
