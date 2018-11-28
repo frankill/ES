@@ -4,6 +4,8 @@ struct Esinfo
 	port::AbstractString
 end
 
+Esinfo(host::AbstractString) = Esinfo(host, "9200")
+
 struct ActionType{T} end
 struct BulkType{T} end
 
