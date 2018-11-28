@@ -162,7 +162,7 @@ end
 
 function escreate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
 
-	escreate(info, index, type, id, json(doc), kw...)
+	escreate(info, index, type, id, json(doc); kw...)
 
 end
 
@@ -207,19 +207,19 @@ end
 
 function esdelete_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::Dict ; kw...)
 
- 	esdelete_by_query(info, "$index/$type", json(dsl), kw...)
+ 	esdelete_by_query(info, "$index/$type", json(dsl) ; kw...)
 
 end
 
 function esdelete_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::AbstractString ; kw...)
 
- 	esdelete_by_query(info, "$index/$type", dsl, kw...)
+ 	esdelete_by_query(info, "$index/$type", dsl ; kw...)
 
 end
 
 function esdelete_by_query(info::Esinfo, index::AbstractString, dsl::Dict ; kw...)
 
- 	esdelete_by_query(info, index, json(dsl), kw...)
+ 	esdelete_by_query(info, index, json(dsl) ; kw...)
 
 end
 
@@ -266,14 +266,14 @@ end
 
 function esexists_source(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
 
-	esexists(info, index ,type, "$id/_source" , kw...)
+	esexists(info, index ,type, "$id/_source"  ; kw...)
 
 end
 
 
 function esexplain(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString, dsl::Dict ; kw...)
 
- 	esexplain(info, index, type, id,  json(dsl), kw...)
+ 	esexplain(info, index, type, id,  json(dsl) ; kw...)
 
 end
 
@@ -327,7 +327,7 @@ end
 
 function esindex(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
 
-	esindex(info, index, type, id, json(doc), kw...)
+	esindex(info, index, type, id, json(doc) ; kw...)
 
 end
 
@@ -341,7 +341,7 @@ end
 
 function esindex(info::Esinfo, index::AbstractString, type::AbstractString, doc::Dict; kw...)
 
-	esindex(info, index, type, json(doc), kw...)
+	esindex(info, index, type, json(doc) ; kw...)
 
 end
 
@@ -355,7 +355,7 @@ end
 
 function esupdate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
 
-	esupdate(info, index, type, id, json(doc), kw...)
+	esupdate(info, index, type, id, json(doc) ; kw...)
 
 end
 
@@ -377,7 +377,7 @@ end
 
 function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body::Dict; kw...)
 
-	esmget(info, index, type, json(body), kw...)
+	esmget(info, index, type, json(body) ; kw...)
 
 end
 
@@ -391,7 +391,7 @@ end
 
 function esmget(info::Esinfo, index::AbstractString, body::Dict; kw...)
 
-	esmget(info, index, json(body), kw...)
+	esmget(info, index, json(body) ;  kw...)
 
 end
 
@@ -405,7 +405,7 @@ end
 
 function esmget(info::Esinfo, body::Dict; kw...)
 
-	esmget(info, json(body), kw...)
+	esmget(info, json(body) ; kw...)
 
 end
 
@@ -419,7 +419,7 @@ end
 
 function esmtermvectors(info::Esinfo, index::AbstractString, type::AbstractString, body::Dict; kw...)
 
-	esmtermvectors(info, index, type, json(body), kw...)
+	esmtermvectors(info, index, type, json(body) ; kw...)
 
 end
 
@@ -433,13 +433,13 @@ end
 
 function esmtermvectors(info::Esinfo, index::AbstractString, body::Dict; kw...)
 
-	esmtermvectors(info, index, json(body), kw...)
+	esmtermvectors(info, index, json(body) ; kw...)
 
 end
 
 function esmtermvectors(info::Esinfo, body::Dict; kw...)
 
-	esmtermvectors(info, json(body), kw...)
+	esmtermvectors(info, json(body) ; kw...)
 
 end
 
@@ -468,13 +468,13 @@ end
 
 function esputscript(info::Esinfo, scripts_id::AbstractString , body::Dict ; kw...)
 
-	esputscript(info, scripts_id, json(body), kw...)
+	esputscript(info, scripts_id, json(body) ; kw...)
 
 end
 
 function esputscript(info::Esinfo, scripts_id::AbstractString , context::AbstractString ,body::Dict ; kw...)
 
-	esputscript(info, scripts_id, context, json(body), kw...)
+	esputscript(info, scripts_id, context, json(body) ; kw...)
 
 end
 
@@ -497,13 +497,13 @@ end
 
 function esrankeval(info::Esinfo, index::AbstractString , body::Dict ; kw...)
 
-	esrankeval(info, index, json(body), kw...)
+	esrankeval(info, index, json(body) ; kw...)
 
 end
 
 function esrankeval(info::Esinfo , body::Dict ; kw...)
 
-	esrankeval(info, json(body), kw...)
+	esrankeval(info, json(body) ; kw...)
 
 end
 
@@ -525,7 +525,7 @@ end
 
 function esreindex(info::Esinfo , dsl::Dict ; kw...)
 
-	esreindex(info, json(dsl), kw...)
+	esreindex(info, json(dsl) ; kw...)
 
 end
 
