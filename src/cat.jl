@@ -61,22 +61,33 @@ macro catgenfun(methods, paths )
 	) 
 end 
 
-
-
+##
 @catgenfun "GET" "aliases"  "name"
+@catgenfun "GET" "aliases"
 @catgenfun "GET" "fielddata" "fields"
+@catgenfun "GET" "fielddata"
 @catgenfun "GET" "allocation"  "node_id"
+@catgenfun "GET" "allocation"
 @catgenfun "GET" "count"  "index"
+@catgenfun "GET" "count"
 @catgenfun "GET" "health"
 @catgenfun "GET" "master" 
 @catgenfun "GET" "nodeattrs"
 @catgenfun "GET" "pending_tasks" 
 @catgenfun "GET" "plugins" 
 @catgenfun "GET" "recovery"  "index" 
+@catgenfun "GET" "recovery"
 @catgenfun "GET" "repositories" 
 @catgenfun "GET" "segments"  "index" 
+@catgenfun "GET" "segments"
 @catgenfun "GET" "shards"  "index" 
+@catgenfun "GET" "shards"
 @catgenfun "GET" "snapshots"  "repository" 
+@catgenfun "GET" "snapshots"
 @catgenfun "GET" "tasks" 
 @catgenfun "GET" "templates"  "name" 
+@catgenfun "GET" "templates"
 @catgenfun "GET" "thread_pool"  "thread_pool_patterns" 
+@catgenfun "GET" "thread_pool"
+
+
