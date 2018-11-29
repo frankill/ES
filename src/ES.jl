@@ -21,5 +21,6 @@ module ES
 	include("plugins.jl")
 	include("cat.jl")
 	include("other.jl")
+	include("cluster_indices.jl")
 
 end 
