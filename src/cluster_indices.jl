@@ -502,8 +502,8 @@ end
 @genfunction "GET" esingest_simulate IngestType{:_simulate} 1
 @genfunction "PUT" esingest_put_pipeline IngestType{:_put_pipeline} 1 id
 @genfunction "GET" esingest_processor_grok IngestType{:_processor_grok} 0
-@genfunction "GET" estasks_get_pipeline IngestType{:_get_pipeline} 0 id
-@genfunction "GET" estasks_get_pipeline IngestType{:_get_pipeline} 0
+@genfunction "GET" esingest_get_pipeline IngestType{:_get_pipeline} 0 id
+@genfunction "GET" esingest_get_pipeline IngestType{:_get_pipeline} 0
 
 #indices
 @genfunction "POST" esindices_validate_query IndicesType{:_validate_query} 1 index
