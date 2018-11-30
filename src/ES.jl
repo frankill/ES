@@ -16,6 +16,19 @@ module ES
 		catnodeattrs,catrecovery,catshards,cattemplates,catallocation,cathealth,catpending_tasks,
 		catrepositories,catsnapshots,catthread_pool,catcount,catmaster,catplugins,catsegments,cattasks
 	
+	export esindices_analyze,esindices_clear_cache,esindices_close,esindices_create,esindices_flush,
+		esindices_flush_synced,esindices_forcemerge,esindices_get,esindices_get_alias,
+		esindices_get_field_mapping,escluster_allocation_explain,escluster_get_settings,escluster_health,
+		esingest_processor_grok,esingest_get_pipeline,esnodes_hot_threads,esnodes_info,essnapshot_create,
+		essnapshot_create_repository,essnapshot_get,estasks_cancel,estasks_get,estasks_get_pipeline,estasks_list,
+		esindices_get_mapping,esindices_get_settings,esindices_get_template,esindices_get_upgrade,esindices_open,
+		esindices_put_alias,esindices_put_mapping,esindices_put_settings,esindices_put_template,esindices_recovery,
+		escluster_pending_tasks,escluster_put_settings,escluster_remote_info,esingest_put_pipeline,
+		esnodes_reload_secure_settings,esnodes_stats,essnapshot_get_repository,essnapshot_restore,essnapshot_status,
+		esindices_refresh,esindices_rollover,esindices_segments,esindices_shard_stores,esindices_shrink,
+		esindices_split,esindices_stats,esindices_update_aliases,esindices_upgrade,esindices_validate_query,
+		escluster_reroute,escluster_state,escluster_stats,esingest_simulate,esnodes_usage,essnapshot_verify_repository
+	
 	include("transformation.jl")
 	include("api.jl")
 	include("plugins.jl")
