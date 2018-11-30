@@ -528,10 +528,10 @@ end
 @genfunction "POST" esindices_put_template IndicesType{:_put_template} 1 name
 @genfunction "PUT" esindices_put_settings IndicesType{:_put_settings} 1 index
 @genfunction "PUT" esindices_put_settings IndicesType{:_put_settings} 1
-@genfunction "POST" esindices_put_mapping IndicesType{:_put_mapping} 1 index type 
-@genfunction "POST" esindices_put_mapping IndicesType{:_put_mapping} 1 index 
-@genfunction "POST" esindices_put_alias IndicesType{:_put_alias} 1 index name 
-@genfunction "POST" esindices_put_alias IndicesType{:_put_alias} 1 
+@genfunction "PUT" esindices_put_mapping IndicesType{:_put_mapping} 1 index type 
+@genfunction "PUT" esindices_put_mapping IndicesType{:_put_mapping} 1 index 
+@genfunction "PUT" esindices_put_alias IndicesType{:_put_alias} 1 index name 
+@genfunction "PUT" esindices_put_alias IndicesType{:_put_alias} 1 
 @genfunction "POST" esindices_open IndicesType{:_open} 0 index
 @genfunction "GET" esindices_get_upgrade IndicesType{:_get_upgrade} 0 index   
 @genfunction "GET" esindices_get_upgrade IndicesType{:_get_upgrade} 0 
