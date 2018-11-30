@@ -491,9 +491,9 @@ end
 @genfunction "GET" esnodes_stats NodesType{:_stats} 0
 @genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0 node_id
 @genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0
-@genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
-@genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
-@genfunction "GET" esnodes_info NodesType{:_info} 0
+# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
+# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
+# @genfunction "GET" esnodes_info NodesType{:_info} 0
 @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0 id
 @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
 
