@@ -494,8 +494,8 @@ end
 # @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
 # @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
 # @genfunction "GET" esnodes_info NodesType{:_info} 0
-@genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0 id
-@genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
+# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0 id
+# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
 
 #ingest 
 @genfunction "GET" esingest_simulate IngestType{:_simulate} 1 id
