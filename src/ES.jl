@@ -29,6 +29,38 @@ module ES
 		esindices_split,esindices_stats,esindices_update_aliases,esindices_upgrade,esindices_validate_query,
 		escluster_reroute,escluster_state,escluster_stats,esingest_simulate,esnodes_usage,essnapshot_verify_repository
 	
+
+	macro eshead( url , query  )
+
+		esc(
+			quote
+				try 
+					respos = HTTP.request("HEAD", $url , query= $query)
+
+					if respos.status == 200 
+						"OK"
+					end
+				catch 
+					"404 - Not Found"
+				end 
+
+			end )
+	end
+
+	macro esdelete( url,   query   )
+
+		esc(
+			quote
+
+				respos = HTTP.request("DELETE", $url ,  query= $query)
+
+				if respos.status == 200 
+					JSON.parse(String(respos.body))
+				end
+
+			end )
+	end
+
 	include("transformation.jl")
 	include("api.jl")
 	include("cat.jl")
