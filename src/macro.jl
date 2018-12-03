@@ -3,7 +3,7 @@ macro eshead( url , query  )
 	esc(
 		quote
 			try 
-				respos = HTTP.request("HEAD", $(HTTP.URI(url)) , query= $query)
+				respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query)
 
 				if respos.status == 200 
 					"OK"
@@ -20,7 +20,7 @@ macro esdelete( url,   query   )
 	esc(
 		quote
 
-			respos = HTTP.request("DELETE", $(HTTP.URI(url)) ,  query= $query)
+			respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query)
 
 			if respos.status == 200 
 				JSON.parse(String(respos.body))
@@ -33,7 +33,7 @@ macro catexport(method, url , query  )
 	esc(
 		quote
 
-			respos = HTTP.request($method, $(HTTP.URI(url)), query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
 			String(respos.body) |> println
 
 		end )
