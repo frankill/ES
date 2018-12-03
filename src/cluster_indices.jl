@@ -434,9 +434,7 @@ function genfunction(  kw::Vector  )
 	end 
 
 	if kw[4] >= 1    
-		push!(func.args, Expr(:where , Expr(:(::) , :body , :T) , 
-						Expr(:(<:) , :T , 
-							Expr(:curly,:Union, :Dict, :AbstractString))) )
+		push!(func.args,  Expr(:(::) , :body , :T) )
 		body = :body 
 	else 
 		body = Dict()
@@ -457,7 +455,8 @@ function genfunction(  kw::Vector  )
 				 )
 			)
 
-	esc(Expr(:function, func, block))
+	esc(Expr(:function, Expr(:where , func,  
+				Expr(:(<:) , :T , Expr(:curly,:Union, :Dict, :AbstractString))), block))
 
 end 
 
