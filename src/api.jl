@@ -71,7 +71,7 @@ macro esexport(method, url, body , query , type )
 	esc(
 		quote
 
-			respos = HTTP.request($method, $url , $header , $body, query= $query)
+			respos = HTTP.request($method, $(HTTP.URI(url)) , $header , $body, query= $query)
 			
 			if respos.status == 200 
 				JSON.parse(String(respos.body))
