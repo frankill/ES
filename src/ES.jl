@@ -31,9 +31,9 @@ module ES
 	
 	include("transformation.jl")
 	include("api.jl")
-	include("plugins.jl")
 	include("cat.jl")
-	include("other.jl")
 	include("cluster_indices.jl")
+	include("plugins.jl")
+	include("other.jl")
 
 end 
