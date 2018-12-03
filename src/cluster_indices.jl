@@ -435,8 +435,8 @@ function genfunction(  kw::Vector  )
 
 	if kw[4] >= 1    
 		push!(func.args, Expr(:where , Expr(:(::) , :body , :T) , 
-								Expr(:(<:) , :T , 
-									Expr(:curly,:Union, :Dict, :AbstractString))) )
+						Expr(:(<:) , :T , 
+							Expr(:curly,:Union, :Dict, :AbstractString))) )
 		body = :body 
 	else 
 		body = Dict()
@@ -451,7 +451,7 @@ function genfunction(  kw::Vector  )
 				 kw[1],
 				 :url ,
 				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict), 
-				 							Expr(:call, :json, body) , body ) ,
+							Expr(:call, :json, body) , body ) ,
 				 :querys ,
 				 "application/json"
 				 )
