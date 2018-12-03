@@ -434,7 +434,9 @@ function genfunction(  kw::Vector  )
 	end 
 
 	if kw[4] >= 1    
-		push!(func.args, Expr(:(::) , :body , :Dict)) 
+		push!(func.args, Expr(:where , Expr(:(::) , :body , :T) , 
+								Expr(:(<:) , :T , 
+									Expr(:curly,:Union, :Dict, :AbstractString))) )
 		body = :body 
 	else 
 		body = Dict()
@@ -448,7 +450,8 @@ function genfunction(  kw::Vector  )
 				 "",
 				 kw[1],
 				 :url ,
-				 Expr(:call , :json , body) ,
+				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict), 
+				 							Expr(:call, :json, body) , body ) ,
 				 :querys ,
 				 "application/json"
 				 )
@@ -491,11 +494,6 @@ end
 @genfunction "GET" esnodes_stats NodesType{:_stats} 0
 @genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0 node_id
 @genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0
-# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
-# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
-# @genfunction "GET" esnodes_info NodesType{:_info} 0
-# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0 id
-# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
 
 #ingest 
 @genfunction "GET" esingest_simulate IngestType{:_simulate} 1 id
@@ -573,5 +571,53 @@ end
 @genfunction "GET" escluster_health ClusterType{:_health} 0
 @genfunction "GET" escluster_get_settings ClusterType{:_get_settings} 0
 @genfunction "GET" escluster_allocation_explain ClusterType{:_allocation_explain} 1
+
+# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
+# @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
+# @genfunction "GET" esnodes_info NodesType{:_info} 0
+# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0 id
+# @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
+
+
+function esnodes_info(info::Esinfo, node_id::AbstractString, metric::AbstractString ; kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(NodesType{:_info}, info, node_id, metric )
+	@catexport "GET"  url  query 
+
+end
+
+function esnodes_info(info::Esinfo, node_id_metric::AbstractString ;  kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(NodesType{:_info}, info, node_id_metric)
+	@catexport "GET"  url  query 
+
+end
+
+function esnodes_info(info::Esinfo ;  kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(NodesType{:_info}, info)
+	@catexport "GET"  url  query 
+
+end
+
+
+function esnodes_hot_threads(info::Esinfo, id::AbstractString ;  kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(NodesType{:_hot_threads}, info, node_id_metric)
+	@catexport "GET"  url  query 
+
+end
+
+function esnodes_hot_threads(info::Esinfo ;  kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(NodesType{:_hot_threads}, info)
+	@catexport "GET"  url  query 
+
+end
 
  
