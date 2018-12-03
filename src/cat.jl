@@ -9,18 +9,6 @@ function makeurl(::Type{CatType{:_cat}}, info::Esinfo,paths::AbstractString)
 	"http://$(info.host):$(info.port)/_cat/$paths"
 end
 
-macro catexport(method, url , query  )
-
-	esc(
-		quote
-
-			respos = HTTP.request($method, $url, query= $query)
-			String(respos.body) |> println
-
-		end )
-end
-
-
 macro catgenfun(methods, paths, names )
 	funname = esc(Symbol(string("cat", paths )) )
 	name    = esc(Symbol(names) )
