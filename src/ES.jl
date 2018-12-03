@@ -29,10 +29,9 @@ module ES
 		esindices_split,esindices_stats,esindices_update_aliases,esindices_upgrade,esindices_validate_query,
 		escluster_reroute,escluster_state,escluster_stats,esingest_simulate,esnodes_usage,essnapshot_verify_repository
 	
-
-	include("macro.jl")
 	include("transformation.jl")
 	include("api.jl")
+	include("macro.jl")
 	include("cat.jl")
 	include("cluster_indices.jl")
 	include("plugins.jl")
