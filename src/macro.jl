@@ -51,7 +51,7 @@ function genfunction(  kw::Vector  )
 	url = :( url = makeurl( $(kw[3]), info ) )
 
 	if length(kw) >= 5
-		append!( url.args[2].args , string.( kw[5:end] ) )
+		append!( url.args[2].args ,  kw[5:end] )
 		append!(func.args, Expr.(:(::) , kw[5:end] , :AbstractString))	
 	end 
 
