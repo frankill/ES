@@ -1,37 +1,6 @@
 struct DmlType{T} end
 struct DdlType{T} end
 
-macro eshead( url , query  )
-
-	esc(
-		quote
-			try 
-				respos = HTTP.request("HEAD", $url , query= $query)
-
-				if respos.status == 200 
-					"OK"
-				end
-			catch 
-				"404 - Not Found"
-			end 
-
-		end )
-end
-
-macro esdelete( url,   query   )
-
-	esc(
-		quote
-
-			respos = HTTP.request("DELETE", $url ,  query= $query)
-			
-			if respos.status == 200 
-				JSON.parse(String(respos.body))
-			end
-
-		end )
-end
-
 function makeurl(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
 	"http://$(info.host):$(info.port)/$index/$type/$id"
 end
@@ -72,8 +41,16 @@ function makeurl(::Type{DdlType{:_delete}}, info::Esinfo, index::AbstractString 
 	"http://$(info.host):$(info.port)/$index/_delete_by_query"
 end
 
+function makeurl(::Type{DdlType{:_delete}}, info::Esinfo, index::AbstractString , type::AbstractString)
+	"http://$(info.host):$(info.port)/$index/$type/_delete_by_query"
+end
+
 function makeurl(::Type{DdlType{:_update}}, info::Esinfo, index::AbstractString )
 	"http://$(info.host):$(info.port)/$index/_update_by_query"
+end
+
+function makeurl(::Type{DdlType{:_update}}, info::Esinfo, index::AbstractString , type::AbstractString)
+	"http://$(info.host):$(info.port)/$index/$type/_update_by_query"
 end
 
 function makeurl(::Type{DdlType{:_delete_script}}, info::Esinfo, id::AbstractString )
@@ -173,19 +150,6 @@ function makeurl(::Type{DdlType{:_search_shards}}, info::Esinfo, index::Abstract
 	"http://$(info.host):$(info.port)/$index/_search_shards"
 end
 
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
-
-	escreate(info, index, type, id, json(doc); kw...)
-
-end
-
-function escreate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DmlType{:_create}, info, index ,type, id )
-	@esexport "POST" url doc query "application/json"
-
-end
 
 function esdelete(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString ; kw...)
 
@@ -194,79 +158,12 @@ function esdelete(info::Esinfo, index::AbstractString, type::AbstractString,id::
 
 end
 
-function esdelete_by_query_rethrottle(info::Esinfo, task_id::AbstractString  ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_delete_rethrottle}, info, task_id  )
-	@esexport "POST" url Dict() query "application/json"
-
-end
-
-function esupdate_by_query_rethrottle(info::Esinfo, task_id::AbstractString  ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_update_rethrottle}, info, task_id  )
-	@esexport "POST" url Dict() query "application/json"
-
-end
 
 function esdelete_by_query(info::Esinfo, scripts_id::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(DdlType{:_delete_script}, info, scripts_id  )
 	@esdelete(url ,  Dict(kw...) )
-
-end
-
-function esdelete_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::Dict ; kw...)
-
- 	esdelete_by_query(info, "$index/$type", json(dsl) ; kw...)
-
-end
-
-function esdelete_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::AbstractString ; kw...)
-
- 	esdelete_by_query(info, "$index/$type", dsl ; kw...)
-
-end
-
-function esdelete_by_query(info::Esinfo, index::AbstractString, dsl::Dict ; kw...)
-
- 	esdelete_by_query(info, index, json(dsl) ; kw...)
-
-end
-
-function esdelete_by_query(info::Esinfo, index::AbstractString, dsl::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_delete}, info, index  )
-	@esexport "POST" url dsl query "application/json"
-
-end
-
-function esupdate_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::Dict ; kw...)
-
- 	esupdate_by_query(info, "$index/$type", json(dsl) ; kw...)
-
-end
-
-function esupdate_by_query(info::Esinfo, index::AbstractString, type::AbstractString, dsl::AbstractString ; kw...)
-
- 	esupdate_by_query(info, "$index/$type", dsl ; kw...)
-
-end
-
-function esupdate_by_query(info::Esinfo, index::AbstractString, dsl::Dict ; kw...)
-
- 	esupdate_by_query(info, index, json(dsl) ; kw...)
-
-end
-
-function esupdate_by_query(info::Esinfo, index::AbstractString, dsl::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_update}, info, index  )
-	@esexport "POST" url dsl query "application/json"
 
 end
 
@@ -283,187 +180,6 @@ function esexists_source(info::Esinfo, index::AbstractString, type::AbstractStri
 
 end
 
-
-function esexplain(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString, dsl::Dict ; kw...)
-
- 	esexplain(info, index, type, id,  json(dsl) ; kw...)
-
-end
-
-function esexplain(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString, dsl::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_explain}, info, index , type, id  )
-	@esexport "POST" url dsl query "application/json"
-
-end
-
-function esfield_caps(info::Esinfo, index::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_field_caps}, info, index  )
-	@esexport "POST" url Dict() query "application/json"
-
-end
-
-function esfield_caps(info::Esinfo  ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_field_caps}, info )
-	@esexport "POST" url Dict() query "application/json"
-
-end
-
-function esget(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
-
- 	query = Dict(kw...)
-	url   = makeurl(DmlType{:_get}, info ,index, type, id  )
-	@esexport "GET" url Dict() query "application/json"
-
-end
-
-function esgetscript(info::Esinfo, scripts_id::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_get_script}, info, scripts_id  )
-	@esexport "GET" url Dict() query "application/json"
-
-end
-
-function esgetsource(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
-
- 	query = Dict(kw...)
-	url   = makeurl(DmlType{:_get_source}, info ,index, type, id  )
-	@esexport "GET" url Dict() query "application/json"
-
-end
-
-function esindex(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
-
-	esindex(info, index, type, id, json(doc) ; kw...)
-
-end
-
-function esindex(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DmlType{:_index}, info, index ,type, id )
-	@esexport "POST" url doc query "application/json"
-
-end
-
-function esindex(info::Esinfo, index::AbstractString, type::AbstractString, doc::Dict; kw...)
-
-	esindex(info, index, type, json(doc) ; kw...)
-
-end
-
-function esindex(info::Esinfo, index::AbstractString, type::AbstractString, doc::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DmlType{:_index}, info, index ,type )
-	@esexport "POST" url doc query "application/json"
-
-end
-
-function esupdate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::Dict; kw...)
-
-	esupdate(info, index, type, id, json(doc) ; kw...)
-
-end
-
-function esupdate(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString, doc::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DmlType{:_update}, info, index ,type, id )
-	@esexport "POST" url doc query "application/json"
-
-end
-
-function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mget}, info, index ,type )
-	@esexport "POST" url body query "application/json"
-
-end
-
-function esmget(info::Esinfo, index::AbstractString, type::AbstractString, body::Dict; kw...)
-
-	esmget(info, index, type, json(body) ; kw...)
-
-end
-
-function esmget(info::Esinfo, index::AbstractString, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mget}, info, index  )
-	@esexport "POST" url body query "application/json"
-
-end
-
-function esmget(info::Esinfo, index::AbstractString, body::Dict; kw...)
-
-	esmget(info, index, json(body) ;  kw...)
-
-end
-
-function esmget(info::Esinfo, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mget}, info )
-	@esexport "POST" url body query "application/json"
-
-end
-
-function esmget(info::Esinfo, body::Dict; kw...)
-
-	esmget(info, json(body) ; kw...)
-
-end
-
-function esmtermvectors(info::Esinfo, index::AbstractString, type::AbstractString, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mtermvectors}, info, index ,type )
-	@esexport "POST" url body query "application/json"
-
-end
-
-function esmtermvectors(info::Esinfo, index::AbstractString, type::AbstractString, body::Dict; kw...)
-
-	esmtermvectors(info, index, type, json(body) ; kw...)
-
-end
-
-function esmtermvectors(info::Esinfo, index::AbstractString, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mtermvectors}, info, index  )
-	@esexport "POST" url body query "application/json"
-
-end
-
-function esmtermvectors(info::Esinfo, index::AbstractString, body::Dict; kw...)
-
-	esmtermvectors(info, index, json(body) ; kw...)
-
-end
-
-function esmtermvectors(info::Esinfo, body::Dict; kw...)
-
-	esmtermvectors(info, json(body) ; kw...)
-
-end
-
-function esmtermvectors(info::Esinfo, body::AbstractString; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_mtermvectors}, info )
-	@esexport "POST" url body query "application/json"
-
-end
-
 function esping(info::Esinfo )
 
 	url   = makeurl(DdlType{:_ping}, info )
@@ -471,137 +187,38 @@ function esping(info::Esinfo )
 
 end
 
-function esputscript(info::Esinfo, scripts_id::AbstractString , body::AbstractString ; kw...)
 
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_put_script}, info, scripts_id  )
-	@esexport "PUT" url body query "application/json"
+@genfunction "POST" escreate DmlType{:_create} 1 index, type, id
+@genfunction "POST" esdelete_by_query_rethrottle DdlType{:_delete_rethrottle} 0 task_id
+@genfunction "POST" esupdate_by_query_rethrottle DdlType{:_update_rethrottle} 0 task_id
+@genfunction "POST" esdelete_by_query DdlType{:_delete} 1 index type 
+@genfunction "POST" esdelete_by_query DdlType{:_delete} 1 index 
+@genfunction "POST" esupdate_by_query DdlType{:_update} 1 index type 
+@genfunction "POST" esupdate_by_query DdlType{:_update} 1 index 
+@genfunction "POST" esexplain DdlType{:_explain} 1 index type id
+@genfunction "POST" esfield_caps DdlType{:_field_caps} 0 index
+@genfunction "POST" esfield_caps DdlType{:_field_caps} 0
+@genfunction "GET" esget DmlType{:_get} 0 index type id 
+@genfunction "GET" esgetscript DdlType{:_get_script} 0 scripts_id
+@genfunction "GET" esgetsource DmlType{:_get_source} 0 index type id 
+@genfunction "POST" esindex DmlType{:_index} 1 index type id 
+@genfunction "POST" esindex DmlType{:_index} 1 index type 
+@genfunction "POST" esupdate DmlType{:_update} 1 index type id 
+@genfunction "POST" esupdate DdlType{:_mget} 1 index type  
+@genfunction "POST" esupdate DdlType{:_mget} 1 index  
+@genfunction "POST" esupdate DdlType{:_mget} 1 
+@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 index type 
+@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 index 
+@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 
+@genfunction "PUT" esputscript DdlType{:_put_script} 1 scripts_id context 
+@genfunction "PUT" esputscript DdlType{:_put_script} 1 scripts_id 
+@genfunction "PUT" esrankeval DdlType{:_rank_eval} 1 index 
+@genfunction "PUT" esrankeval DdlType{:_rank_eval} 1 
+@genfunction "POST" esreindex DdlType{:_reindex} 1 
+@genfunction "POST" esreindex_rethrottle DdlType{:_reindex_rethrottle} 0 task_id 
+@genfunction "POST" esrender_search_template DdlType{:_render_search_template} 1 id 
+@genfunction "POST" esrender_search_template DdlType{:_render_search_template} 1 
+@genfunction "POST" esscripts_painless_execute DdlType{:_scripts_painless_execute} 1 
+@genfunction "POST" essearch_shards DdlType{:_search_shards} 0 index 
+@genfunction "POST" essearch_shards DdlType{:_search_shards} 0 
 
-end
-
-function esputscript(info::Esinfo, scripts_id::AbstractString , body::Dict ; kw...)
-
-	esputscript(info, scripts_id, json(body) ; kw...)
-
-end
-
-function esputscript(info::Esinfo, scripts_id::AbstractString , context::AbstractString ,body::Dict ; kw...)
-
-	esputscript(info, scripts_id, context, json(body) ; kw...)
-
-end
-
-function esputscript(info::Esinfo, scripts_id::AbstractString , context::AbstractString ,body::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_put_script}, info, scripts_id ,context )
-	@esexport "PUT" url body query "application/json"
-
-end
-
-
-function esrankeval(info::Esinfo, index::AbstractString , body::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_rank_eval}, info, index  )
-	@esexport "PUT" url body query "application/json"
-
-end
-
-function esrankeval(info::Esinfo, index::AbstractString , body::Dict ; kw...)
-
-	esrankeval(info, index, json(body) ; kw...)
-
-end
-
-function esrankeval(info::Esinfo , body::Dict ; kw...)
-
-	esrankeval(info, json(body) ; kw...)
-
-end
-
-function esrankeval(info::Esinfo , body::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_rank_eval}, info  )
-	@esexport "PUT" url body query "application/json"
-
-end
-
-function esreindex(info::Esinfo , dsl::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_reindex}, info  )
-	@esexport "POST" url dsl query "application/json"
-
-end
-
-function esreindex(info::Esinfo , dsl::Dict ; kw...)
-
-	esreindex(info, json(dsl) ; kw...)
-
-end
-
-function esreindex_rethrottle(info::Esinfo , task_id::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_reindex_rethrottle}, info , task_id )
-	@esexport "POST" url Dict() query "application/json"
-
-end
-
-
-function esrender_search_template(info::Esinfo , id::AbstractString , body::AbstractString )
-
-	url   = makeurl(DdlType{:_render_search_template}, info , id )
-	@esexport "POST" url body Dict() "application/json"
-
-end
-
-function esrender_search_template(info::Esinfo , id::AbstractString , body::Dict )
-
-	esrender_search_template(info, id, json(Dict))
-
-end
-
-function esrender_search_template(info::Esinfo ,body::Dict )
-
-	esrender_search_template(info, json(Dict))
-
-end
-
-function esrender_search_template(info::Esinfo ,body::AbstractString )
-
-	url   = makeurl(DdlType{:_render_search_template}, info )
-	@esexport "POST" url body Dict() "application/json"
-
-end
-
-function esscripts_painless_execute(info::Esinfo ,body::AbstractString )
-
-	url   = makeurl(DdlType{:_scripts_painless_execute}, info )
-	@esexport "POST" url body Dict() "application/json"
-
-end
-
-function esscripts_painless_execute(info::Esinfo ,body::Dict )
-
-	esscripts_painless_execute(info, json(body))
-
-end
-
-function essearch_shards(info::Esinfo , index::AbstractString ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_search_shards}, info , task_id )
-	@esexport "POST" url Dict() query "application/json"
-
-end
-
-function essearch_shards(info::Esinfo   ; kw...)
-
-	query = Dict(kw...)
-	url   = makeurl(DdlType{:_search_shards}, info   )
-	@esexport "POST" url Dict() query "application/json"
-
-end
