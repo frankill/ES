@@ -568,4 +568,63 @@ function esnodes_hot_threads(info::Esinfo ;  kw...)
 
 end
 
+function esindices_delete(info::Esinfo, index::AbstractString ; kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(IndicesType{:_delete}, info, index  )
+	@esdelete(url ,  Dict(kw...) )
+
+end
+
+function esindices_delete_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(IndicesType{:_delete_alias}, info, index ,name )
+	@esdelete(url ,  Dict(kw...) )
+
+end
+
+function esindices_delete_template(info::Esinfo, name::AbstractString ; kw...)
+
+	query = Dict(kw...)
+	url   = makeurl(IndicesType{:_delete_template}, info ,name )
+	@esdelete(url ,  Dict(kw...) )
+
+end
+
+function esindices_exists(info::Esinfo, index::AbstractString ; kw...)
+
+	url   = makeurl(IndicesType{:_exists}, info, index)
+	@eshead  url   Dict(kw...)  
+
+end
+
+function esindices_exists_alias(info::Esinfo, name::AbstractString ; kw...)
+
+	url   = makeurl(IndicesType{:_exists_alias}, info, name)
+	@eshead  url   Dict(kw...)  
+
+end
+
+function esindices_exists_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
+
+	url   = makeurl(IndicesType{:_exists_alias}, info, index,name)
+	@eshead  url   Dict(kw...)  
+
+end
+
+function esindices_exists_template(info::Esinfo, name::AbstractString ; kw...)
+
+	url   = makeurl(IndicesType{:_exists_template}, info ,name)
+	@eshead  url   Dict(kw...)  
+
+end
+
+function esindices_exists_type(info::Esinfo, index::AbstractString ,type::AbstractString ; kw...)
+
+	url   = makeurl(IndicesType{:_exists_type}, info ,index, type)
+	@eshead  url   Dict(kw...)  
+
+end
+
  
