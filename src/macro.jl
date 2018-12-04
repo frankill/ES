@@ -76,9 +76,12 @@ function genfunction(  kw::Vector  )
 				 "application/json"
 				 )
 			)
-
-	esc(Expr(:function, Expr(:where , func,  
-				Expr(:(<:) , :T , Expr(:curly,:Union, :Dict, :AbstractString))), block))
+	if kw[4] >= 1
+		esc(Expr(:function, Expr(:where , func,  
+					Expr(:(<:) , :T , Expr(:curly,:Union, :Dict, :AbstractString))), block))
+	else
+		esc(Expr(:function, func, block))
+	end 
 
 end 
 
