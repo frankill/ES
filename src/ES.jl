@@ -27,7 +27,9 @@ module ES
 		esnodes_reload_secure_settings,esnodes_stats,essnapshot_get_repository,essnapshot_restore,essnapshot_status,
 		esindices_refresh,esindices_rollover,esindices_segments,esindices_shard_stores,esindices_shrink,
 		esindices_split,esindices_stats,esindices_update_aliases,esindices_upgrade,esindices_validate_query,
-		escluster_reroute,escluster_state,escluster_stats,esingest_simulate,esnodes_usage,essnapshot_verify_repository
+		escluster_reroute,escluster_state,escluster_stats,esingest_simulate,esnodes_usage,essnapshot_verify_repository,
+		esindices_delete,esindices_delete_alias,esindices_delete_template,esindices_exists,esindices_exists_alias,
+		esindices_exists_template,esindices_exists_type
 	
 	include("transformation.jl")
 	include("api.jl")
