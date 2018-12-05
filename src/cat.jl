@@ -1,11 +1,11 @@
 
 struct CatType{T} end
 
-function makeurl(::Type{CatType{:_cat}}, info::Esinfo, paths::AbstractString, name::AbstractString)
+function make_url(::Type{CatType{:_cat}}, info::Esinfo, paths::AbstractString, name::AbstractString)
 	"http://$(info.host):$(info.port)/_cat/$paths/$name"
 end
 
-function makeurl(::Type{CatType{:_cat}}, info::Esinfo,paths::AbstractString)
+function make_url(::Type{CatType{:_cat}}, info::Esinfo,paths::AbstractString)
 	"http://$(info.host):$(info.port)/_cat/$paths"
 end
 
@@ -24,7 +24,7 @@ macro catgenfun(methods, paths, names )
 		Expr(:block ,  
 			quote
 				querys = Dict(kw...) 
-				url    = makeurl(CatType{:_cat}, info, $paths, name)
+				url    = make_url(CatType{:_cat}, info, $paths, name)
 				@catexport $methods  url  querys 
 			end )
 	) 
@@ -43,7 +43,7 @@ macro catgenfun(methods, paths )
 		Expr(:block ,  
 			quote
 				querys = Dict(kw...) 
-				url    = makeurl(CatType{:_cat}, info, $paths)
+				url    = make_url(CatType{:_cat}, info, $paths)
 				@catexport $methods  url  querys 
 			end )
 	) 
