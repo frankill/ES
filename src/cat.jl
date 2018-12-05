@@ -10,7 +10,7 @@ function makeurl(::Type{CatType{:_cat}}, info::Esinfo,paths::AbstractString)
 end
 
 macro catgenfun(methods, paths, names )
-	funname = esc(Symbol(string("cat", paths )) )
+	funname = esc(Symbol(string("cat_", paths )) )
 	name    = esc(Symbol(names) )
 
 	Expr(:function , 
