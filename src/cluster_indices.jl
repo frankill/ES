@@ -502,8 +502,8 @@ end
 @genfunction "PUT" es_indices_create IndicesType{:_create} 1 index
 @genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 
 @genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 index
-@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 0 
-@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 0 index
+@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 1 
+@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 1 index
 
 # cluster
 @genfunction "GET" es_cluster_stats ClusterType{:_stats} 0 
