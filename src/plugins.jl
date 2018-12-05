@@ -2,15 +2,15 @@
 struct Xpack{T} end
 Xpack(T) = Xpack{T}
 
-function makeurl(::Type{Xpack{:_sql}}, info::Esinfo)
+function make_url(::Type{Xpack{:_sql}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_xpack/sql/"
 end
 
-function makeurl(::Type{Xpack{:_translate}}, info::Esinfo)
+function make_url(::Type{Xpack{:_translate}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_xpack/sql/translate"
 end
 
-function makeurl(::Type{Xpack{:_sql_close}}, info::Esinfo)
+function make_url(::Type{Xpack{:_sql_close}}, info::Esinfo)
 	"http://$(info.host):$(info.port)/_xpack/sql/close"
 end
 
