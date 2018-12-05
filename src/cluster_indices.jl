@@ -418,10 +418,10 @@ function make_url(::Type{TasksType{:_cancel}}, info::Esinfo, task_id::AbstractSt
 end
 
 #task 
-@genfunction "GET" es_tasks_cancel TasksType{:_cancel} 0 task_id
-@genfunction "GET" es_tasks_cancel TasksType{:_cancel} 0  
+@genfunction "POST" es_tasks_cancel TasksType{:_cancel} 0 task_id
+@genfunction "POST" es_tasks_cancel TasksType{:_cancel} 0  
 @genfunction "GET" es_tasks_get TasksType{:_get} 0 task_id
-@genfunction "POST" es_tasks_list TasksType{:_list} 0  
+@genfunction "GET" es_tasks_list TasksType{:_list} 0  
 
 #snapshot
 @genfunction "POST" es_snapshot_verify_repository SnapshotType{:_verify_repository} 0 repository
