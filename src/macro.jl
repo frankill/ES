@@ -48,7 +48,7 @@ function genfunction(  kw::Vector  )
 		Expr(:(::) , :info , :Esinfo)
 		)
 
-	url = :( url = makeurl( $(kw[3]), info ) )
+	url = :( url = make_url( $(kw[3]), info ) )
 
 	if length(kw) >= 5
 		append!( url.args[2].args ,  kw[5:end] )
