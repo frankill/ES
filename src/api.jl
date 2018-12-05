@@ -37,10 +37,6 @@ end
 Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
 Base.length(B::BulkLength)           = Int(ceil(B.count/B.seq))
 
-function make_url(::Type{ActionType{:_setting}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_settings"
-end
-
 function make_url(::Type{ActionType{:_count}}, info::Esinfo, index::AbstractString)
 	"http://$(info.host):$(info.port)/$index/_count"
 end
@@ -78,13 +74,6 @@ macro esexport(method, url, body , query , type )
 			end
 
 		end )
-end
-
-function es_index_setting(info::Esinfo, index::AbstractString)
-
-	url   = make_url(ActionType{:_setting}, info, index )
-	@esexport "GET" url Dict() Dict() "application/json"
-
 end
 
 function es_count(info::Esinfo, index::AbstractString ; kw...)
