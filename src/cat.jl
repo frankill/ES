@@ -31,7 +31,7 @@ macro catgenfun(methods, paths, names )
 end 
 
 macro catgenfun(methods, paths )
-	funname = esc(Symbol(string("cat", paths )) )
+	funname = esc(Symbol(string("cat_", paths )) )
 
 	Expr(:function , 
 		Expr(:call , 
