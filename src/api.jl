@@ -182,7 +182,7 @@ function es_bulk_update(info::Esinfo, index::AbstractString, doc::AbstractString
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_update},  x, y , asupsert) for (x ,y) in zip(data[m:n], id[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 	
@@ -197,7 +197,7 @@ function es_bulk_update(info::Esinfo, index::AbstractString, doc::AbstractString
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_update},  x, y , z, asupsert) for (x ,y,z) in zip(data[m:n], id[m:n],routing[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 	
@@ -209,7 +209,7 @@ function es_bulk_script(info::Esinfo, index::AbstractString, doc::AbstractString
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_script},  x, y , sid, asupsert) for (x ,y) in zip(data[m:n], id[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end  
 
 end 
@@ -221,7 +221,7 @@ function es_bulk_script(info::Esinfo, index::AbstractString, doc::AbstractString
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_script},  x, y , z, sid, asupsert) for (x ,y,z) in zip(data[m:n], id[m:n],routing[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end  
 
 end 
@@ -232,7 +232,7 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_index}, x, y  ) for (x ,y) in zip(data[m:n], id[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 
@@ -244,7 +244,7 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_index}, x, y ,z ) for (x ,y,z) in zip(data[m:n], id[m:n],routing[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 
@@ -276,7 +276,7 @@ function es_bulk_create(info::Esinfo, index::AbstractString, doc::AbstractString
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_create},  x, y ) for (x ,y) in zip(data[m:n], id[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 
@@ -288,7 +288,7 @@ function es_bulk_create(info::Esinfo, index::AbstractString, doc::AbstractString
 	@esdatawarn data id 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_create},  x, y ,z) for (x ,y,z) in zip(data[m:n], id[m:n],routing[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end 
@@ -298,7 +298,7 @@ function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_del}, x ) for x in id[m:n] )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end
@@ -308,7 +308,7 @@ function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 
 	for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_del}, x ,y) for (x ,y) in zip(data[m:n], id[m:n]) )
-		es_bulk(info, index, doc, chunk, kw...)
+		es_bulk(info, index, doc, chunk; kw...)
 	end 
 
 end
