@@ -4,7 +4,7 @@ module ES
 
 	using HTTP
 	using JSON
-	export Esinfo, escount, esearch ,esfsearch, escroll ,esbulkupdate,esbulkcript,esbulkindex,esbulkcreate,esbulkdel
+	export Esinfo, es_count, es_search ,es_searchs, es_croll ,es_bulk_update,es_bulk_cript,es_bulk_index,es_bulk_create,es_bulk_del
 	export xpack_sql , xpack_sql_close, xpack_translate
 	export @esexport ,@query, @filter, @must, @must_not ,@should  ,@nested ,@has_child, @has_parent ,@fulltext,@smi,@comm,@extra
 
