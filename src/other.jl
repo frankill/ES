@@ -151,7 +151,7 @@ function makeurl(::Type{DdlType{:_search_shards}}, info::Esinfo, index::Abstract
 end
 
 
-function esdelete(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString ; kw...)
+function es_delete(info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString ; kw...)
 
 	url   = makeurl(DmlType{:_delete}, info, index ,type, id )
 	@esdelete(url ,  Dict(kw...) )
@@ -159,7 +159,7 @@ function esdelete(info::Esinfo, index::AbstractString, type::AbstractString,id::
 end
 
 
-function esdelete_by_query(info::Esinfo, scripts_id::AbstractString ; kw...)
+function es_delete_by_query(info::Esinfo, scripts_id::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(DdlType{:_delete_script}, info, scripts_id  )
@@ -167,20 +167,20 @@ function esdelete_by_query(info::Esinfo, scripts_id::AbstractString ; kw...)
 
 end
 
-function esexists(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
+function es_exists(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
 
 	url   = makeurl(DmlType{:_head}, info, index ,type, id )
 	@eshead  url   Dict(kw...)  
 
 end
 
-function esexists_source(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
+function es_exists_source(info::Esinfo, index::AbstractString, type::AbstractString, id::AbstractString ; kw...)
 
 	esexists(info, index ,type, "$id/_source"  ; kw...)
 
 end
 
-function esping(info::Esinfo )
+function es_ping(info::Esinfo )
 
 	url   = makeurl(DdlType{:_ping}, info )
 	@eshead  url  Dict()  
@@ -188,37 +188,37 @@ function esping(info::Esinfo )
 end
 
 
-@genfunction "POST" escreate DmlType{:_create} 1 index, type, id
-@genfunction "POST" esdelete_by_query_rethrottle DdlType{:_delete_rethrottle} 0 task_id
-@genfunction "POST" esupdate_by_query_rethrottle DdlType{:_update_rethrottle} 0 task_id
-@genfunction "POST" esdelete_by_query DdlType{:_delete} 1 index type 
-@genfunction "POST" esdelete_by_query DdlType{:_delete} 1 index 
-@genfunction "POST" esupdate_by_query DdlType{:_update} 1 index type 
-@genfunction "POST" esupdate_by_query DdlType{:_update} 1 index 
-@genfunction "POST" esexplain DdlType{:_explain} 1 index type id
-@genfunction "POST" esfield_caps DdlType{:_field_caps} 0 index
-@genfunction "POST" esfield_caps DdlType{:_field_caps} 0
-@genfunction "GET" esget DmlType{:_get} 0 index type id 
-@genfunction "GET" esgetscript DdlType{:_get_script} 0 scripts_id
-@genfunction "GET" esgetsource DmlType{:_get_source} 0 index type id 
-@genfunction "POST" esindex DmlType{:_index} 1 index type id 
-@genfunction "POST" esindex DmlType{:_index} 1 index type 
-@genfunction "POST" esupdate DmlType{:_update} 1 index type id 
-@genfunction "POST" esupdate DdlType{:_mget} 1 index type  
-@genfunction "POST" esupdate DdlType{:_mget} 1 index  
-@genfunction "POST" esupdate DdlType{:_mget} 1 
-@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 index type 
-@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 index 
-@genfunction "POST" esmtermvectors DdlType{:_mtermvectors} 1 
-@genfunction "PUT" esputscript DdlType{:_put_script} 1 scripts_id context 
-@genfunction "PUT" esputscript DdlType{:_put_script} 1 scripts_id 
-@genfunction "PUT" esrankeval DdlType{:_rank_eval} 1 index 
-@genfunction "PUT" esrankeval DdlType{:_rank_eval} 1 
-@genfunction "POST" esreindex DdlType{:_reindex} 1 
-@genfunction "POST" esreindex_rethrottle DdlType{:_reindex_rethrottle} 0 task_id 
-@genfunction "POST" esrender_search_template DdlType{:_render_search_template} 1 id 
-@genfunction "POST" esrender_search_template DdlType{:_render_search_template} 1 
-@genfunction "POST" esscripts_painless_execute DdlType{:_scripts_painless_execute} 1 
-@genfunction "POST" essearch_shards DdlType{:_search_shards} 0 index 
-@genfunction "POST" essearch_shards DdlType{:_search_shards} 0 
+@genfunction "POST" es_create DmlType{:_create} 1 index, type, id
+@genfunction "POST" es_delete_by_query_rethrottle DdlType{:_delete_rethrottle} 0 task_id
+@genfunction "POST" es_update_by_query_rethrottle DdlType{:_update_rethrottle} 0 task_id
+@genfunction "POST" es_delete_by_query DdlType{:_delete} 1 index type 
+@genfunction "POST" es_delete_by_query DdlType{:_delete} 1 index 
+@genfunction "POST" es_update_by_query DdlType{:_update} 1 index type 
+@genfunction "POST" es_update_by_query DdlType{:_update} 1 index 
+@genfunction "POST" es_explain DdlType{:_explain} 1 index type id
+@genfunction "POST" es_field_caps DdlType{:_field_caps} 0 index
+@genfunction "POST" es_field_caps DdlType{:_field_caps} 0
+@genfunction "GET" es_get DmlType{:_get} 0 index type id 
+@genfunction "GET" es_getscript DdlType{:_get_script} 0 scripts_id
+@genfunction "GET" es_getsource DmlType{:_get_source} 0 index type id 
+@genfunction "POST" es_index DmlType{:_index} 1 index type id 
+@genfunction "POST" es_index DmlType{:_index} 1 index type 
+@genfunction "POST" es_update DmlType{:_update} 1 index type id 
+@genfunction "POST" es_update DdlType{:_mget} 1 index type  
+@genfunction "POST" es_update DdlType{:_mget} 1 index  
+@genfunction "POST" es_update DdlType{:_mget} 1 
+@genfunction "POST" es_mtermvectors DdlType{:_mtermvectors} 1 index type 
+@genfunction "POST" es_mtermvectors DdlType{:_mtermvectors} 1 index 
+@genfunction "POST" es_mtermvectors DdlType{:_mtermvectors} 1 
+@genfunction "PUT" es_put_script DdlType{:_put_script} 1 scripts_id context 
+@genfunction "PUT" es_put_script DdlType{:_put_script} 1 scripts_id 
+@genfunction "PUT" es_rank_eval DdlType{:_rank_eval} 1 index 
+@genfunction "PUT" es_rank_eval DdlType{:_rank_eval} 1 
+@genfunction "POST" es_reindex DdlType{:_reindex} 1 
+@genfunction "POST" es_reindex_rethrottle DdlType{:_reindex_rethrottle} 0 task_id 
+@genfunction "POST" es_render_search_template DdlType{:_render_search_template} 1 id 
+@genfunction "POST" es_render_search_template DdlType{:_render_search_template} 1 
+@genfunction "POST" es_scripts_painless_execute DdlType{:_scripts_painless_execute} 1 
+@genfunction "POST" es_search_shards DdlType{:_search_shards} 0 index 
+@genfunction "POST" es_search_shards DdlType{:_search_shards} 0 
 
