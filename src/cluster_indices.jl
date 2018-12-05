@@ -418,107 +418,107 @@ function makeurl(::Type{TasksType{:_cancel}}, info::Esinfo, task_id::AbstractStr
 end
 
 #task 
-@genfunction "GET" estasks_cancel TasksType{:_cancel} 0 task_id
-@genfunction "GET" estasks_cancel TasksType{:_cancel} 0  
-@genfunction "GET" estasks_get TasksType{:_get} 0 task_id
-@genfunction "POST" estasks_list TasksType{:_list} 0  
+@genfunction "GET" es_tasks_cancel TasksType{:_cancel} 0 task_id
+@genfunction "GET" es_tasks_cancel TasksType{:_cancel} 0  
+@genfunction "GET" es_tasks_get TasksType{:_get} 0 task_id
+@genfunction "POST" es_tasks_list TasksType{:_list} 0  
 
 #snapshot
-@genfunction "POST" essnapshot_verify_repository SnapshotType{:_verify_repository} 0 repository
-@genfunction "GET" essnapshot_status SnapshotType{:_status} 0  repository snapshot
-@genfunction "GET" essnapshot_status SnapshotType{:_status} 0  repository
-@genfunction "GET" essnapshot_status SnapshotType{:_status} 0  
-@genfunction "POST" essnapshot_restore SnapshotType{:_restore} 1  repository snapshot
-@genfunction "GET" essnapshot_get_repository SnapshotType{:_snapshot_repository} 0 repository
-@genfunction "GET" essnapshot_get_repository SnapshotType{:_get_repository} 0  
-@genfunction "GET" essnapshot_get SnapshotType{:_snapshot} 0  repository snapshot
-@genfunction "POST" essnapshot_create_repository SnapshotType{:_snapshot_repository} 1 repository 
-@genfunction "POST" essnapshot_create SnapshotType{:_snapshot} 1 repository snapshot
+@genfunction "POST" es_snapshot_verify_repository SnapshotType{:_verify_repository} 0 repository
+@genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  repository snapshot
+@genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  repository
+@genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  
+@genfunction "POST" es_snapshot_restore SnapshotType{:_restore} 1  repository snapshot
+@genfunction "GET" es_snapshot_get_repository SnapshotType{:_snapshot_repository} 0 repository
+@genfunction "GET" es_snapshot_get_repository SnapshotType{:_get_repository} 0  
+@genfunction "GET" es_snapshot_get SnapshotType{:_snapshot} 0  repository snapshot
+@genfunction "POST" es_snapshot_create_repository SnapshotType{:_snapshot_repository} 1 repository 
+@genfunction "POST" es_snapshot_create SnapshotType{:_snapshot} 1 repository snapshot
 
 #nodes
-@genfunction "GET" esnodes_usage NodesType{:_usage} 0 node_id
-@genfunction "GET" esnodes_usage NodesType{:_usage} 0 
-@genfunction "GET" esnodes_stats NodesType{:_stats} 0 node_id
-@genfunction "GET" esnodes_stats NodesType{:_stats} 0
-@genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0 node_id
-@genfunction "GET" esnodes_reload_secure_settings NodesType{:_reload_secure_settings} 0
+@genfunction "GET" es_nodes_usage NodesType{:_usage} 0 node_id
+@genfunction "GET" es_nodes_usage NodesType{:_usage} 0 
+@genfunction "GET" es_nodes_stats NodesType{:_stats} 0 node_id
+@genfunction "GET" es_nodes_stats NodesType{:_stats} 0
+@genfunction "GET" es_nodes_reload_secure_settings NodesType{:_reload_secure_settings} 0 node_id
+@genfunction "GET" es_nodes_reload_secure_settings NodesType{:_reload_secure_settings} 0
 
 #ingest 
-@genfunction "GET" esingest_simulate IngestType{:_simulate} 1 id
-@genfunction "GET" esingest_simulate IngestType{:_simulate} 1
-@genfunction "PUT" esingest_put_pipeline IngestType{:_put_pipeline} 1 id
-@genfunction "GET" esingest_processor_grok IngestType{:_processor_grok} 0
-@genfunction "GET" esingest_get_pipeline IngestType{:_get_pipeline} 0 id
-@genfunction "GET" esingest_get_pipeline IngestType{:_get_pipeline} 0
+@genfunction "GET" es_ingest_simulate IngestType{:_simulate} 1 id
+@genfunction "GET" es_ingest_simulate IngestType{:_simulate} 1
+@genfunction "PUT" es_ingest_put_pipeline IngestType{:_put_pipeline} 1 id
+@genfunction "GET" es_ingest_processor_grok IngestType{:_processor_grok} 0
+@genfunction "GET" es_ingest_get_pipeline IngestType{:_get_pipeline} 0 id
+@genfunction "GET" es_ingest_get_pipeline IngestType{:_get_pipeline} 0
 
 #indices
-@genfunction "POST" esindices_validate_query IndicesType{:_validate_query} 1 index
-@genfunction "POST" esindices_validate_query IndicesType{:_validate_query} 1
-@genfunction "POST" esindices_upgrade IndicesType{:_upgrade} 1 index
-@genfunction "POST" esindices_upgrade IndicesType{:_upgrade} 1
-@genfunction "POST" esindices_update_aliases IndicesType{:_update_aliases} 1
-@genfunction "GET" esindices_stats IndicesType{:_stats} 0 index
-@genfunction "GET" esindices_stats IndicesType{:_stats} 0
-@genfunction "POST" esindices_split IndicesType{:_split} 1 index target
-@genfunction "POST" esindices_shrink IndicesType{:_shrink} 1 index target
-@genfunction "GET" esindices_shard_stores IndicesType{:_shard_stores} 0 index
-@genfunction "GET" esindices_shard_stores IndicesType{:_shard_stores} 0
-@genfunction "GET" esindices_segments IndicesType{:_segments} 0 index
-@genfunction "GET" esindices_segments IndicesType{:_segments} 0
-@genfunction "POST" esindices_rollover IndicesType{:_rollover} 1 alias new_index
-@genfunction "POST" esindices_rollover IndicesType{:_rollover} 1 alias
-@genfunction "GET" esindices_refresh IndicesType{:_refresh} 0 index
-@genfunction "GET" esindices_refresh IndicesType{:_refresh} 0
-@genfunction "GET" esindices_recovery IndicesType{:_recovery} 0 index
-@genfunction "GET" esindices_recovery IndicesType{:_recovery} 0
-@genfunction "POST" esindices_put_template IndicesType{:_put_template} 1 name
-@genfunction "PUT" esindices_put_settings IndicesType{:_put_settings} 1 index
-@genfunction "PUT" esindices_put_settings IndicesType{:_put_settings} 1
-@genfunction "PUT" esindices_put_mapping IndicesType{:_put_mapping} 1 index type 
-@genfunction "PUT" esindices_put_mapping IndicesType{:_put_mapping} 1 index 
-@genfunction "PUT" esindices_put_alias IndicesType{:_put_alias} 1 index name 
-@genfunction "PUT" esindices_put_alias IndicesType{:_put_alias} 1 
-@genfunction "POST" esindices_open IndicesType{:_open} 0 index
-@genfunction "GET" esindices_get_upgrade IndicesType{:_get_upgrade} 0 index   
-@genfunction "GET" esindices_get_upgrade IndicesType{:_get_upgrade} 0 
-@genfunction "GET" esindices_get_template IndicesType{:_get_template} 0 name   
-@genfunction "GET" esindices_get_template IndicesType{:_get_template} 0 
-@genfunction "GET" esindices_get_settings IndicesType{:_get_settings} 0 index   
-@genfunction "GET" esindices_get_settings IndicesType{:_get_settings} 0 
-@genfunction "GET" esindices_get_mapping IndicesType{:_get_mapping} 0 index   
-@genfunction "GET" esindices_get_mapping IndicesType{:_get_mapping} 0 
-@genfunction "GET" esindices_get_field_mapping IndicesType{:_get_field_mapping} 0 index fields 
-@genfunction "GET" esindices_get_field_mapping IndicesType{:_get_field_mapping} 0 fields
-@genfunction "GET" esindices_get_alias IndicesType{:_get_alias} 0 
-@genfunction "GET" esindices_get_alias IndicesType{:_get_alias} 0 index
-@genfunction "GET" esindices_get_alias IndicesType{:_get_alias} 0 index name 
-@genfunction "GET" esindices_get IndicesType{:_get} 0 index 
-@genfunction "POST" esindices_forcemerge IndicesType{:_forcemerge} 0 
-@genfunction "POST" esindices_forcemerge IndicesType{:_forcemerge} 0 index
-@genfunction "POST" esindices_flush_synced IndicesType{:_flush_synced} 0 
-@genfunction "POST" esindices_flush IndicesType{:_flush} 0 
-@genfunction "POST" esindices_flush IndicesType{:_flush} 0 index
-@genfunction "POST" esindices_close IndicesType{:_close} 0 index
-@genfunction "PUT" esindices_create IndicesType{:_create} 1 index
-@genfunction "POST" esindices_clear_cache IndicesType{:_clear_cache} 0 
-@genfunction "POST" esindices_clear_cache IndicesType{:_clear_cache} 0 index
-@genfunction "POST" esindices_analyze IndicesType{:_analyze} 0 
-@genfunction "POST" esindices_analyze IndicesType{:_analyze} 0 index
+@genfunction "POST" es_indices_validate_query IndicesType{:_validate_query} 1 index
+@genfunction "POST" es_indices_validate_query IndicesType{:_validate_query} 1
+@genfunction "POST" es_indices_upgrade IndicesType{:_upgrade} 1 index
+@genfunction "POST" es_indices_upgrade IndicesType{:_upgrade} 1
+@genfunction "POST" es_indices_update_aliases IndicesType{:_update_aliases} 1
+@genfunction "GET" es_indices_stats IndicesType{:_stats} 0 index
+@genfunction "GET" es_indices_stats IndicesType{:_stats} 0
+@genfunction "POST" es_indices_split IndicesType{:_split} 1 index target
+@genfunction "POST" es_indices_shrink IndicesType{:_shrink} 1 index target
+@genfunction "GET" es_indices_shard_stores IndicesType{:_shard_stores} 0 index
+@genfunction "GET" es_indices_shard_stores IndicesType{:_shard_stores} 0
+@genfunction "GET" es_indices_segments IndicesType{:_segments} 0 index
+@genfunction "GET" es_indices_segments IndicesType{:_segments} 0
+@genfunction "POST" es_indices_rollover IndicesType{:_rollover} 1 alias new_index
+@genfunction "POST" es_indices_rollover IndicesType{:_rollover} 1 alias
+@genfunction "GET" es_indices_refresh IndicesType{:_refresh} 0 index
+@genfunction "GET" es_indices_refresh IndicesType{:_refresh} 0
+@genfunction "GET" es_indices_recovery IndicesType{:_recovery} 0 index
+@genfunction "GET" es_indices_recovery IndicesType{:_recovery} 0
+@genfunction "POST" es_indices_put_template IndicesType{:_put_template} 1 name
+@genfunction "PUT" es_indices_put_settings IndicesType{:_put_settings} 1 index
+@genfunction "PUT" es_indices_put_settings IndicesType{:_put_settings} 1
+@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index type 
+@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index 
+@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1 index name 
+@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1 
+@genfunction "POST" es_indices_open IndicesType{:_open} 0 index
+@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0 index   
+@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0 
+@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0 name   
+@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0 
+@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0 index   
+@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0 
+@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0 index   
+@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0 
+@genfunction "GET" es_indices_get_field_mapping IndicesType{:_get_field_mapping} 0 index fields 
+@genfunction "GET" es_indices_get_field_mapping IndicesType{:_get_field_mapping} 0 fields
+@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 
+@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 index
+@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 index name 
+@genfunction "GET" es_indices_get IndicesType{:_get} 0 index 
+@genfunction "POST" es_indices_forcemerge IndicesType{:_forcemerge} 0 
+@genfunction "POST" es_indices_forcemerge IndicesType{:_forcemerge} 0 index
+@genfunction "POST" es_indices_flush_synced IndicesType{:_flush_synced} 0 
+@genfunction "POST" es_indices_flush IndicesType{:_flush} 0 
+@genfunction "POST" es_indices_flush IndicesType{:_flush} 0 index
+@genfunction "POST" es_indices_close IndicesType{:_close} 0 index
+@genfunction "PUT" es_indices_create IndicesType{:_create} 1 index
+@genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 
+@genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 index
+@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 0 
+@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 0 index
 
 # cluster
-@genfunction "GET" escluster_stats ClusterType{:_stats} 0 
-@genfunction "GET" escluster_stats ClusterType{:_stats} 0 node_id
-@genfunction "GET" escluster_state ClusterType{:_state} 0 metric index 
-@genfunction "GET" escluster_state ClusterType{:_state} 0 metric
-@genfunction "GET" escluster_state ClusterType{:_state} 0 
-@genfunction "GET" escluster_reroute ClusterType{:_reroute} 0 
-@genfunction "GET" escluster_remote_info ClusterType{:_remote_info} 0 
-@genfunction "PUT" escluster_put_settings ClusterType{:_put_settings} 1
-@genfunction "GET" escluster_pending_tasks ClusterType{:_pending_tasks} 0
-@genfunction "GET" escluster_health ClusterType{:_health} 0 index
-@genfunction "GET" escluster_health ClusterType{:_health} 0
-@genfunction "GET" escluster_get_settings ClusterType{:_get_settings} 0
-@genfunction "GET" escluster_allocation_explain ClusterType{:_allocation_explain} 1
+@genfunction "GET" es_cluster_stats ClusterType{:_stats} 0 
+@genfunction "GET" es_cluster_stats ClusterType{:_stats} 0 node_id
+@genfunction "GET" es_cluster_state ClusterType{:_state} 0 metric index 
+@genfunction "GET" es_cluster_state ClusterType{:_state} 0 metric
+@genfunction "GET" es_cluster_state ClusterType{:_state} 0 
+@genfunction "GET" es_cluster_reroute ClusterType{:_reroute} 0 
+@genfunction "GET" es_cluster_remote_info ClusterType{:_remote_info} 0 
+@genfunction "PUT" es_cluster_put_settings ClusterType{:_put_settings} 1
+@genfunction "GET" es_cluster_pending_tasks ClusterType{:_pending_tasks} 0
+@genfunction "GET" es_cluster_health ClusterType{:_health} 0 index
+@genfunction "GET" es_cluster_health ClusterType{:_health} 0
+@genfunction "GET" es_cluster_get_settings ClusterType{:_get_settings} 0
+@genfunction "GET" es_cluster_allocation_explain ClusterType{:_allocation_explain} 1
 
 # @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id metric
 # @genfunction "GET" esnodes_info NodesType{:_info} 0 node_id_metric
@@ -527,7 +527,7 @@ end
 # @genfunction "GET" esnodes_hot_threads NodesType{:_hot_threads} 0
 
 
-function esnodes_info(info::Esinfo, node_id::AbstractString, metric::AbstractString ; kw...)
+function es_nodes_info(info::Esinfo, node_id::AbstractString, metric::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(NodesType{:_info}, info, node_id, metric )
@@ -535,7 +535,7 @@ function esnodes_info(info::Esinfo, node_id::AbstractString, metric::AbstractStr
 
 end
 
-function esnodes_info(info::Esinfo, node_id_metric::AbstractString ;  kw...)
+function es_nodes_info(info::Esinfo, node_id_metric::AbstractString ;  kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(NodesType{:_info}, info, node_id_metric)
@@ -543,7 +543,7 @@ function esnodes_info(info::Esinfo, node_id_metric::AbstractString ;  kw...)
 
 end
 
-function esnodes_info(info::Esinfo ;  kw...)
+function es_nodes_info(info::Esinfo ;  kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(NodesType{:_info}, info)
@@ -552,7 +552,7 @@ function esnodes_info(info::Esinfo ;  kw...)
 end
 
 
-function esnodes_hot_threads(info::Esinfo, id::AbstractString ;  kw...)
+function es_nodes_hot_threads(info::Esinfo, id::AbstractString ;  kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(NodesType{:_hot_threads}, info, node_id_metric)
@@ -560,7 +560,7 @@ function esnodes_hot_threads(info::Esinfo, id::AbstractString ;  kw...)
 
 end
 
-function esnodes_hot_threads(info::Esinfo ;  kw...)
+function es_nodes_hot_threads(info::Esinfo ;  kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(NodesType{:_hot_threads}, info)
@@ -568,7 +568,7 @@ function esnodes_hot_threads(info::Esinfo ;  kw...)
 
 end
 
-function esindices_delete(info::Esinfo, index::AbstractString ; kw...)
+function es_indices_delete(info::Esinfo, index::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(IndicesType{:_delete}, info, index  )
@@ -576,7 +576,7 @@ function esindices_delete(info::Esinfo, index::AbstractString ; kw...)
 
 end
 
-function esindices_delete_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
+function es_indices_delete_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(IndicesType{:_delete_alias}, info, index ,name )
@@ -584,7 +584,7 @@ function esindices_delete_alias(info::Esinfo, index::AbstractString, name::Abstr
 
 end
 
-function esindices_delete_template(info::Esinfo, name::AbstractString ; kw...)
+function es_indices_delete_template(info::Esinfo, name::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = makeurl(IndicesType{:_delete_template}, info ,name )
@@ -592,35 +592,35 @@ function esindices_delete_template(info::Esinfo, name::AbstractString ; kw...)
 
 end
 
-function esindices_exists(info::Esinfo, index::AbstractString ; kw...)
+function es_indices_exists(info::Esinfo, index::AbstractString ; kw...)
 
 	url   = makeurl(IndicesType{:_exists}, info, index)
 	@eshead  url   Dict(kw...)  
 
 end
 
-function esindices_exists_alias(info::Esinfo, name::AbstractString ; kw...)
+function es_indices_exists_alias(info::Esinfo, name::AbstractString ; kw...)
 
 	url   = makeurl(IndicesType{:_exists_alias}, info, name)
 	@eshead  url   Dict(kw...)  
 
 end
 
-function esindices_exists_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
+function es_indices_exists_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
 
 	url   = makeurl(IndicesType{:_exists_alias}, info, index,name)
 	@eshead  url   Dict(kw...)  
 
 end
 
-function esindices_exists_template(info::Esinfo, name::AbstractString ; kw...)
+function es_indices_exists_template(info::Esinfo, name::AbstractString ; kw...)
 
 	url   = makeurl(IndicesType{:_exists_template}, info ,name)
 	@eshead  url   Dict(kw...)  
 
 end
 
-function esindices_exists_type(info::Esinfo, index::AbstractString ,type::AbstractString ; kw...)
+function es_indices_exists_type(info::Esinfo, index::AbstractString ,type::AbstractString ; kw...)
 
 	url   = makeurl(IndicesType{:_exists_type}, info ,index, type)
 	@eshead  url   Dict(kw...)  
