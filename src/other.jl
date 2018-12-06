@@ -188,7 +188,7 @@ function es_ping(info::Esinfo )
 end
 
 
-@genfunction "POST" es_create DmlType{:_create} 1 index, type, id
+@genfunction "POST" es_create DmlType{:_create} 1 index type id
 @genfunction "POST" es_delete_by_query_rethrottle DdlType{:_delete_rethrottle} 0 task_id
 @genfunction "POST" es_update_by_query_rethrottle DdlType{:_update_rethrottle} 0 task_id
 @genfunction "POST" es_delete_by_query DdlType{:_delete} 1 index type 
