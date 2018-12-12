@@ -508,6 +508,20 @@ macro cheak(method , data)
 	end)
 end 
 
+macro cheak(method , data, yes) 
+	esc(quote
+		if haskey($data, :routing)
+			title = @esmetaallronting($method,ref($data, :_index),ref($data, :_type),ref($data, :_id),ref($data, :routing))
+		else 
+			if haskey($data, :_id)
+				title = @esmetaall($method,ref($data, :_index),ref($data, :_type),ref($data, :_id)) 
+			else 
+				title = @esmetaall($method,ref($data, :_index),ref($data, :_type) )
+			end  
+		end 
+	end)
+end 
+
 function make_bulk(::Type{BulkType{:_del}},  data::EsData )
 
 	@cheak "delete" data 
@@ -517,7 +531,7 @@ end
 
 function make_bulk(::Type{BulkType{:_index}}, data::EsData)
 
-	@cheak "index" data 
+	@cheak "index" data 1
 	content = ref(data, :_source) |> json
 	return( "$(title)\n$(content)\n")
 
