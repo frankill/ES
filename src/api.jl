@@ -474,7 +474,10 @@ function es_bulk_del( info::Esinfo, data::Vector{<:EsData},chunk_num::Number=100
 	end 
 
 end
-
+												
+macro esmetaall(method, index, type )
+	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type )) )))
+end 
 
 macro esmetaall(method, index, type, id )
 	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id )) )))
