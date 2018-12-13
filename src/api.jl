@@ -264,7 +264,7 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 					chunk_num::Number=1000 ; kw... )
 
 	for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = (make_bulk(BulkType{:_index}, index, doc ,x ,y,Val(true)) for (x,y) in  zip(view(data,m:n), view(routing,m:n]) ) 
+		chunk = (make_bulk(BulkType{:_index}, index, doc ,x ,y,Val(true)) for (x,y) in  zip(view(data,m:n), view(routing,m:n) ) 
 		es_bulk(info, chunk; kw...)
 	end 
 
