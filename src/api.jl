@@ -132,7 +132,7 @@ function es_searchs(info::Esinfo, index::AbstractString, body::T ; kw... ) where
 			df -> es_count(info, index, df)
 	query = Dict(kw..., :size => num)
 				
-	res   = es_search(info, index, body, query)  
+	res   = es_search(info, index, body, query)::Vector{Dict}  
 	snum  <= num && return res
 	
 	sizehint!(res["hits"]["hits"], snum)
@@ -142,7 +142,7 @@ function es_searchs(info::Esinfo, index::AbstractString, body::T ; kw... ) where
 		append!(res["hits"]["hits"], tmp["hits"]["hits"] )
 		ids = tmp["_scroll_id"]
 	end 
-	res::Vector{Dict}
+	res
 end
 
 function es_scroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
