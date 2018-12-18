@@ -138,7 +138,7 @@ function es_searchs(info::Esinfo, index::AbstractString, body::T ; kw... ) where
 	sizehint!(res["hits"]["hits"], snum)
 	ids = res["_scroll_id"]
 	for _ in 1:(Int(floor(snum/num)))
-		tmp = escroll(info , ids , query[:scroll])  
+		tmp = es_scroll(info , ids , query[:scroll])  
 		append!(res["hits"]["hits"], tmp["hits"]["hits"] )
 		ids = tmp["_scroll_id"]
 	end 
