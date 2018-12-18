@@ -132,8 +132,7 @@ function es_searchs(info::Esinfo, index::AbstractString, body::T ; kw... ) where
 			df -> es_count(info, index, df)
 	query = Dict(kw..., :size => num)
 	
-	res   = Vector{Dict}(undef, snum  <= num ? snum : num )  
-	append!(res, es_search(info, index, body, query)) 
+	res = es_search(info, index, body, query)
 	snum  <= num && return res
 	
 	sizehint!(res["hits"]["hits"], snum)
