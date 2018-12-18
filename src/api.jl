@@ -142,7 +142,7 @@ function es_searchs(info::Esinfo, index::AbstractString, body::T ; kw... ) where
 		append!(res["hits"]["hits"], tmp["hits"]["hits"] )
 		ids = tmp["_scroll_id"]
 	end 
-	res
+	res::Vector{Dict}
 end
 
 function es_scroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
