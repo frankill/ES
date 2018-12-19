@@ -410,7 +410,7 @@ function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,sid::Abs
 	title =  @esmeta "update" id 
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
 			"scripted_upsert" => asupsert, "upsert"=> Dict()) |> json
-	return("$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -420,7 +420,7 @@ function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,routing:
 	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => data)), 
 			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
-	return("$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
