@@ -37,6 +37,14 @@ end
 Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
 Base.length(B::BulkLength)           = Int(ceil(B.count/B.seq))
 
+macro returns(title, content)
+	esc(:( string($title, "\n" , $content, "\n") ))
+end 
+
+macro returns(title)
+	esc(:( string($title, "\n") ))
+end 
+
 function make_url(::Type{ActionType{:_count}}, info::Esinfo, index::AbstractString)
 	"http://$(info.host):$(info.port)/$index/_count"
 end
@@ -320,14 +328,14 @@ end
 function make_bulk(::Type{BulkType{:_del}}, id::EsId )
 
 	title =  @esmeta "delete" id 
-	return( "$(title)\n")
+	@returns title
 
 end 
 
 function make_bulk(::Type{BulkType{:_del}}, id::EsId,routing::EsId )
 
 	title =  @smi( delete = @smi(_id = id , routing = routing )) |> json
-	return( "$(title)\n")
+	@returns title
 
 end 
 
@@ -335,7 +343,7 @@ function make_bulk(::Type{BulkType{:_index}},  data::EsData, id::EsId )
 
 	title =  @esmeta "index" id 
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -343,7 +351,7 @@ function make_bulk(::Type{BulkType{:_index}},  data::EsData, id::EsId ,routing::
 
 	title =  @smi( index = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -352,7 +360,7 @@ function make_bulk(::Type{BulkType{:_index}}, index::AbstractString , type::Abst
 
 	title =  @smi(index = @smi(_index = index , _type = type)) |> json 
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -361,7 +369,7 @@ function make_bulk(::Type{BulkType{:_index}}, index::AbstractString , type::Abst
 
 	title =  @smi(index = @smi(_index = index , _type = type,_routing = routing )) |> json 
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -369,7 +377,7 @@ end
 
 	title =  @esmeta "create" id 
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -377,7 +385,7 @@ end
 
 	title =  @smi( create = @smi(_id = id , routing = routing )) |> json
 	content = data |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -385,7 +393,7 @@ function make_bulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,asupsert
 
 	title =  @esmeta "update"  id 
 	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -393,7 +401,7 @@ function make_bulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,routing:
 
 	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
 	content = Dict("doc" => data, "doc_as_upsert" => asupsert) |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -528,7 +536,7 @@ end
 function make_bulk(::Type{BulkType{:_del}},  data::EsData )
 
 	@cheak "delete" data 
-	return( "$(title)\n")
+	@returns title
 
 end
 
@@ -536,21 +544,21 @@ function make_bulk(::Type{BulkType{:_index}}, data::EsData)
 
 	@cheak "index" data 1
 	content = ref(data, :_source) |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
  function make_bulk(::Type{BulkType{:_create}}, data::EsData)
  	@cheak "create" data 
 	content = ref(data, :_source) |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
 function make_bulk(::Type{BulkType{:_update}}, data::EsData ,asupsert::Bool)
 	@cheak "update" data 
 	content = Dict("doc" => ref(data, :_source), "doc_as_upsert" => asupsert) |> json
-	return( "$(title)\n$(content)\n")
+	@returns title content
 
 end 
 
@@ -558,7 +566,7 @@ function make_bulk(::Type{BulkType{:_script}}, data::EsData ,sid::AbstractString
 	@cheak "update" data 
 	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref(data, :_source))), 
 			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
-	return("$(title)\n$(content)\n")
+	@returns title content
 
 end 
 										
