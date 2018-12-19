@@ -25,7 +25,7 @@ module ES
 		es_indices_recovery,es_indices_refresh,es_indices_rollover,es_indices_segments,es_indices_shard_stores
 
 	export @esexport ,@query, @filter, @must, @must_not ,@should  ,@nested ,@has_child, @has_parent ,@fulltext,@smi,@comm,@extra
-	export BulkLength	
+	export BulkLength , findfirst	
 
 	include("transformation.jl")
 	include("api.jl")
@@ -34,5 +34,6 @@ module ES
 	include("cluster_indices.jl")
 	include("plugins.jl")
 	include("other.jl")
+	include("tools,jl")
 
 end 
