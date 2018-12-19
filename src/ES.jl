@@ -34,6 +34,6 @@ module ES
 	include("cluster_indices.jl")
 	include("plugins.jl")
 	include("other.jl")
-	include("tools,jl")
+	include("tools.jl")
 
 end 
