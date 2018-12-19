@@ -1,4 +1,4 @@
-function Base.findfirst(A::Vector{Dict{AbstractString,Any}}, name::AbstractString)
+function Base.findfirst(A::Vector{T}, name::AbstractString) where T <: Union{Dict, NamedTuple}
     seen = Set{String }()
     num = length(A)
     res = Vector{Int}()
@@ -11,4 +11,4 @@ function Base.findfirst(A::Vector{Dict{AbstractString,Any}}, name::AbstractStrin
     res
 end
 
-Base.unique(A::Vector{Dict{AbstractString,Any}}, name::AbstractString) = findfirst(A, name) |> q -> view(A, q) 
+Base.unique(A::Vector{T}, name::AbstractString) where T <: Union{Dict, NamedTuple} = findfirst(A, name) |> q -> view(A, q) 
