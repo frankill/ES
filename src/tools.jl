@@ -1,4 +1,4 @@
-function Base.findfirst(A::AbstractVector, name::AbstractString)c
+function Base.findfirst(A::AbstractVector, name::AbstractString)
     seen = Set{A[1] |> eltype |> a -> a.parameters[1] }()
     num = length(A)
     res = Vector{Int}()
