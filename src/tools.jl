@@ -10,3 +10,6 @@ function Base.findfirst(A::AbstractVector, name::AbstractString)
     end
     res
 end
+
+Base.unique(A::AbstractVector, name::AbstractString) = findfirst(A, name) |> q -> view(A, q) 
+
