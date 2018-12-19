@@ -1,5 +1,5 @@
-function Base.findfirst(A::Vector{Union{Dict, NamedTuple}}, name::AbstractString)
-    seen = Set{A[1] |> eltype |> a -> a.parameters[1] }()
+function Base.findfirst(A::Vector{Dict{AbstractString,Any}}, name::AbstractString)
+    seen = Set{String }()
     num = length(A)
     res = Vector{Int}()
     @inbounds for x in 1:num 
@@ -11,5 +11,4 @@ function Base.findfirst(A::Vector{Union{Dict, NamedTuple}}, name::AbstractString
     res
 end
 
-Base.unique(A::Vector{Union{Dict, NamedTuple}}, name::AbstractString) = findfirst(A, name) |> q -> view(A, q) 
-
+Base.unique(A::Vector{Dict{AbstractString,Any}}, name::AbstractString) = findfirst(A, name) |> q -> view(A, q) 
