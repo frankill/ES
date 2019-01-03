@@ -53,6 +53,10 @@ function make_url(::Type{ActionType{:_search}}, info::Esinfo, index::AbstractStr
 	"http://$(info.host):$(info.port)/$index/$path"
 end
 
+function make_url(::Type{ActionType{:_search}}, info::Esinfo)
+	"http://$(info.host):$(info.port)/_search"
+end
+
 function make_url(::Type{ActionType{:_scroll}}, info::Esinfo )
 	"http://$(info.host):$(info.port)/_search/scroll"
 end
@@ -107,6 +111,8 @@ function es_count(info::Esinfo, index::AbstractString, body::AbstractString ; kw
 	@esexp res "count"
 
 end
+
+@genfunction "POST" es_search ActionType{:_search} 1 
 
 function es_search(info::Esinfo, index::AbstractString, body::AbstractString , path::AbstractString="_search" ; kw...)
 
