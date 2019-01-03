@@ -26,14 +26,13 @@ module ES
 
 	export @esexport ,@query, @filter, @must, @must_not ,@should  ,@nested ,@has_child, @has_parent ,@fulltext,@smi,@comm,@extra
 	export BulkLength 
-
+	
+	include("macro.jl")
 	include("transformation.jl")
 	include("api.jl")
-	include("macro.jl")
 	include("cat.jl")
 	include("cluster_indices.jl")
 	include("plugins.jl")
 	include("other.jl")
-	include("tools.jl")
 
 end 
