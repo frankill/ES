@@ -1,49 +1,50 @@
-macro eshead( url , query  )
+macro eshead(info,  url , query  )
 
 	esc(
 		quote
-			try 
+			try
+				! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
 				respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query)
 
-				if respos.status == 200 
+				if respos.status == 200
 					"OK"
 				end
-			catch 
+			catch
 				"404 - Not Found"
-			end 
+			end
 
 		end )
 end
 
-macro esdelete( url,   query   )
+macro esdelete(info,  url,   query   )
 
 	esc(
 		quote
-
+			! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query)
 
-			if respos.status == 200 
+			if respos.status == 200
 				JSON.parse(String(respos.body))
 			end
 
 		end )
 end
-macro catexport(method, url , query  )
+macro catexport(info, method, url , query  )
 
 	esc(
 		quote
-
+			! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
 			respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
 			String(respos.body) |> println
 
 		end )
 end
 
-function genfunction(  kw::Vector  ) 
+function genfunction(  kw::Vector  )
 
-	func = Expr(:call , 
+	func = Expr(:call ,
 		kw[2] ,
-		Expr(:parameters, 
+		Expr(:parameters,
 			Expr(:(...), :kw)),
 		Expr(:(::) , :info , :Esinfo)
 		)
@@ -52,41 +53,42 @@ function genfunction(  kw::Vector  )
 
 	if length(kw) >= 5
 		append!( url.args[2].args ,  kw[5:end] )
-		append!(func.args, Expr.(:(::) , kw[5:end] , :AbstractString))	
-	end 
+		append!(func.args, Expr.(:(::) , kw[5:end] , :AbstractString))
+	end
 
-	if kw[4] >= 1    
+	if kw[4] >= 1
 		push!(func.args,  Expr(:(::) , :body , :T) )
-		body = :body 
-	else 
+		body = :body
+	else
 		body = Dict()
-	end 
+	end
 
-	block = Expr(:block ,  
+	block = Expr(:block ,
 		:( querys = Dict(kw...) ),
 		url ,
-		Expr(:macrocall , 
+		Expr(:macrocall ,
 				 Symbol("@esexport") ,
 				 "",
+				 :info,
 				 kw[1],
 				 :url ,
-				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict), 
+				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict),
 							Expr(:call, :json, body) , body ) ,
 				 :querys ,
 				 "application/json"
 				 )
 			)
 	if kw[4] >= 1
-		esc(Expr(:function, Expr(:where , func,  
+		esc(Expr(:function, Expr(:where , func,
 					Expr(:(<:) , :T , Expr(:curly,:Union, :Dict, :AbstractString))), block))
 	else
 		esc(Expr(:function, func, block))
-	end 
+	end
 
-end 
+end
 
 macro genfunction( kw... )
 
-	 genfunction( collect(kw) ) 
+	 genfunction( collect(kw) )
 
-end 
+end

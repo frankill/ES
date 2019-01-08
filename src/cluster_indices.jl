@@ -6,444 +6,444 @@ struct SnapshotType{T} end
 struct TasksType{T} end
 
 function make_url(::Type{ClusterType{:_allocation_explain}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/allocation/explain"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/allocation/explain"
 end
 
 function make_url(::Type{ClusterType{:_get_settings}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/settings"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/settings"
 end
 
 function make_url(::Type{ClusterType{:_health}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/_cluster/health/$index"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/health/$index"
 end
 
 function make_url(::Type{ClusterType{:_health}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/health/"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/health/"
 end
 
 function make_url(::Type{ClusterType{:_pending_tasks}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/pending_tasks"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/pending_tasks"
 end
 
 function make_url(::Type{ClusterType{:_put_settings}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/settings"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/settings"
 end
 
 function make_url(::Type{ClusterType{:_remote_info}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_remote/info"
+	"$(info.transport)://$(info.host):$(info.port)/_remote/info"
 end
 
 function make_url(::Type{ClusterType{:_reroute}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/reroute"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/reroute"
 end
 
 function make_url(::Type{ClusterType{:_state}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/state"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/state"
 end
 
 function make_url(::Type{ClusterType{:_state}}, info::Esinfo, metric::AbstractString)
-	"http://$(info.host):$(info.port)/_cluster/state/$metric"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/state/$metric"
 end
 
 function make_url(::Type{ClusterType{:_state}}, info::Esinfo, metric::AbstractString, index::AbstractString)
-	"http://$(info.host):$(info.port)/_cluster/state/$metric/$index"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/state/$metric/$index"
 end
 
 function make_url(::Type{ClusterType{:_stats}}, info::Esinfo, node_id::AbstractString)
-	"http://$(info.host):$(info.port)/_cluster/stats/nodes/$node_id/"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/stats/nodes/$node_id/"
 end
 
 function make_url(::Type{ClusterType{:_stats}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cluster/stats"
+	"$(info.transport)://$(info.host):$(info.port)/_cluster/stats"
 end
 
 function make_url(::Type{IndicesType{:_analyze}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_analyze"
+	"$(info.transport)://$(info.host):$(info.port)/_analyze"
 end
 
 function make_url(::Type{IndicesType{:_analyze}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_analyze"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_analyze"
 end
 
 function make_url(::Type{IndicesType{:_clear_cache}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_cache/clear"
+	"$(info.transport)://$(info.host):$(info.port)/_cache/clear"
 end
 
 function make_url(::Type{IndicesType{:_clear_cache}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_cache/clear"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_cache/clear"
 end
 
 function make_url(::Type{IndicesType{:_close}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_close"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_close"
 end
 
 function make_url(::Type{IndicesType{:_create}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index"
+	"$(info.transport)://$(info.host):$(info.port)/$index"
 end
 
 function make_url(::Type{IndicesType{:_delete}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index"
+	"$(info.transport)://$(info.host):$(info.port)/$index"
 end
- 
+
 function make_url(::Type{IndicesType{:_delete_alias}}, info::Esinfo, index::AbstractString, name::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_delete_template}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_template/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_template/$name"
 end
 
 function make_url(::Type{IndicesType{:_exists}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index"
+	"$(info.transport)://$(info.host):$(info.port)/$index"
 end
 
 function make_url(::Type{IndicesType{:_exists_alias}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_exists_alias}}, info::Esinfo, index::AbstractString,name::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_exists_template}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_template/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_template/$name"
 end
 
 function make_url(::Type{IndicesType{:_exists_type}}, info::Esinfo, index::AbstractString, type::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_mapping/$type"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_mapping/$type"
 end
 
 function make_url(::Type{IndicesType{:_flush}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_flush"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_flush"
 end
 
 function make_url(::Type{IndicesType{:_flush}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_flush"
+	"$(info.transport)://$(info.host):$(info.port)/_flush"
 end
 
 function make_url(::Type{IndicesType{:_flush_synced}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_flush/synced"
+	"$(info.transport)://$(info.host):$(info.port)/_flush/synced"
 end
 
 function make_url(::Type{IndicesType{:_forcemerge}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_forcemerge"
+	"$(info.transport)://$(info.host):$(info.port)/_forcemerge"
 end
 
 function make_url(::Type{IndicesType{:_forcemerge}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_forcemerge"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_forcemerge"
 end
 
 function make_url(::Type{IndicesType{:_get}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index"
+	"$(info.transport)://$(info.host):$(info.port)/$index"
 end
 
 function make_url(::Type{IndicesType{:_get_alias}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_alias"
+	"$(info.transport)://$(info.host):$(info.port)/_alias"
 end
 
 function make_url(::Type{IndicesType{:_get_alias}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_get_alias}}, info::Esinfo, index::AbstractString, name::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_get_field_mapping}}, info::Esinfo, fields::AbstractString)
-	"http://$(info.host):$(info.port)/_mapping/field/$fields"
+	"$(info.transport)://$(info.host):$(info.port)/_mapping/field/$fields"
 end
 
 function make_url(::Type{IndicesType{:_get_field_mapping}}, info::Esinfo, index::AbstractString, fields::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_mapping/field/$fields"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_mapping/field/$fields"
 end
 
 function make_url(::Type{IndicesType{:_get_mapping}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_mapping"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_mapping"
 end
 
 function make_url(::Type{IndicesType{:_get_mapping}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_mapping"
+	"$(info.transport)://$(info.host):$(info.port)/_mapping"
 end
 
 function make_url(::Type{IndicesType{:_get_settings}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_settings"
+	"$(info.transport)://$(info.host):$(info.port)/_settings"
 end
 
 function make_url(::Type{IndicesType{:_get_settings}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_settings"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_settings"
 end
 
 function make_url(::Type{IndicesType{:_get_template}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_template/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_template/$name"
 end
 
 function make_url(::Type{IndicesType{:_get_template}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_template"
+	"$(info.transport)://$(info.host):$(info.port)/_template"
 end
 
 function make_url(::Type{IndicesType{:_get_upgrade}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_upgrade"
+	"$(info.transport)://$(info.host):$(info.port)/_upgrade"
 end
 
 function make_url(::Type{IndicesType{:_get_upgrade}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_upgrade"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_upgrade"
 end
 
 function make_url(::Type{IndicesType{:_open}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_open"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_open"
 end
 
 function make_url(::Type{IndicesType{:_put_alias}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_aliases"
+	"$(info.transport)://$(info.host):$(info.port)/_aliases"
 end
 
 function make_url(::Type{IndicesType{:_put_alias}}, info::Esinfo ,index::AbstractString, name::AbstractString )
-	"http://$(info.host):$(info.port)/$index/_alias/$name"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_alias/$name"
 end
 
 function make_url(::Type{IndicesType{:_put_mapping}}, info::Esinfo ,index::AbstractString, type::AbstractString )
-	"http://$(info.host):$(info.port)/$index/_mapping/$type"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_mapping/$type"
 end
 
 function make_url(::Type{IndicesType{:_put_mapping}}, info::Esinfo ,index::AbstractString  )
-	"http://$(info.host):$(info.port)/$index"
+	"$(info.transport)://$(info.host):$(info.port)/$index"
 end
 
 function make_url(::Type{IndicesType{:_put_settings}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_settings"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_settings"
 end
 
 function make_url(::Type{IndicesType{:_put_settings}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_settings"
+	"$(info.transport)://$(info.host):$(info.port)/_settings"
 end
 
 function make_url(::Type{IndicesType{:_put_template}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/_template/$name"
+	"$(info.transport)://$(info.host):$(info.port)/_template/$name"
 end
 
 function make_url(::Type{IndicesType{:_recovery}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_recovery"
+	"$(info.transport)://$(info.host):$(info.port)/_recovery"
 end
 
 function make_url(::Type{IndicesType{:_recovery}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_recovery"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_recovery"
 end
 
 function make_url(::Type{IndicesType{:_refresh}}, info::Esinfo, name::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_refresh"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_refresh"
 end
 
 function make_url(::Type{IndicesType{:_refresh}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_refresh"
+	"$(info.transport)://$(info.host):$(info.port)/_refresh"
 end
 
 function make_url(::Type{IndicesType{:_rollover}}, info::Esinfo, alias::AbstractString)
-	"http://$(info.host):$(info.port)/$alias/_rollover"
+	"$(info.transport)://$(info.host):$(info.port)/$alias/_rollover"
 end
 
 function make_url(::Type{IndicesType{:_rollover}}, info::Esinfo, alias::AbstractString, new_index::AbstractString)
-	"http://$(info.host):$(info.port)/$alias/_rollover/$new_index"
+	"$(info.transport)://$(info.host):$(info.port)/$alias/_rollover/$new_index"
 end
 
 function make_url(::Type{IndicesType{:_segments}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_segments"
+	"$(info.transport)://$(info.host):$(info.port)/_segments"
 end
 
 function make_url(::Type{IndicesType{:_segments}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_segments"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_segments"
 end
 
 function make_url(::Type{IndicesType{:_shard_stores}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_shard_stores"
+	"$(info.transport)://$(info.host):$(info.port)/_shard_stores"
 end
 
 function make_url(::Type{IndicesType{:_shard_stores}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_shard_stores"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_shard_stores"
 end
 
 function make_url(::Type{IndicesType{:_shrink}}, info::Esinfo, index::AbstractString, target::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_shrink/$target"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_shrink/$target"
 end
 
 function make_url(::Type{IndicesType{:_split}}, info::Esinfo, index::AbstractString, target::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_split/$target"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_split/$target"
 end
 
 function make_url(::Type{IndicesType{:_stats}}, info::Esinfo )
-	"http://$(info.host):$(info.port)/_stats"
+	"$(info.transport)://$(info.host):$(info.port)/_stats"
 end
 
 function make_url(::Type{IndicesType{:_stats}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_stats"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_stats"
 end
 
 function make_url(::Type{IndicesType{:_update_aliases}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_aliases"
+	"$(info.transport)://$(info.host):$(info.port)/_aliases"
 end
 
 function make_url(::Type{IndicesType{:_upgrade}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_upgrade"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_upgrade"
 end
 
 function make_url(::Type{IndicesType{:_upgrade}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_upgrade"
+	"$(info.transport)://$(info.host):$(info.port)/_upgrade"
 end
 
 function make_url(::Type{IndicesType{:_validate_query}}, info::Esinfo, index::AbstractString)
-	"http://$(info.host):$(info.port)/$index/_validate/query"
+	"$(info.transport)://$(info.host):$(info.port)/$index/_validate/query"
 end
 
 function make_url(::Type{IndicesType{:_validate_query}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_validate/query"
+	"$(info.transport)://$(info.host):$(info.port)/_validate/query"
 end
 
 function make_url(::Type{IngestType{:_delete_pipeline}}, info::Esinfo, id::AbstractString)
-	"http://$(info.host):$(info.port)/_ingest/pipeline/$id"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline/$id"
 end
 
 function make_url(::Type{IngestType{:_get_pipeline}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_ingest/pipeline"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline"
 end
 
 function make_url(::Type{IngestType{:_get_pipeline}}, info::Esinfo, id::AbstractString)
-	"http://$(info.host):$(info.port)/_ingest/pipeline/$id"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline/$id"
 end
 
 function make_url(::Type{IngestType{:_processor_grok}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_ingest/processor/grok"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/processor/grok"
 end
 
 function make_url(::Type{IngestType{:_put_pipeline}}, info::Esinfo, id::AbstractString)
-	"http://$(info.host):$(info.port)/_ingest/pipeline/$id"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline/$id"
 end
 
 function make_url(::Type{IngestType{:_simulate}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_ingest/pipeline/_simulate"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline/_simulate"
 end
 
 function make_url(::Type{IngestType{:_simulate}}, info::Esinfo, id::AbstractString)
-	"http://$(info.host):$(info.port)/_ingest/pipeline/$id/_simulate"
+	"$(info.transport)://$(info.host):$(info.port)/_ingest/pipeline/$id/_simulate"
 end
 
 function make_url(::Type{NodesType{:_hot_threads}}, info::Esinfo, id::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$id/hot_threads"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$id/hot_threads"
 end
 
 function make_url(::Type{NodesType{:_hot_threads}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_nodes/hot_threads"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/hot_threads"
 end
 
 function make_url(::Type{NodesType{:_info}}, info::Esinfo, node_id_metric::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$node_id_metric"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$node_id_metric"
 end
 
 function make_url(::Type{NodesType{:_info}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_nodes/hot_threads"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/hot_threads"
 end
 
 function make_url(::Type{NodesType{:_info}}, info::Esinfo, node_id::AbstractString, metric::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$node_id/$metric"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$node_id/$metric"
 end
 
 function make_url(::Type{NodesType{:_reload_secure_settings}}, info::Esinfo, node_id::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$node_id/reload_secure_settings"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$node_id/reload_secure_settings"
 end
 
 function make_url(::Type{NodesType{:_reload_secure_settings}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_nodes/reload_secure_settings"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/reload_secure_settings"
 end
 
 function make_url(::Type{NodesType{:_usage}}, info::Esinfo, node_id::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$node_id/usage"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$node_id/usage"
 end
 
 function make_url(::Type{NodesType{:_usage}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_nodes/usage"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/usage"
 end
 
 function make_url(::Type{NodesType{:_stats}}, info::Esinfo, node_id::AbstractString)
-	"http://$(info.host):$(info.port)/_nodes/$node_id/stats"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/$node_id/stats"
 end
 
 function make_url(::Type{NodesType{:_stats}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_nodes/stats"
+	"$(info.transport)://$(info.host):$(info.port)/_nodes/stats"
 end
 
 function make_url(::Type{SnapshotType{:_snapshot}}, info::Esinfo, repository::AbstractString, snapshot::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository/$snapshot"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository/$snapshot"
 end
 
 function make_url(::Type{SnapshotType{:_snapshot_repository}}, info::Esinfo, repository::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository"
 end
 
 function make_url(::Type{SnapshotType{:_get_repository}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_snapshot/"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/"
 end
 
 function make_url(::Type{SnapshotType{:_restore}}, info::Esinfo, repository::AbstractString, snapshot::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository/$snapshot/_restore"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository/$snapshot/_restore"
 end
 
 function make_url(::Type{SnapshotType{:_status}}, info::Esinfo, repository::AbstractString, snapshot::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository/$snapshot/_status"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository/$snapshot/_status"
 end
 
 function make_url(::Type{SnapshotType{:_status}}, info::Esinfo, repository::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository/_status"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository/_status"
 end
 
 function make_url(::Type{SnapshotType{:_status}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_snapshot/_status"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/_status"
 end
 
 function make_url(::Type{SnapshotType{:_verify_repository}}, info::Esinfo, repository::AbstractString)
-	"http://$(info.host):$(info.port)/_snapshot/$repository/_verify"
+	"$(info.transport)://$(info.host):$(info.port)/_snapshot/$repository/_verify"
 end
 
 function make_url(::Type{TasksType{:_list}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_tasks"
+	"$(info.transport)://$(info.host):$(info.port)/_tasks"
 end
 
 function make_url(::Type{TasksType{:_get}}, info::Esinfo, task_id::AbstractString)
-	"http://$(info.host):$(info.port)/_tasks/$task_id"
+	"$(info.transport)://$(info.host):$(info.port)/_tasks/$task_id"
 end
 
 function make_url(::Type{TasksType{:_cancel}}, info::Esinfo)
-	"http://$(info.host):$(info.port)/_tasks/_cancel"
+	"$(info.transport)://$(info.host):$(info.port)/_tasks/_cancel"
 end
 
 function make_url(::Type{TasksType{:_cancel}}, info::Esinfo, task_id::AbstractString)
-	"http://$(info.host):$(info.port)/_tasks/$task_id/_cancel"
+	"$(info.transport)://$(info.host):$(info.port)/_tasks/$task_id/_cancel"
 end
 
-#task 
+#task
 @genfunction "POST" es_tasks_cancel TasksType{:_cancel} 0 task_id
-@genfunction "POST" es_tasks_cancel TasksType{:_cancel} 0  
+@genfunction "POST" es_tasks_cancel TasksType{:_cancel} 0
 @genfunction "GET" es_tasks_get TasksType{:_get} 0 task_id
-@genfunction "GET" es_tasks_list TasksType{:_list} 0  
+@genfunction "GET" es_tasks_list TasksType{:_list} 0
 
 #snapshot
 @genfunction "POST" es_snapshot_verify_repository SnapshotType{:_verify_repository} 0 repository
 @genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  repository snapshot
 @genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  repository
-@genfunction "GET" es_snapshot_status SnapshotType{:_status} 0  
+@genfunction "GET" es_snapshot_status SnapshotType{:_status} 0
 @genfunction "POST" es_snapshot_restore SnapshotType{:_restore} 1  repository snapshot
 @genfunction "GET" es_snapshot_get_repository SnapshotType{:_snapshot_repository} 0 repository
-@genfunction "GET" es_snapshot_get_repository SnapshotType{:_get_repository} 0  
+@genfunction "GET" es_snapshot_get_repository SnapshotType{:_get_repository} 0
 @genfunction "GET" es_snapshot_get SnapshotType{:_snapshot} 0  repository snapshot
-@genfunction "POST" es_snapshot_create_repository SnapshotType{:_snapshot_repository} 1 repository 
+@genfunction "POST" es_snapshot_create_repository SnapshotType{:_snapshot_repository} 1 repository
 @genfunction "POST" es_snapshot_create SnapshotType{:_snapshot} 1 repository snapshot
 
 #nodes
 @genfunction "GET" es_nodes_usage NodesType{:_usage} 0 node_id
-@genfunction "GET" es_nodes_usage NodesType{:_usage} 0 
+@genfunction "GET" es_nodes_usage NodesType{:_usage} 0
 @genfunction "GET" es_nodes_stats NodesType{:_stats} 0 node_id
 @genfunction "GET" es_nodes_stats NodesType{:_stats} 0
 @genfunction "GET" es_nodes_reload_secure_settings NodesType{:_reload_secure_settings} 0 node_id
 @genfunction "GET" es_nodes_reload_secure_settings NodesType{:_reload_secure_settings} 0
 
-#ingest 
+#ingest
 @genfunction "GET" es_ingest_simulate IngestType{:_simulate} 1 id
 @genfunction "GET" es_ingest_simulate IngestType{:_simulate} 1
 @genfunction "PUT" es_ingest_put_pipeline IngestType{:_put_pipeline} 1 id
@@ -474,45 +474,45 @@ end
 @genfunction "POST" es_indices_put_template IndicesType{:_put_template} 1 name
 @genfunction "PUT" es_indices_put_settings IndicesType{:_put_settings} 1 index
 @genfunction "PUT" es_indices_put_settings IndicesType{:_put_settings} 1
-@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index type 
-@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index 
-@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1 index name 
-@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1 
+@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index type
+@genfunction "PUT" es_indices_put_mapping IndicesType{:_put_mapping} 1 index
+@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1 index name
+@genfunction "PUT" es_indices_put_alias IndicesType{:_put_alias} 1
 @genfunction "POST" es_indices_open IndicesType{:_open} 0 index
-@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0 index   
-@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0 
-@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0 name   
-@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0 
-@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0 index   
-@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0 
-@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0 index   
-@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0 
-@genfunction "GET" es_indices_get_field_mapping IndicesType{:_get_field_mapping} 0 index fields 
+@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0 index
+@genfunction "GET" es_indices_get_upgrade IndicesType{:_get_upgrade} 0
+@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0 name
+@genfunction "GET" es_indices_get_template IndicesType{:_get_template} 0
+@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0 index
+@genfunction "GET" es_indices_get_settings IndicesType{:_get_settings} 0
+@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0 index
+@genfunction "GET" es_indices_get_mapping IndicesType{:_get_mapping} 0
+@genfunction "GET" es_indices_get_field_mapping IndicesType{:_get_field_mapping} 0 index fields
 @genfunction "GET" es_indices_get_field_mapping IndicesType{:_get_field_mapping} 0 fields
-@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 
+@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0
 @genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 index
-@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 index name 
-@genfunction "GET" es_indices_get IndicesType{:_get} 0 index 
-@genfunction "POST" es_indices_forcemerge IndicesType{:_forcemerge} 0 
+@genfunction "GET" es_indices_get_alias IndicesType{:_get_alias} 0 index name
+@genfunction "GET" es_indices_get IndicesType{:_get} 0 index
+@genfunction "POST" es_indices_forcemerge IndicesType{:_forcemerge} 0
 @genfunction "POST" es_indices_forcemerge IndicesType{:_forcemerge} 0 index
-@genfunction "POST" es_indices_flush_synced IndicesType{:_flush_synced} 0 
-@genfunction "POST" es_indices_flush IndicesType{:_flush} 0 
+@genfunction "POST" es_indices_flush_synced IndicesType{:_flush_synced} 0
+@genfunction "POST" es_indices_flush IndicesType{:_flush} 0
 @genfunction "POST" es_indices_flush IndicesType{:_flush} 0 index
 @genfunction "POST" es_indices_close IndicesType{:_close} 0 index
 @genfunction "PUT" es_indices_create IndicesType{:_create} 1 index
-@genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 
+@genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0
 @genfunction "POST" es_indices_clear_cache IndicesType{:_clear_cache} 0 index
-@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 1 
+@genfunction "POST" es_indices_analyze IndicesType{:_analyze} 1
 @genfunction "POST" es_indices_analyze IndicesType{:_analyze} 1 index
 
 # cluster
-@genfunction "GET" es_cluster_stats ClusterType{:_stats} 0 
+@genfunction "GET" es_cluster_stats ClusterType{:_stats} 0
 @genfunction "GET" es_cluster_stats ClusterType{:_stats} 0 node_id
-@genfunction "GET" es_cluster_state ClusterType{:_state} 0 metric index 
+@genfunction "GET" es_cluster_state ClusterType{:_state} 0 metric index
 @genfunction "GET" es_cluster_state ClusterType{:_state} 0 metric
-@genfunction "GET" es_cluster_state ClusterType{:_state} 0 
-@genfunction "GET" es_cluster_reroute ClusterType{:_reroute} 0 
-@genfunction "GET" es_cluster_remote_info ClusterType{:_remote_info} 0 
+@genfunction "GET" es_cluster_state ClusterType{:_state} 0
+@genfunction "GET" es_cluster_reroute ClusterType{:_reroute} 0
+@genfunction "GET" es_cluster_remote_info ClusterType{:_remote_info} 0
 @genfunction "PUT" es_cluster_put_settings ClusterType{:_put_settings} 1
 @genfunction "GET" es_cluster_pending_tasks ClusterType{:_pending_tasks} 0
 @genfunction "GET" es_cluster_health ClusterType{:_health} 0 index
@@ -531,7 +531,7 @@ function es_nodes_info(info::Esinfo, node_id::AbstractString, metric::AbstractSt
 
 	query = Dict(kw...)
 	url   = make_url(NodesType{:_info}, info, node_id, metric )
-	@catexport "GET"  url  query 
+	@catexport info "GET"  url  query
 
 end
 
@@ -539,7 +539,7 @@ function es_nodes_info(info::Esinfo, node_id_metric::AbstractString ;  kw...)
 
 	query = Dict(kw...)
 	url   = make_url(NodesType{:_info}, info, node_id_metric)
-	@catexport "GET"  url  query 
+	@catexport info "GET"  url  query
 
 end
 
@@ -547,7 +547,7 @@ function es_nodes_info(info::Esinfo ;  kw...)
 
 	query = Dict(kw...)
 	url   = make_url(NodesType{:_info}, info)
-	@catexport "GET"  url  query 
+	@catexport info "GET"  url  query
 
 end
 
@@ -556,7 +556,7 @@ function es_nodes_hot_threads(info::Esinfo, id::AbstractString ;  kw...)
 
 	query = Dict(kw...)
 	url   = make_url(NodesType{:_hot_threads}, info, node_id_metric)
-	@catexport "GET"  url  query 
+	@catexport info "GET"  url  query
 
 end
 
@@ -564,7 +564,7 @@ function es_nodes_hot_threads(info::Esinfo ;  kw...)
 
 	query = Dict(kw...)
 	url   = make_url(NodesType{:_hot_threads}, info)
-	@catexport "GET"  url  query 
+	@catexport info "GET"  url  query
 
 end
 
@@ -572,7 +572,7 @@ function es_indices_delete(info::Esinfo, index::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = make_url(IndicesType{:_delete}, info, index  )
-	@esdelete(url ,  Dict(kw...) )
+	@esdelete(info ,url ,  Dict(kw...) )
 
 end
 
@@ -580,7 +580,7 @@ function es_indices_delete_alias(info::Esinfo, index::AbstractString, name::Abst
 
 	query = Dict(kw...)
 	url   = make_url(IndicesType{:_delete_alias}, info, index ,name )
-	@esdelete(url ,  Dict(kw...) )
+	@esdelete(info ,url ,  Dict(kw...) )
 
 end
 
@@ -588,43 +588,41 @@ function es_indices_delete_template(info::Esinfo, name::AbstractString ; kw...)
 
 	query = Dict(kw...)
 	url   = make_url(IndicesType{:_delete_template}, info ,name )
-	@esdelete(url ,  Dict(kw...) )
+	@esdelete(info ,url ,  Dict(kw...) )
 
 end
 
 function es_indices_exists(info::Esinfo, index::AbstractString ; kw...)
 
 	url   = make_url(IndicesType{:_exists}, info, index)
-	@eshead  url   Dict(kw...)  
+	@eshead info  url   Dict(kw...)
 
 end
 
 function es_indices_exists_alias(info::Esinfo, name::AbstractString ; kw...)
 
 	url   = make_url(IndicesType{:_exists_alias}, info, name)
-	@eshead  url   Dict(kw...)  
+	@eshead info  url   Dict(kw...)
 
 end
 
 function es_indices_exists_alias(info::Esinfo, index::AbstractString, name::AbstractString ; kw...)
 
 	url   = make_url(IndicesType{:_exists_alias}, info, index,name)
-	@eshead  url   Dict(kw...)  
+	@eshead info  url   Dict(kw...)
 
 end
 
 function es_indices_exists_template(info::Esinfo, name::AbstractString ; kw...)
 
 	url   = make_url(IndicesType{:_exists_template}, info ,name)
-	@eshead  url   Dict(kw...)  
+	@eshead info  url   Dict(kw...)
 
 end
 
 function es_indices_exists_type(info::Esinfo, index::AbstractString ,type::AbstractString ; kw...)
 
 	url   = make_url(IndicesType{:_exists_type}, info ,index, type)
-	@eshead  url   Dict(kw...)  
+	@eshead info  url   Dict(kw...)
 
 end
-
- 
