@@ -1,15 +1,3 @@
-
-struct Esinfo
-	host::AbstractString
-	port::AbstractString
-	transport::AbstractString
-	user::AbstractString
-	pwd::AbstractString
-end
-
-Esinfo(host::AbstractString) = Esinfo(host, "9200","http","","")
-Esinfo()= Esinfo("127.0.0.1", "9200","http","","")
-
 struct ActionType{T} end
 struct BulkType{T} end
 
