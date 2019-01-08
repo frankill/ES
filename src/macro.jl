@@ -1,11 +1,11 @@
 macro eshead(info,  url , query  )
 
+	head = ["user" => info.user  ,"password" => info.pwd]
 	esc(
 		quote
 			try
 				! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
-				respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query)
-
+				respos = HTTP.request("HEAD", HTTP.URI($(url)), $head , query= $query)
 				if respos.status == 200
 					"OK"
 				end
@@ -18,11 +18,11 @@ end
 
 macro esdelete(info,  url,   query   )
 
+	head = ["user" => info.user  ,"password" => info.pwd]
 	esc(
 		quote
 			! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
-			respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query)
-
+			respos = HTTP.request("DELETE", HTTP.URI($(url)) , $head,  query= $query)
 			if respos.status == 200
 				JSON.parse(String(respos.body))
 			end
@@ -31,10 +31,10 @@ macro esdelete(info,  url,   query   )
 end
 macro catexport(info, method, url , query  )
 
+	head = ["user" => info.user  ,"password" => info.pwd]
 	esc(
 		quote
-			! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
-			respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)),$head, query= $query)
 			String(respos.body) |> println
 
 		end )
