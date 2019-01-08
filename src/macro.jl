@@ -1,6 +1,6 @@
 macro eshead(info,  url , query  )
 
-	head = ["user" => info.user  ,"password" => info.pwd]
+	head = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
 	esc(
 		quote
 			try
@@ -18,7 +18,7 @@ end
 
 macro esdelete(info,  url,   query   )
 
-	head = ["user" => info.user  ,"password" => info.pwd]
+	head = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
 	esc(
 		quote
 			! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
@@ -31,7 +31,7 @@ macro esdelete(info,  url,   query   )
 end
 macro catexport(info, method, url , query  )
 
-	head = ["user" => info.user  ,"password" => info.pwd]
+	head = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
 	esc(
 		quote
 			respos = HTTP.request($method, HTTP.URI($(url)),$head, query= $query)
