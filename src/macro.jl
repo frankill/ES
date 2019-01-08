@@ -3,7 +3,7 @@ macro eshead(info,  url , query  )
 	esc(
 		quote
 			try
-				! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
+				! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
 				respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query)
 
 				if respos.status == 200
@@ -20,7 +20,7 @@ macro esdelete(info,  url,   query   )
 
 	esc(
 		quote
-			! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
+			! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query)
 
 			if respos.status == 200
@@ -33,7 +33,7 @@ macro catexport(info, method, url , query  )
 
 	esc(
 		quote
-			! isempty($(info.user)) && append!($header, ["user" => $(info.user) ,"password" => $(info.pwd)])
+			! isempty($(info).user) && append!($header, ["user" => $(info).user ,"password" => $(info).pwd])
 			respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
 			String(respos.body) |> println
 
