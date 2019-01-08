@@ -3,7 +3,10 @@ macro eshead(info,  url , query  )
 	esc(
 		quote
 			try
-				header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+				if ! isempty( $(info).base64 )
+					 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+					 push!($query, "require_ssl_verification" => false,"basic_authorization" => true)
+				end
 				respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query)
 				if respos.status == 200
 					"OK"
@@ -18,7 +21,10 @@ end
 macro esdelete(info,  url,   query   )
 	esc(
 		quote
-			header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+			if ! isempty( $(info).base64 )
+				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+				 push!($query, "require_ssl_verification" => false,"basic_authorization" => true)
+			end
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query)
 			if respos.status == 200
 				JSON.parse(String(respos.body))
@@ -29,7 +35,10 @@ end
 macro catexport(info, method, url , query  )
 	esc(
 		quote
-			header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+			if ! isempty( $(info).base64 )
+				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
+				 push!($query, "require_ssl_verification" => false,"basic_authorization" => true)
+			end
 			respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query)
 			String(respos.body) |> println
 		end )

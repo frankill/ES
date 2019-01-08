@@ -69,7 +69,10 @@ macro esexport(info, method, url, body , query , type )
 	header = ["content-type" => "$type"]
 	esc(
 		quote
-			! isempty( $(info).base64 ) && push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
+			if ! isempty( $(info).base64 )
+				 push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
+				 push!($query, "require_ssl_verification" => false,"basic_authorization" => true)
+			end
 			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
 
 			if respos.status == 200
