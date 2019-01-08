@@ -37,7 +37,7 @@ module ES
 			Esinfo( host,  port,  "https", base64encode( user , ":", pwd) )
 		end
 		function Esinfo(host::AbstractString ,port::AbstractString , transport::AbstractString="http")
-			Esinfo( host,  port,  transport)
+			Esinfo( host,  port,  transport, "")
 		end
 	end
 
