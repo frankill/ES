@@ -1,6 +1,6 @@
 macro eshead(info,  url , query  )
 
-	header = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
+	header = ["Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
 			try
@@ -18,7 +18,7 @@ end
 
 macro esdelete(info,  url,   query   )
 
-	header = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
+	header = [ "Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
 
@@ -31,10 +31,10 @@ macro esdelete(info,  url,   query   )
 end
 macro catexport(info, method, url , query  )
 
-	header = ["user" => "$(info).user"  ,"password" => "$(info).pwd"]
+	header = [ "Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
-			respos = HTTP.request($method, HTTP.URI($(url)),$header, query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)), $header, query= $query)
 			String(respos.body) |> println
 
 		end )
