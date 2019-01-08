@@ -70,7 +70,7 @@ macro esexport(info, method, url, body , query , type )
 	esc(
 		quote
 			! isempty( $(info).base64 ) && push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
-			respos = HTTP.request($method, HTTP.URI($(url)) , header , $body, query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
 
 			if respos.status == 200
 				JSON.parse(String(respos.body))
