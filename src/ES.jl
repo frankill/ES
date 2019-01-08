@@ -33,13 +33,17 @@ module ES
 		port::AbstractString
 		transport::AbstractString
 		base64::AbstractString
-		function Esinfo(host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString )
-			Esinfo( host,  port,  "https", base64encode( user , ":", pwd) )
+		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString )
+			new( host,  port,  "https", base64encode( user , ":", pwd) )
 		end
+
 		function Esinfo(host::AbstractString ,port::AbstractString , transport::AbstractString="http")
-			Esinfo( host,  port,  transport, "")
+			new( host,  port,  transport, "")
 		end
+
 	end
+
+
 
 
 	include("macro.jl")
