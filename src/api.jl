@@ -71,9 +71,11 @@ macro esexport(info, method, url, body , query , type )
 		quote
 			if ! isempty( $(info).base64 )
 				 push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
-				 push!($query, "require_ssl_verification" => false,"basic_authorization" => true)
+				 conf = ( "require_ssl_verification" => false,"basic_authorization" => true)
+			else
+				 conf = ( "basic_authorization" => false)
 			end
-			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query, conf...)
 
 			if respos.status == 200
 				JSON.parse(String(respos.body))
