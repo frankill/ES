@@ -4,6 +4,7 @@ module ES
 
 	using HTTP
 	using JSON
+	import Base64 : base64encode
 	export Esinfo,cat_aliases,cat_allocation,cat_count,cat_fielddata,cat_health,cat_master,cat_nodeattrs,cat_pending_tasks,
 		cat_plugins,cat_recovery,cat_repositories,cat_segments,cat_shards,cat_snapshots,cat_tasks,cat_templates,cat_thread_pool,
 		es_indices_shrink,es_indices_split,es_indices_stats,es_indices_update_aliases,es_indices_upgrade,es_indices_validate_query,
@@ -31,12 +32,14 @@ module ES
 		host::AbstractString
 		port::AbstractString
 		transport::AbstractString
-		user::AbstractString
-		pwd::AbstractString
+		base64::AbstractString
 	end
 
-	Esinfo(host::AbstractString) = Esinfo(host, "9200","http","","")
-	Esinfo()= Esinfo("127.0.0.1", "9200","http","","")
+	Esinfo(host::AbstractString) = Esinfo(host, "9200","http","")
+	Esinfo()= Esinfo("127.0.0.1", "9200","http","")
+	function Esinfo(host::AbstractString ,port::AbstractString ,user::AbstractString ,pwd::AbstractString)
+		Esinfo( host,  port,  "https", base64encode( user , ":", pwd) )
+	end
 
 	include("macro.jl")
 	include("transformation.jl")

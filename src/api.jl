@@ -66,10 +66,10 @@ macro esexp(x,y)
 end
 
 macro esexport(info, method, url, body , query , type )
-
+	header = ["content-type" => "$type"]
 	esc(
 		quote
-			header = ["content-type" => $type , "Authorization" => string( ($(info).user)," ",($(info).pwd))]
+			! isempty( $(info).base64 ) && push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
 			respos = HTTP.request($method, HTTP.URI($(url)) , header , $body, query= $query)
 
 			if respos.status == 200
