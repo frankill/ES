@@ -3,7 +3,7 @@ macro eshead(info,  url , query  )
 	esc(
 		quote
 			try
-				header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
+				header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd))]
 				respos = HTTP.request("HEAD", HTTP.URI($(url)), $header , query= $query)
 				if respos.status == 200
 					"OK"
@@ -18,7 +18,7 @@ end
 macro esdelete(info,  url,   query   )
 	esc(
 		quote
-			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
+			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd))]
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) , $header,  query= $query)
 			if respos.status == 200
 				JSON.parse(String(respos.body))
@@ -29,7 +29,7 @@ end
 macro catexport(info, method, url , query  )
 	esc(
 		quote
-			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
+			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd))]
 			respos = HTTP.request($method, HTTP.URI($(url)), $header, query= $query)
 			String(respos.body) |> println
 		end )
