@@ -5,9 +5,9 @@ macro eshead(info,  url , query  )
 			try
 				if ! isempty( $(info).base64 )
 					 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-					 conf = ( "require_ssl_verification" = false,"basic_authorization" = true)
+					 conf = ( require_ssl_verification = false, basic_authorization = true)
 				else
-					conf = ( "basic_authorization" => false)
+					conf = ( basic_authorization => false)
 				end
 				respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query, conf...)
 				if respos.status == 200
@@ -25,9 +25,9 @@ macro esdelete(info,  url,   query   )
 		quote
 			if ! isempty( $(info).base64 )
 				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-				 conf = ( "require_ssl_verification" = false,"basic_authorization" = true)
+				 conf = ( require_ssl_verification = false, basic_authorization = true)
 			else
-				conf = ( "basic_authorization" => false)
+				conf = ( basic_authorization => false)
 			end
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query, conf...)
 			if respos.status == 200
@@ -41,9 +41,9 @@ macro catexport(info, method, url , query  )
 		quote
 			if ! isempty( $(info).base64 )
 				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-				 conf = ( "require_ssl_verification" = false,"basic_authorization" = true)
+				 conf = ( require_ssl_verification = false, basic_authorization = true)
 			else
-				conf = ( "basic_authorization" => false)
+				conf = ( basic_authorization => false)
 			end
 			respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query, conf...)
 			String(respos.body) |> println
