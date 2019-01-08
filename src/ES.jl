@@ -36,10 +36,9 @@ module ES
 		function Esinfo(host::AbstractString ,port::AbstractString ,user::AbstractString ,pwd::AbstractString)
 			Esinfo( host,  port,  "https", base64encode( user , ":", pwd) )
 		end
+		Esinfo(host::AbstractString) = Esinfo(host, "9200","http","")
+		Esinfo()= Esinfo("127.0.0.1", "9200","http","")
 	end
-
-	Esinfo(host::AbstractString) = Esinfo(host, "9200","http","")
-	Esinfo()= Esinfo("127.0.0.1", "9200","http","")
 
 
 	include("macro.jl")
