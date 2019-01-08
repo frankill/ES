@@ -1,27 +1,24 @@
 macro eshead(info,  url , query  )
 
-	header = ["Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
 			try
-
+				header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
 				respos = HTTP.request("HEAD", HTTP.URI($(url)), $header , query= $query)
 				if respos.status == 200
 					"OK"
 				end
 			catch
-				"404 - Not Found"
+				"Fail"
 			end
 
 		end )
 end
 
 macro esdelete(info,  url,   query   )
-
-	header = [ "Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
-
+			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
 			respos = HTTP.request("DELETE", HTTP.URI($(url)) , $header,  query= $query)
 			if respos.status == 200
 				JSON.parse(String(respos.body))
@@ -30,13 +27,11 @@ macro esdelete(info,  url,   query   )
 		end )
 end
 macro catexport(info, method, url , query  )
-
-	header = [ "Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
+			header = [  "Authorization" => string( ($(info).user)," ",($(info).pwd)]
 			respos = HTTP.request($method, HTTP.URI($(url)), $header, query= $query)
 			String(respos.body) |> println
-
 		end )
 end
 

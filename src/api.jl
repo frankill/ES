@@ -67,10 +67,9 @@ end
 
 macro esexport(info, method, url, body , query , type )
 
-	header = ["content-type" => "$type" , "Authorization" => "$(info.user) $(info.pwd)"]
 	esc(
 		quote
-
+			header = ["content-type" => $type , "Authorization" => string( ($(info).user)," ",($(info).pwd)]
 			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
 
 			if respos.status == 200
