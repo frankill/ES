@@ -9,7 +9,7 @@ macro eshead(info,  url , query  )
 				else
 					conf = ( basic_authorization => false)
 				end
-				respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query, conf...)
+				respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query ; conf...)
 				if respos.status == 200
 					"OK"
 				end
@@ -29,7 +29,7 @@ macro esdelete(info,  url,   query   )
 			else
 				conf = ( basic_authorization => false)
 			end
-			respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query, conf...)
+			respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query ; conf...)
 			if respos.status == 200
 				JSON.parse(String(respos.body))
 			end
@@ -45,7 +45,7 @@ macro catexport(info, method, url , query  )
 			else
 				conf = ( basic_authorization => false)
 			end
-			respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query, conf...)
+			respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query ; conf...)
 			String(respos.body) |> println
 		end )
 end

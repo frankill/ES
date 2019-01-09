@@ -2,11 +2,11 @@
 struct CatType{T} end
 
 function make_url(::Type{CatType{:_cat}}, info::Esinfo, paths::AbstractString, name::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/_cat/$paths/$name"
+	"$(info.url)/_cat/$paths/$name"
 end
 
 function make_url(::Type{CatType{:_cat}}, info::Esinfo,paths::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/_cat/$paths"
+	"$(info.url)/_cat/$paths"
 end
 
 macro catgenfun(methods, paths, names )

@@ -2,152 +2,152 @@ struct DmlType{T} end
 struct DdlType{T} end
 
 function make_url(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id"
+	"$(info.url)/$index/$type/$id"
 end
 
 function make_url(::Type{DmlType{:_index}}, info::Esinfo, index::AbstractString, type::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type"
+	"$(info.url)/$index/$type"
 end
 
 function make_url(::Type{DmlType{:_create}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id/_create"
+	"$(info.url)/$index/$type/$id/_create"
 end
 
 function make_url(::Type{DmlType{:_update}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id/_update"
+	"$(info.url)/$index/$type/$id/_update"
 end
 
 function make_url(::Type{DmlType{:_delete}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id"
+	"$(info.url)/$index/$type/$id"
 end
 
 function make_url(::Type{DmlType{:_head}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id"
+	"$(info.url)/$index/$type/$id"
 end
 
 function make_url(::Type{DmlType{:_get}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id"
+	"$(info.url)/$index/$type/$id"
 end
 
 function make_url(::Type{DmlType{:_get_source}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id/_source"
+	"$(info.url)/$index/$type/$id/_source"
 end
 
 function make_url(::Type{DdlType{:_explain}}, info::Esinfo, index::AbstractString, type::AbstractString,id::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/$id/_explain"
+	"$(info.url)/$index/$type/$id/_explain"
 end
 
 function make_url(::Type{DdlType{:_delete}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/$index/_delete_by_query"
+	"$(info.url)/$index/_delete_by_query"
 end
 
 function make_url(::Type{DdlType{:_delete}}, info::Esinfo, index::AbstractString , type::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/_delete_by_query"
+	"$(info.url)/$index/$type/_delete_by_query"
 end
 
 function make_url(::Type{DdlType{:_update}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/$index/_update_by_query"
+	"$(info.url)/$index/_update_by_query"
 end
 
 function make_url(::Type{DdlType{:_update}}, info::Esinfo, index::AbstractString , type::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/_update_by_query"
+	"$(info.url)/$index/$type/_update_by_query"
 end
 
 function make_url(::Type{DdlType{:_delete_script}}, info::Esinfo, id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_scripts/$id"
+	"$(info.url)/_scripts/$id"
 end
 
 function make_url(::Type{DdlType{:_get_script}}, info::Esinfo, id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_scripts/$id"
+	"$(info.url)/_scripts/$id"
 end
 
 function make_url(::Type{DdlType{:_field_caps}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/$index/_field_caps"
+	"$(info.url)/$index/_field_caps"
 end
 
 function make_url(::Type{DdlType{:_field_caps}}, info::Esinfo  )
-	"$(info.transport)://$(info.host):$(info.port)/_field_caps"
+	"$(info.url)/_field_caps"
 end
 
 function make_url(::Type{DdlType{:_delete_rethrottle}}, info::Esinfo, task_id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_delete_by_query/$task_id/_rethrottle"
+	"$(info.url)/_delete_by_query/$task_id/_rethrottle"
 end
 
 function make_url(::Type{DdlType{:_update_rethrottle}}, info::Esinfo, task_id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_update_by_query/$task_id/_rethrottle"
+	"$(info.url)/_update_by_query/$task_id/_rethrottle"
 end
 
 function make_url(::Type{DdlType{:_mget}}, info::Esinfo  )
-	"$(info.transport)://$(info.host):$(info.port)/_mget"
+	"$(info.url)/_mget"
 end
 
 function make_url(::Type{DdlType{:_mget}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/$index/_mget"
+	"$(info.url)/$index/_mget"
 end
 
 function make_url(::Type{DdlType{:_mget}}, info::Esinfo, index::AbstractString , type::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/_mget"
+	"$(info.url)/$index/$type/_mget"
 end
 
 
 function make_url(::Type{DdlType{:_mtermvectors}}, info::Esinfo  )
-	"$(info.transport)://$(info.host):$(info.port)/_mtermvectors"
+	"$(info.url)/_mtermvectors"
 end
 
 function make_url(::Type{DdlType{:_mtermvectors}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/$index/_mtermvectors"
+	"$(info.url)/$index/_mtermvectors"
 end
 
 function make_url(::Type{DdlType{:_mtermvectors}}, info::Esinfo, index::AbstractString , type::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$type/_mtermvectors"
+	"$(info.url)/$index/$type/_mtermvectors"
 end
 
 function make_url(::Type{DdlType{:_ping}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/"
+	"$(info.url)/"
 end
 
 function make_url(::Type{DdlType{:_put_script}}, info::Esinfo, id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_scripts/$id"
+	"$(info.url)/_scripts/$id"
 end
 
 function make_url(::Type{DdlType{:_put_script}}, info::Esinfo, id::AbstractString, context::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_scripts/$id/$context"
+	"$(info.url)/_scripts/$id/$context"
 end
 
 function make_url(::Type{DdlType{:_rank_eval}}, info::Esinfo, index::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_index/_rank_eval"
+	"$(info.url)/_index/_rank_eval"
 end
 
 function make_url(::Type{DdlType{:_rank_eval}}, info::Esinfo )
-	"$(info.transport)://$(info.host):$(info.port)/_rank_eval"
+	"$(info.url)/_rank_eval"
 end
 
 function make_url(::Type{DdlType{:_reindex}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_reindex"
+	"$(info.url)/_reindex"
 end
 
 function make_url(::Type{DdlType{:_reindex_rethrottle}}, info::Esinfo, task_id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_reindex/$task_id/_rethrottle"
+	"$(info.url)/_reindex/$task_id/_rethrottle"
 end
 
 function make_url(::Type{DdlType{:_render_search_template}}, info::Esinfo, id::AbstractString )
-	"$(info.transport)://$(info.host):$(info.port)/_render/template/$id"
+	"$(info.url)/_render/template/$id"
 end
 
 function make_url(::Type{DdlType{:_render_search_template}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_render/template"
+	"$(info.url)/_render/template"
 end
 
 function make_url(::Type{DdlType{:_scripts_painless_execute}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_scripts/painless/_execute"
+	"$(info.url)/_scripts/painless/_execute"
 end
 
 function make_url(::Type{DdlType{:_search_shards}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_search_shards"
+	"$(info.url)/_search_shards"
 end
 
 function make_url(::Type{DdlType{:_search_shards}}, info::Esinfo, index::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/_search_shards"
+	"$(info.url)/$index/_search_shards"
 end
 
 

@@ -33,12 +33,15 @@ module ES
 		port::AbstractString
 		transport::AbstractString
 		base64::AbstractString
+		url::AbstractString
 		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString )
-			new( host,  port,  "https", base64encode( user , ":", pwd) )
+			ur = string(transport, "://", host, ":", port)
+			new( host,  port,  "https", base64encode( user , ":", pwd), url )
 		end
 
 		function Esinfo(host::AbstractString ,port::AbstractString , transport::AbstractString="http")
-			new( host,  port,  transport, "")
+			ur = string(transport, "://", host, ":", port)
+			new( host,  port,  transport, "", ur)
 		end
 
 	end

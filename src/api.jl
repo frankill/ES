@@ -38,27 +38,27 @@ macro returns(title)
 end
 
 function make_url(::Type{ActionType{:_count}}, info::Esinfo, index::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/_count"
+	"$(info.url)/$index/_count"
 end
 
 function make_url(::Type{ActionType{:_search}}, info::Esinfo, index::AbstractString, path::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$path"
+	"$(info.url)/$index/$path"
 end
 
 function make_url(::Type{ActionType{:_search}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_search"
+	"$(info.url)/_search"
 end
 
 function make_url(::Type{ActionType{:_scroll}}, info::Esinfo )
-	"$(info.transport)://$(info.host):$(info.port)/_search/scroll"
+	"$(info.url)/_search/scroll"
 end
 
 function make_url(::Type{ActionType{:_bulk}}, info::Esinfo, index::AbstractString, doc::AbstractString)
-	"$(info.transport)://$(info.host):$(info.port)/$index/$doc/_bulk"
+	"$(info.url)/$index/$doc/_bulk"
 end
 
 function make_url(::Type{ActionType{:_bulk}}, info::Esinfo)
-	"$(info.transport)://$(info.host):$(info.port)/_bulk"
+	"$(info.url)/_bulk"
 end
 
 macro esexp(x,y)
@@ -75,7 +75,7 @@ macro esexport(info, method, url, body , query , type )
 			else
 				 conf = ( basic_authorization => false)
 			end
-			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query, conf...)
+			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query;  conf...)
 
 			if respos.status == 200
 				JSON.parse(String(respos.body))
