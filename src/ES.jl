@@ -46,9 +46,6 @@ module ES
 
 	end
 
-
-
-
 	include("macro.jl")
 	include("transformation.jl")
 	include("api.jl")

@@ -73,7 +73,7 @@ macro esexport(info, method, url, body , query , type )
 				 push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
 				 conf = ( require_ssl_verification = false, basic_authorization = true)
 			else
-				 conf = ( basic_authorization => false)
+				 conf = ( basic_authorization = false)
 			end
 			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query;  conf...)
 
