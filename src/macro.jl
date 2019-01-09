@@ -8,7 +8,7 @@ macro eshead(info,  url , query  )
 					 conf = ( require_ssl_verification = false, basic_authorization = true)
 					 respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query ; conf...)
 				else
-					respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query )
+					respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query )
 				end
 
 				if respos.status == 200
@@ -29,7 +29,7 @@ macro esdelete(info,  url,   query   )
 				 conf = ( require_ssl_verification = false, basic_authorization = true)
 				 respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query ; conf...)
 			else
-				respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query )
+				respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query )
 			end
 
 			if respos.status == 200
@@ -46,7 +46,7 @@ macro catexport(info, method, url , query  )
 				 conf = ( require_ssl_verification = false, basic_authorization = true)
 				 respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query ; conf...)
 			else
-				respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query)
+				respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
 			end
 
 			String(respos.body) |> println
