@@ -34,9 +34,9 @@ module ES
 		transport::AbstractString
 		base64::AbstractString
 		url::AbstractString
-		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString )
+		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString , transport::AbstractString= "https")
 			ur = string(transport, "://", host, ":", port)
-			new( host,  port,  "https", base64encode( user , ":", pwd), ur )
+			new( host,  port,  transport , base64encode( user , ":", pwd), ur )
 		end
 
 		function Esinfo(host::AbstractString ,port::AbstractString , transport::AbstractString="http")
