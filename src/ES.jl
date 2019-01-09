@@ -46,8 +46,7 @@ module ES
 
 	end
 
-	Esinfo(host::AbstractString) = Esinfo(host, "9200")
-	Esinfo() = Esinfo("127.0.0.1")
+	Esinfo(host::AbstractString="127.0.0.1") = Esinfo(host, "9200")
 
 	include("macro.jl")
 	include("transformation.jl")
