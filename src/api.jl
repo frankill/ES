@@ -1,7 +1,7 @@
 struct ActionType{T} end
 struct BulkType{T} end
 
-struct BulkLength{T<:Number}
+struct BulkLength{T<:Integer}
    seq::T
    count::T
 end
@@ -26,7 +26,7 @@ macro extra(data, kw...)
 
 end
 
-Base.iterate(B::BulkLength, state=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
+Base.iterate(B::BulkLength, state::Integer=0) = state  >= B.count ? nothing : ( ( state+1, ( state+B.seq) > B.count ? B.count : (state + B.seq) ) , state+B.seq )
 Base.length(B::BulkLength)           = Int(ceil(B.count/B.seq))
 
 macro returns(title, content)
