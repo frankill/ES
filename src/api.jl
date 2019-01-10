@@ -76,7 +76,7 @@ macro esexport(info, method, url, body , query , type )
 			else
 				 respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
 			end
-			
+
 			if respos.status == 200
 				JSON.parse(String(respos.body))
 			end
@@ -505,18 +505,18 @@ macro flowd(x, y )
 	esc(Expr(:ref, x, y ))
 end
 
-ref(x::Dict, y::AbstractString)	=  	@flowd(x,y)
-ref(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
-ref(x::Dict, y::Symbol) 	= 	ref(x, String(y))
+ref_new(x::Dict, y::AbstractString)	=  	@flowd(x,y)
+ref_new(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
+ref_new(x::Dict, y::Symbol) 	= 	ref_new(x, String(y))
 
 Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
 
 macro cheak(method , data)
 	esc(quote
 		if haskey($data, :routing)
-			title = @esmetaallronting($method,ref($data, :_index),ref($data, :_type),ref($data, :_id),ref($data, :routing))
+			title = @esmetaallronting($method,ref_new($data, :_index),ref_new($data, :_type),ref_new($data, :_id),ref_new($data, :routing))
 		else
-			title = @esmetaall($method,ref($data, :_index),ref($data, :_type),ref($data, :_id))
+			title = @esmetaall($method,ref_new($data, :_index),ref_new($data, :_type),ref_new($data, :_id))
 		end
 	end)
 end
@@ -524,12 +524,12 @@ end
 macro cheak(method , data, yes)
 	esc(quote
 		if haskey($data, :routing)
-			title = @esmetaallronting($method,ref($data, :_index),ref($data, :_type),ref($data, :_id),ref($data, :routing))
+			title = @esmetaallronting($method,ref_new($data, :_index),ref_new($data, :_type),ref_new($data, :_id),ref_new($data, :routing))
 		else
 			if haskey($data, :_id)
-				title = @esmetaall($method,ref($data, :_index),ref($data, :_type),ref($data, :_id))
+				title = @esmetaall($method,ref_new($data, :_index),ref_new($data, :_type),ref_new($data, :_id))
 			else
-				title = @esmetaall($method,ref($data, :_index),ref($data, :_type) )
+				title = @esmetaall($method,ref_new($data, :_index),ref_new($data, :_type) )
 			end
 		end
 	end)
@@ -545,28 +545,28 @@ end
 function make_bulk(::Type{BulkType{:_index}}, data::EsData)
 
 	@cheak "index" data 1
-	content = ref(data, :_source) |> json
+	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
  function make_bulk(::Type{BulkType{:_create}}, data::EsData)
  	@cheak "create" data
-	content = ref(data, :_source) |> json
+	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_update}}, data::EsData ,asupsert::Bool)
 	@cheak "update" data
-	content = Dict("doc" => ref(data, :_source), "doc_as_upsert" => asupsert) |> json
+	content = Dict("doc" => ref_new(data, :_source), "doc_as_upsert" => asupsert) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_script}}, data::EsData ,sid::AbstractString,asupsert::Bool)
 	@cheak "update" data
-	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref(data, :_source))),
+	content = Dict("script" => Dict("id" => sid, "params" => Dict("event" => ref_new(data, :_source))),
 			"scripted_upsert" => asupsert, "upsert" => Dict()) |> json
 	@returns title content
 
