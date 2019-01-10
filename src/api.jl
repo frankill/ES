@@ -460,9 +460,9 @@ end
 
 function es_bulk_index( info::Esinfo, data::Vector{<:EsData}, chunk_num::Number=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync @simd for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_index}, i ) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
