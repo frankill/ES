@@ -426,13 +426,13 @@ function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,routing:
 
 end
 
-function es_bulk(info::Esinfo , index::AbstractString, doc::AbstractString , data ; kw...)
+@inline function es_bulk(info::Esinfo , index::AbstractString, doc::AbstractString , data ; kw...)
 	url   = make_url(ActionType{:_bulk}, info ,index, doc )
 	query = Dict(kw...)
 	@esexport info "POST" url data query "application/x-ndjson"
 end
 
-function es_bulk(info::Esinfo , data  ; kw...)
+@inline function es_bulk(info::Esinfo , data  ; kw...)
 	url   = make_url(ActionType{:_bulk}, info  )
 	query = Dict(kw...)
 	@esexport info "POST" url data query "application/x-ndjson"
