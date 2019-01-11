@@ -190,9 +190,9 @@ function es_bulk_update(info::Esinfo, index::AbstractString, doc::AbstractString
 
 	@esdatawarn data id
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_update},  x, y , asupsert) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -205,9 +205,9 @@ function es_bulk_update(info::Esinfo, index::AbstractString, doc::AbstractString
 
 	@esdatawarn data id
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_update},  x, y , z, asupsert) for (x ,y,z) in zip(view(data,m:n),view(id,m:n),view(routing,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -217,9 +217,9 @@ function es_bulk_script(info::Esinfo, index::AbstractString, doc::AbstractString
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Integer=1000 ; kw... )
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_script},  x, y , sid, asupsert) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -229,9 +229,9 @@ function es_bulk_script(info::Esinfo, index::AbstractString, doc::AbstractString
 					  sid::AbstractString,asupsert::Bool=true,chunk_num::Integer=1000 ; kw... )
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_script},  x, y , z, sid, asupsert) for (x ,y,z) in zip(view(data,m:n),view(id,m:n),view(routing,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -240,9 +240,9 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 					data::Vector{<:EsData}, id::Vector{<:EsId} ,chunk_num::Integer=1000 ; kw... )
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_index}, x, y  ) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -252,9 +252,9 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 					routing::Vector{<:EsId},chunk_num::Integer=1000 ; kw... )
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_index}, x, y ,z ) for (x ,y,z) in zip(view(data,m:n),view(id,m:n),view(routing,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -262,9 +262,9 @@ end
 function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 					data::Vector{<:EsData} ,::Val{true}, chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_index}, index, doc ,x ) for x in  view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
@@ -273,9 +273,9 @@ function es_bulk_index(info::Esinfo, index::AbstractString, doc::AbstractString,
 					data::Vector{<:EsData} ,routing::Vector{<:EsId},::Val{true},
 					chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_index}, index, doc ,x ,y,Val(true)) for (x,y) in  zip(view(data,m:n), view(routing,m:n) ) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
@@ -284,9 +284,9 @@ function es_bulk_create(info::Esinfo, index::AbstractString, doc::AbstractString
 					data::Vector{<:EsData}, id::Vector{<:EsId},chunk_num::Integer=1000 ; kw...)
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_create},  x, y ) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -296,9 +296,9 @@ function es_bulk_create(info::Esinfo, index::AbstractString, doc::AbstractString
 					routing::Vector{<:EsId},chunk_num::Integer=1000 ; kw...)
 
 	@esdatawarn data id
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_create},  x, y ,z) for (x ,y,z) in zip(view(data,m:n),view(id,m:n),view(routing,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -306,9 +306,9 @@ end
 function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 					id::Vector{<:EsId},chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_del}, x ) for x in view(id,m:n) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -316,9 +316,9 @@ end
 function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 					id::Vector{<:EsId},routing::Vector{<:EsId},chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(id) )
+	@sync for (m, n) in BulkLength( chunk_num, length(id) )
 		chunk = (make_bulk(BulkType{:_del}, x ,y) for (x ,y) in zip(view(data,m:n), view(id,m:n)) )
-		es_bulk(info, index, doc, chunk; kw...)
+		@async es_bulk(info, index, doc, chunk; kw...)
 	end
 
 end
@@ -489,10 +489,9 @@ function es_bulk_index( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer
 end
 
 function es_bulk_create( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw...)
-
+	chunk = [ make_bulk(BulkType{:_create}, i ) for i in data ]
 	@sync for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = [ make_bulk(BulkType{:_create}, i ) for i in view(data,m:n) ]
-		@async es_bulk(info, chunk; kw...)
+		@async es_bulk(info, view(data,m:n); kw...)
 	end
 
 end
