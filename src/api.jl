@@ -451,36 +451,36 @@ end
 function es_bulk_script(info::Esinfo, data::Vector{<:EsData}, sid::AbstractString,asupsert::Bool=true,
 								chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_script}, i , sid, asupsert) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
 
 function es_bulk_index( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_index}, i ) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
 
 function es_bulk_create( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw...)
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_create}, i ) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
 
 function es_bulk_del( info::Esinfo, data::Vector{<:EsData},chunk_num::Integer=1000 ; kw... )
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_del}, i) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
