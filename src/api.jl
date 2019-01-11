@@ -439,6 +439,27 @@ function es_bulk(info::Esinfo , data  ; kw...)
 end
 
 # add meta all function
+
+function fortest( data::SubArray{T, 1}) where T <: EsData
+
+	res= Vector{String}(undef, length(data))
+
+	@inbounds @simd for i in eachindex(data)
+		res[i] = make_bulk(BulkType{:_index}, data[i] )
+	end
+
+	res
+end
+
+function es_bulk_test( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw... )
+
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
+		chunk = fortest(view(data,m:n))
+		@async es_bulk(info, chunk; kw...)
+	end
+
+end
+
 function es_bulk_update(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
 
 	@sync for (m, n) in BulkLength( chunk_num, length(data) )
