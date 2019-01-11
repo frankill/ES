@@ -324,12 +324,12 @@ function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 end
 
 macro esmeta(method, id)
-	esc(:(json(Dict($method => ( _id = $id ,)) )))
+	esc(:(json( ($method => ( _id = $id ,) ,) )))
 end
 
 function make_bulk(::Type{BulkType{:_del}}, id::EsId )
 
-	title =  @esmeta "delete" id
+	title =  @esmeta :delete id
 	@returns title
 
 end
@@ -343,7 +343,7 @@ end
 
 function make_bulk(::Type{BulkType{:_index}},  data::EsData, id::EsId )
 
-	title =  @esmeta "index" id
+	title =  @esmeta :index id
 	content = data |> json
 	@returns title content
 
@@ -377,7 +377,7 @@ end
 
  function make_bulk(::Type{BulkType{:_create}},  data::EsData, id::EsId)
 
-	title =  @esmeta "create" id
+	title =  @esmeta :create id
 	content = data |> json
 	@returns title content
 
@@ -393,7 +393,7 @@ end
 
 function make_bulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,asupsert::Bool)
 
-	title =  @esmeta "update"  id
+	title =  @esmeta :update  id
 	content = (doc = data, doc_as_upsert = asupsert ,) |> json
 	@returns title content
 
@@ -409,7 +409,7 @@ end
 
 function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,sid::AbstractString,asupsert::Bool)
 
-	title =  @esmeta "update" id
+	title =  @esmeta :update id
 	content =  (script = (id = sid, params = (event = data ,),),
 			scripted_upsert = asupsert, upsert = Dict() ,) |> json
 	@returns title content
@@ -419,7 +419,7 @@ end
 function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,routing::EsId ,sid::AbstractString,
 														asupsert::Bool)
 
-	title =  @smi( update = @smi(_id = id , routing = routing )) |> json
+	title =  ( update = (_id = id , routing = routing ,) ,) |> json
 	content =  (script =  (id = sid, params =  (event = data ,) ,),
 			scripted_upsert = asupsert, upsert = Dict() , ) |> json
 	@returns title content
@@ -440,25 +440,25 @@ end
 
 # add meta all function
 
-function fortest( data::SubArray{T, 1}) where T <: EsData
-
-	res= Vector{String}(undef, length(data))
-
-	@inbounds @simd for i in eachindex(data)
-		res[i] = make_bulk(BulkType{:_index}, data[i] )
-	end
-
-	res
-end
-
-function es_bulk_test( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw... )
-
-	@sync for (m, n) in BulkLength( chunk_num, length(data) )
-		chunk = fortest(view(data,m:n))
-		@async es_bulk(info, chunk; kw...)
-	end
-
-end
+# function fortest( data::SubArray{T, 1}) where T <: EsData
+#
+# 	res= Vector{String}(undef, length(data))
+#
+# 	@inbounds @simd for i in eachindex(data)
+# 		res[i] = make_bulk(BulkType{:_index}, data[i] )
+# 	end
+#
+# 	res
+# end
+#
+# function es_bulk_test( info::Esinfo, data::Vector{<:EsData}, chunk_num::Integer=1000 ; kw... )
+#
+# 	@sync for (m, n) in BulkLength( chunk_num, length(data) )
+# 		chunk = fortest(view(data,m:n))
+# 		@async es_bulk(info, chunk; kw...)
+# 	end
+#
+# end
 
 function es_bulk_update(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
 
@@ -507,15 +507,15 @@ function es_bulk_del( info::Esinfo, data::Vector{<:EsData},chunk_num::Integer=10
 end
 
 macro esmetaall(method, index, type )
-	esc(:(json(Dict($method => (_index = $index, _type = $type ,)) )))
+	esc(:(json(($method = (_index = $index, _type = $type ,),) )))
 end
 
 macro esmetaall(method, index, type, id )
-	esc(:(json(Dict($method => (_index = $index, _type = $type,  _id = $id ,)) )))
+	esc(:(json( ($method = (_index = $index, _type = $type,  _id = $id ,),) )))
 end
 
 macro esmetaallronting(method, index, type, id, routing )
-	esc(:(json(Dict($method => (_index = $index, _type = $type,  _id = $id ,routing = $routing ,)) )))
+	esc(:(json( ($method = (_index = $index, _type = $type,  _id = $id ,routing = $routing ,),) )))
 end
 
 macro flown(x, y )
@@ -558,35 +558,35 @@ end
 
 function make_bulk(::Type{BulkType{:_del}},  data::EsData )
 
-	@cheak "delete" data
+	@cheak :delete data
 	@returns title
 
 end
 
 function make_bulk(::Type{BulkType{:_index}}, data::EsData)
 
-	@cheak "index" data 1
+	@cheak :index data 1
 	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
  function make_bulk(::Type{BulkType{:_create}}, data::EsData)
- 	@cheak "create" data
+ 	@cheak :create data
 	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_update}}, data::EsData ,asupsert::Bool)
-	@cheak "update" data
+	@cheak :update data
 	content =  (doc= ref_new(data, :_source), doc_as_upsert = asupsert, ) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_script}}, data::EsData ,sid::AbstractString,asupsert::Bool)
-	@cheak "update" data
+	@cheak :update data
 	content = (script = (id= sid, params = (event = ref_new(data, :_source),),),
 			scripted_upsert = asupsert, upsert = Dict() ,) |> json
 	@returns title content
