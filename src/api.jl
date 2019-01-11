@@ -157,7 +157,7 @@ end
 
 function es_scroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m")
 
-	body  = Dict("scroll" => scroll, "scroll_id" => id)
+	body  = (scroll = scroll, scroll_id = id, )
 	url   = make_url(ActionType{:_scroll}, info )
 	@esexport info "POST" url json(body) Dict() "application/json"
 
@@ -166,7 +166,7 @@ end
 function es_scroll_clear(info::Esinfo, id::Union{Vector{AbstractString},AbstractString} )
 
 	url   = make_url(ActionType{:_scroll}, info )
-	body = Dict("scroll_id" => id)
+	body =  (scroll_id => id , )
 	@esexport info "DELETE" url json(body) Dict() "application/json"
 
 end
