@@ -324,7 +324,7 @@ function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 end
 
 macro esmeta(method, id)
-	esc(:(json(Dict($method => Dict( "_id" => $id )) )))
+	esc(:(json(Dict($method => ( _id = $id ,)) )))
 end
 
 function make_bulk(::Type{BulkType{:_del}}, id::EsId )
@@ -410,7 +410,7 @@ end
 function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,sid::AbstractString,asupsert::Bool)
 
 	title =  @esmeta "update" id
-	content =  (script = ("id" = sid, "params" = ("event" = data ,),),
+	content =  (script = (id = sid, params = (event = data ,),),
 			scripted_upsert = asupsert, upsert = Dict() ,) |> json
 	@returns title content
 
@@ -486,15 +486,15 @@ function es_bulk_del( info::Esinfo, data::Vector{<:EsData},chunk_num::Integer=10
 end
 
 macro esmetaall(method, index, type )
-	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type )) )))
+	esc(:(json(Dict($method => (_index = $index, _type = $type ,)) )))
 end
 
 macro esmetaall(method, index, type, id )
-	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id )) )))
+	esc(:(json(Dict($method => (_index = $index, _type = $type,  _id = $id ,)) )))
 end
 
 macro esmetaallronting(method, index, type, id, routing )
-	esc(:(json(Dict($method => Dict("_index" => $index, "_type" => $type,  "_id" => $id ,"routing" => $routing)) )))
+	esc(:(json(Dict($method => (_index = $index, _type = $type,  _id = $id ,routing = $routing ,)) )))
 end
 
 macro flown(x, y )
