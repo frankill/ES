@@ -426,13 +426,13 @@ function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,routing:
 
 end
 
-@inline function es_bulk(info::Esinfo , index::AbstractString, doc::AbstractString , data ; kw...)
+function es_bulk(info::Esinfo , index::AbstractString, doc::AbstractString , data ; kw...)
 	url   = make_url(ActionType{:_bulk}, info ,index, doc )
 	query = Dict(kw...)
 	@esexport info "POST" url data query "application/x-ndjson"
 end
 
-@inline function es_bulk(info::Esinfo , data  ; kw...)
+function es_bulk(info::Esinfo , data  ; kw...)
 	url   = make_url(ActionType{:_bulk}, info  )
 	query = Dict(kw...)
 	@esexport info "POST" url data query "application/x-ndjson"
@@ -444,6 +444,15 @@ function es_bulk_update(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=tr
 	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_update}, i , asupsert) for i in view(data,m:n) )
 		@async es_bulk(info, chunk; kw...)
+	end
+
+end
+
+function es_bulk_test(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
+
+	  for (m, n) in BulkLength( chunk_num, length(data) )
+		chunk = (make_bulk(BulkType{:_update}, i , asupsert) for i in view(data,m:n) )
+
 	end
 
 end
