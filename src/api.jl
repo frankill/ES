@@ -184,16 +184,16 @@ macro esdatawarn(x, y)
 end
 
 function es_bulk_update(info::Esinfo, index::AbstractString, doc::AbstractString,
-					data::Vector{<:EsData},
-					id::Vector{<:EsId},
-					asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
+				data::Vector{<:EsData},
+				id::Vector{<:EsId},
+				asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
 
-	@esdatawarn data id
+@esdatawarn data id
 
-	@sync for (m, n) in BulkLength( chunk_num, length(id) )
-		chunk = (make_bulk(BulkType{:_update},  x, y , asupsert) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
-		@async es_bulk(info, index, doc, chunk; kw...)
-	end
+@sync for (m, n) in BulkLength( chunk_num, length(id) )
+	chunk = (make_bulk(BulkType{:_update},  x, y , asupsert) for (x ,y) in zip(view(data,m:n),view(id,m:n)) )
+	@async es_bulk(info, index, doc, chunk; kw...)
+end
 
 end
 
@@ -324,12 +324,12 @@ function es_bulk_del(info::Esinfo, index::AbstractString, doc::AbstractString,
 end
 
 macro esmeta(method, id)
-	esc(:(json( ($method => ( _id = $id ,) ,) )))
+	esc(:( ($method = ( _id = $id ,) ,) |> json ))
 end
 
 function make_bulk(::Type{BulkType{:_del}}, id::EsId )
 
-	title =  @esmeta :delete id
+	title =  @esmeta delete id
 	@returns title
 
 end
@@ -343,7 +343,7 @@ end
 
 function make_bulk(::Type{BulkType{:_index}},  data::EsData, id::EsId )
 
-	title =  @esmeta :index id
+	title =  @esmeta index id
 	content = data |> json
 	@returns title content
 
@@ -377,7 +377,7 @@ end
 
  function make_bulk(::Type{BulkType{:_create}},  data::EsData, id::EsId)
 
-	title =  @esmeta :create id
+	title =  @esmeta create id
 	content = data |> json
 	@returns title content
 
@@ -393,7 +393,7 @@ end
 
 function make_bulk(::Type{BulkType{:_update}},  data::EsData, id::EsId ,asupsert::Bool)
 
-	title =  @esmeta :update  id
+	title =  @esmeta update  id
 	content = (doc = data, doc_as_upsert = asupsert ,) |> json
 	@returns title content
 
@@ -409,7 +409,7 @@ end
 
 function make_bulk(::Type{BulkType{:_script}},  data::EsData, id::EsId ,sid::AbstractString,asupsert::Bool)
 
-	title =  @esmeta :update id
+	title =  @esmeta update id
 	content =  (script = (id = sid, params = (event = data ,),),
 			scripted_upsert = asupsert, upsert = Dict() ,) |> json
 	@returns title content
