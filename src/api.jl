@@ -441,9 +441,9 @@ end
 # add meta all function
 function es_bulk_update(info::Esinfo,  data::Vector{<:EsData}, asupsert::Bool=true  ,chunk_num::Integer=1000 ; kw...)
 
-	for (m, n) in BulkLength( chunk_num, length(data) )
+	@sync for (m, n) in BulkLength( chunk_num, length(data) )
 		chunk = (make_bulk(BulkType{:_update}, i , asupsert) for i in view(data,m:n) )
-		es_bulk(info, chunk; kw...)
+		@async es_bulk(info, chunk; kw...)
 	end
 
 end
