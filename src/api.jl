@@ -558,35 +558,35 @@ end
 
 function make_bulk(::Type{BulkType{:_del}},  data::EsData )
 
-	@cheak :delete data
+	@cheak delete data
 	@returns title
 
 end
 
 function make_bulk(::Type{BulkType{:_index}}, data::EsData)
 
-	@cheak :index data 1
+	@cheak index data 1
 	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
  function make_bulk(::Type{BulkType{:_create}}, data::EsData)
- 	@cheak :create data
+ 	@cheak create data
 	content = ref_new(data, :_source) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_update}}, data::EsData ,asupsert::Bool)
-	@cheak :update data
+	@cheak update data
 	content =  (doc= ref_new(data, :_source), doc_as_upsert = asupsert, ) |> json
 	@returns title content
 
 end
 
 function make_bulk(::Type{BulkType{:_script}}, data::EsData ,sid::AbstractString,asupsert::Bool)
-	@cheak :update data
+	@cheak update data
 	content = (script = (id= sid, params = (event = ref_new(data, :_source),),),
 			scripted_upsert = asupsert, upsert = Dict() ,) |> json
 	@returns title content
