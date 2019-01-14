@@ -525,9 +525,9 @@ macro flowd(x, y )
 	esc(Expr(:ref, x, y ))
 end
 
-ref_new(x::Dict, y::AbstractString)	=  	@flowd(x,y)
-ref_new(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
-ref_new(x::Dict, y::Symbol) 	= 	ref_new(x, String(y))
+@inline ref_new(x::Dict, y::AbstractString)	=  	@flowd(x,y)
+@inline ref_new(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
+@inline ref_new(x::Dict, y::Symbol) 	= 	ref_new(x, String(y))
 
 Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
 
