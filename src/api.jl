@@ -529,7 +529,7 @@ end
 @inline ref_new(x::NamedTuple, y::Symbol) 	= 	@flown(x,y)
 @inline ref_new(x::Dict, y::Symbol) 	= 	ref_new(x, String(y))
 
-Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
+# Base.haskey(nt::Dict, key::Symbol) = Base.haskey(nt, String(key))
 
 macro cheak(method , data)
 	esc(quote
