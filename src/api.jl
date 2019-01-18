@@ -61,33 +61,10 @@ function make_url(::Type{ActionType{:_bulk}}, info::Esinfo)
 	"$(info.url)/_bulk"
 end
 
-macro esexp(x,y)
-	esc(:(get($x, $y, missing)))
-end
-
-macro esexport(info, method, url, body , query , type )
-	header = ["content-type" => "$type"]
-	esc(
-		quote
-			if ! isempty( $(info).base64 )
-				 push!($header, "Authorization" => string( "Basic" , " ", $(info).base64 ) )
-				 conf = ( require_ssl_verification = false, basic_authorization = true)
-				 respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query;  conf...)
-			else
-				 respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query)
-			end
-
-			if respos.status == 200
-				JSON.parse(String(respos.body))
-			end
-
-		end )
-end
-
 function es_count(info::Esinfo, index::AbstractString ; kw...)
 
 	url   = make_url(ActionType{:_count}, info, index )
-	res   = @esexport info "GET" url Dict() Dict(kw...) "application/json"
+	res   = @esexport info "GET" url Dict() Dict(kw...) getfield(info, :jheader)
 	@esexp res "count"
 
 end
@@ -95,7 +72,7 @@ end
 function es_count(info::Esinfo, index::AbstractString, body::Dict ; kw...)
 
 	url   = make_url(ActionType{:_count}, info, index )
-	res   = @esexport info "POST" url json(body) Dict(kw...) "application/json"
+	res   = @esexport info "POST" url json(body) Dict(kw...) getfield(info, :jheader)
 	@esexp res "count"
 
 end
@@ -103,7 +80,7 @@ end
 function es_count(info::Esinfo, index::AbstractString, body::AbstractString ; kw...)
 
 	url   = make_url(ActionType{:_count}, info, index )
-	res   = @esexport info "POST" url body Dict(kw...) "application/json"
+	res   = @esexport info "POST" url body Dict(kw...) getfield(info, :jheader)
 	@esexp res "count"
 
 end
@@ -114,7 +91,7 @@ function es_search(info::Esinfo, index::AbstractString, body::AbstractString , p
 
 	query = Dict(kw...)
 	url   = make_url(ActionType{:_search}, info, index , path )
-	@esexport info "POST" url body query "application/json"
+	@esexport info "POST" url body query getfield(info, :jheader)
 
 end
 
@@ -122,14 +99,14 @@ function es_search(info::Esinfo, index::AbstractString, body::Dict , path::Abstr
 
 	query = Dict(kw...)
 	url   = make_url(ActionType{:_search}, info, index , path )
-	@esexport info "POST" url json(body) query "application/json"
+	@esexport info "POST" url json(body) query getfield(info, :jheader)
 
 end
 
 function es_search(info::Esinfo, index::AbstractString, body::Dict ,query::Dict, path::AbstractString="_search" )
 
 	url   = make_url(ActionType{:_search}, info, index , path )
-	@esexport info "POST" url json(body) query "application/json"
+	@esexport info "POST" url json(body) query getfield(info, :jheader)
 
 end
 
@@ -159,7 +136,7 @@ function es_scroll(info::Esinfo, id::AbstractString, scroll::AbstractString="1m"
 
 	body  = (scroll = scroll, scroll_id = id, )
 	url   = make_url(ActionType{:_scroll}, info )
-	@esexport info "POST" url json(body) Dict() "application/json"
+	@esexport info "POST" url json(body) Dict() getfield(info, :jheader)
 
 end
 
@@ -167,7 +144,7 @@ function es_scroll_clear(info::Esinfo, id::Union{Vector{AbstractString},Abstract
 
 	url   = make_url(ActionType{:_scroll}, info )
 	body =  (scroll_id => id , )
-	@esexport info "DELETE" url json(body) Dict() "application/json"
+	@esexport info "DELETE" url json(body) Dict() getfield(info, :jheader)
 
 end
 
@@ -175,7 +152,7 @@ function es_scroll_clear(info::Esinfo)
 
 	url   = make_url(ActionType{:_scroll}, info )
 	body  = Dict()
-	@esexport info "DELETE" (url * "/_all") json(body) Dict() "application/json"
+	@esexport info "DELETE" (url * "/_all") json(body) Dict() getfield(info, :jheader)
 
 end
 
@@ -429,13 +406,13 @@ end
 function es_bulk(info::Esinfo , index::AbstractString, doc::AbstractString , data ; kw...)
 	url   = make_url(ActionType{:_bulk}, info ,index, doc )
 	query = Dict(kw...)
-	@esexport info "POST" url data query "application/x-ndjson"
+	@esexport info "POST" url data query getfield(info, :nheader)
 end
 
 function es_bulk(info::Esinfo , data  ; kw...)
 	url   = make_url(ActionType{:_bulk}, info  )
 	query = Dict(kw...)
-	@esexport info "POST" url data query "application/x-ndjson"
+	@esexport info "POST" url data query getfield(info, :nheader)
 end
 
 # add meta all function
