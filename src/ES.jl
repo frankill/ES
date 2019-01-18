@@ -19,7 +19,7 @@ module ES
 		es_cluster_state,es_cluster_stats,es_count,es_create,es_delete,es_delete_by_query,es_delete_by_query_rethrottle,
 		es_exists,es_exists_source,es_explain,es_field_caps,es_get,es_getscript,es_getsource,es_index,es_indices_analyze,
 		es_indices_clear_cache,es_indices_close,es_indices_create,es_indices_delete,es_indices_delete_alias,
-		es_indices_delete_template,es_indices_exists,es_indices_exists_alias,es_indices_exists_template,es_indices_exists_type,
+		es_indices_delete_template,es_indices_exists,es_indices_exists_alias,es_indices_exists_template,
 		es_indices_flush,es_indices_flush_synced,es_indices_forcemerge,es_indices_get,es_indices_get_alias,
 		es_indices_get_field_mapping,es_indices_get_mapping,es_indices_get_settings,es_indices_get_template,es_indices_get_upgrade,
 		es_indices_open,es_indices_put_alias,es_indices_put_mapping,es_indices_put_settings,es_indices_put_template,
@@ -34,17 +34,27 @@ module ES
 		transport::AbstractString
 		base64::AbstractString
 		url::AbstractString
+		jheader::Vector{Pair{String,String}}
+		nheader::Vector{Pair{String,String}}
+		conf::NamedTuple
 		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString , transport::AbstractString= "https")
 			ur = string(transport, "://", host, ":", port)
-			new( host,  port,  transport , base64encode( user , ":", pwd), ur )
+			basetmp = base64encode( user , ":", pwd)
+			jheader= ["content-type" => "application/json", "Authorization" => string( "Basic" , " ", basetmp ) ]
+			nheader= ["content-type" => "application/x-ndjson", "Authorization" => string( "Basic" , " ", basetmp ) ]
+			conf = ( require_ssl_verification = false, basic_authorization = true)
+			new( host,  port,  transport , basetmp , ur, jheader, nheader, conf )
 		end
 
 		function Esinfo(host::AbstractString ,port::AbstractString , transport::AbstractString="http")
 			ur = string(transport, "://", host, ":", port)
-			new( host,  port,  transport, "", ur)
+			jheader= ["content-type" => "application/json" ]
+			nheader= ["content-type" => "application/x-ndjson"  ]
+			new( host,  port,  transport, "", ur , jheader, nheader, NamedTuple() )
 		end
 
 	end
+
 
 	Esinfo(host::AbstractString) = Esinfo(host, "9200")
 
