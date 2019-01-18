@@ -53,7 +53,7 @@ module ES
 			new( host,  port,  transport, "", ur , jheader, nheader, NamedTuple() )
 		end
 	
-		function Esinfo(; host::AbstractString ,port::AbstractString ,base64::AbstractString ,
+		function Esinfo(host::AbstractString ,port::AbstractString ,base64::AbstractString ,
 			 						jheader::Vector{Pair{String,String}},
 									nheader::Vector{Pair{String,String}},
 									conf::NamedTuple,
