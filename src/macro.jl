@@ -3,13 +3,7 @@ macro eshead(info,  url , query  )
 	esc(
 		quote
 			try
-				if ! isempty( $(info).base64 )
-					 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-					 conf = ( require_ssl_verification = false, basic_authorization = true)
-					 respos = HTTP.request("HEAD", HTTP.URI($(url)), header , query= $query ; conf...)
-				else
-					respos = HTTP.request("HEAD", HTTP.URI($(url)) , query= $query )
-				end
+				respos = HTTP.request("HEAD", HTTP.URI($(url)), $(info).jheader , query= $query ;  $(info).conf...)
 
 				if respos.status == 200
 					"OK"
@@ -24,13 +18,7 @@ end
 macro esdelete(info,  url,   query   )
 	esc(
 		quote
-			if ! isempty( $(info).base64 )
-				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-				 conf = ( require_ssl_verification = false, basic_authorization = true)
-				 respos = HTTP.request("DELETE", HTTP.URI($(url)) , header,  query= $query ; conf...)
-			else
-				respos = HTTP.request("DELETE", HTTP.URI($(url)) ,  query= $query )
-			end
+			respos = HTTP.request("DELETE", HTTP.URI($(url)) , $(info).jheader,  query= $query ;  $(info).conf...)
 
 			if respos.status == 200
 				JSON.parse(String(respos.body))
@@ -41,15 +29,25 @@ end
 macro catexport(info, method, url , query  )
 	esc(
 		quote
-			if ! isempty( $(info).base64 )
-				 header  = ["Authorization" => string( "Basic" , " ", $(info).base64 ) ]
-				 conf = ( require_ssl_verification = false, basic_authorization = true)
-				 respos = HTTP.request($method, HTTP.URI($(url)), header, query= $query ; conf...)
-			else
-				respos = HTTP.request($method, HTTP.URI($(url)), query= $query)
+			respos = HTTP.request($method, HTTP.URI($(url)), $(info).jheader, query= $query ;  $(info).conf...)
+			String(respos.body) |> println
+		end )
+end
+
+macro esexp(x,y)
+	esc(:(get($x, $y, missing)))
+end
+
+macro esexport(info, method, url, body , query , header )
+	esc(
+		quote
+
+			respos = HTTP.request($method, HTTP.URI($(url)) , $header , $body, query= $query;  $(info).conf...)
+
+			if respos.status == 200
+				JSON.parse(String(respos.body))
 			end
 
-			String(respos.body) |> println
 		end )
 end
 
@@ -88,7 +86,7 @@ function genfunction(  kw::Vector  )
 				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict),
 							Expr(:call, :json, body) , body ) ,
 				 :querys ,
-				 "application/json"
+				 Expr(:call, :getfield, :info , :jheader)
 				 )
 			)
 	if kw[4] >= 1
