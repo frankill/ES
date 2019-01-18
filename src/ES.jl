@@ -52,6 +52,15 @@ module ES
 			nheader= ["content-type" => "application/x-ndjson"  ]
 			new( host,  port,  transport, "", ur , jheader, nheader, NamedTuple() )
 		end
+	
+		function Esinfo(; host::AbstractString ,port::AbstractString ,base64::AbstractString ,
+			 						jheader::Vector{Pair{String,String}},
+									nheader::Vector{Pair{String,String}},
+									conf::NamedTuple,
+									transport::AbstractString= "https")
+			ur = string(transport, "://", host, ":", port)
+			new( host,  port,  transport , base64 , ur, jheader, nheader, conf )
+		end
 
 	end
 
