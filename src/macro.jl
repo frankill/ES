@@ -86,7 +86,7 @@ function genfunction(  kw::Vector  )
 				 Expr(:call , :ifelse , Expr(:call, :isa, body, :Dict),
 							Expr(:call, :json, body) , body ) ,
 				 :querys ,
-				 Expr(:call, :getfield, :info , :jheader)
+				 Expr(:(.), :info , :(:jheader))
 				 )
 			)
 	if kw[4] >= 1
