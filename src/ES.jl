@@ -28,15 +28,16 @@ module ES
 	export @esexport ,@query, @filter, @must, @must_not ,@should  ,@nested ,@has_child, @has_parent ,@fulltext,@smi,@comm,@extra
 	export BulkLength
 
-	struct Esinfo
-		host::AbstractString
-		port::AbstractString
-		transport::AbstractString
-		base64::AbstractString
-		url::AbstractString
-		jheader::Vector{Pair{String,String}}
-		nheader::Vector{Pair{String,String}}
+	struct Esinfo{ T <: AbstractString }  
+		host::T
+		port::T
+		transport::T
+		base64::T
+		url::T
+		jheader::Vector{Pair{T,T}}
+		nheader::Vector{Pair{T,T}}
 		conf::NamedTuple
+	
 		function Esinfo(; host::AbstractString ,port::AbstractString ,user::AbstractString  ,pwd::AbstractString , transport::AbstractString= "https")
 			ur = string(transport, "://", host, ":", port)
 			basetmp = base64encode( user , ":", pwd)
